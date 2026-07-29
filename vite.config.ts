@@ -6,11 +6,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    TanStackRouterVite(),
-    tailwindcss(),
-    react(),
-  ],
+  plugins: [TanStackRouterVite(), tailwindcss(), react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

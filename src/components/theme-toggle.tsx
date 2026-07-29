@@ -17,8 +17,12 @@ export function ThemeToggle() {
       >
         {isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
       </span>
-      <Sun className={`absolute right-2.5 h-4 w-4 transition-opacity ${isDark ? "opacity-40" : "opacity-0"}`} />
-      <Moon className={`absolute left-2.5 h-4 w-4 transition-opacity ${isDark ? "opacity-0" : "opacity-40"}`} />
+      <Sun
+        className={`absolute right-2.5 h-4 w-4 transition-opacity ${isDark ? "opacity-40" : "opacity-0"}`}
+      />
+      <Moon
+        className={`absolute left-2.5 h-4 w-4 transition-opacity ${isDark ? "opacity-0" : "opacity-40"}`}
+      />
     </button>
   );
 }
