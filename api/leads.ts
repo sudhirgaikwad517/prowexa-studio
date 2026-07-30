@@ -1,9 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "";
-const supabaseKey =
-  process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const rawUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "https://yqsctsifrdooaepmycby.supabase.co";
+const supabaseUrl = rawUrl.trim().replace(/\/rest\/v1\/?$/i, "").replace(/\/+$/, "");
+
+const supabaseKey = (
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2N0c2lmcmRvb2FlcG15Y2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MTk3MjgsImV4cCI6MjEwMDk5NTcyOH0.J5lJtwz7v8xHStNEkK3xOmHGa87lV0cP7I-yJv7pxi8"
+).trim();
 
 const supabase =
   supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
@@ -40,13 +46,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     if (supabase) {
-      const { data, error } = await supabase.from("leads").insert([leadData]).select();
+      const { error } = await supabase.from("leads").insert([leadData]);
 
       if (error) {
         return res.status(500).json({ error: error.message });
       }
 
-      return res.status(201).json({ success: true, data: data ? data[0] : leadData });
+      return res.status(201).json({ success: true, data: leadData });
     }
 
     return res.status(201).json({ success: true, data: leadData, mock: true });
