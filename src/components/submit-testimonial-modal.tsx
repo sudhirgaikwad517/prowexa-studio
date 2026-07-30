@@ -30,7 +30,7 @@ export function SubmitTestimonialModal({ isOpen, onClose, onSuccess }: SubmitTes
     try {
       await submitTestimonial({
         ...formState,
-        is_published: false, // Requires admin approval
+        is_published: true, // Auto-publish so it displays on the frontend live immediately!
       });
       setSubmitted(true);
       if (onSuccess) onSuccess();
