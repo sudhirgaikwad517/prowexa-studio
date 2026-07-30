@@ -17,7 +17,7 @@ const DEFAULT_DESCRIPTION =
   "Prowexa Technologies Pvt. Ltd. is a top software development company in Pune, India. We build scalable products, React & Flutter mobile apps, AI solutions, and custom ERP/CRM software.";
 const DEFAULT_KEYWORDS =
   "Prowexa Technologies, Software Development Company Pune, IT Company Pune, Website Development Pune, Mobile App Development, Flutter Development, React Development, AI Development, ERP Development, CRM Development, Cloud Solutions, Custom Software Development India";
-const SITE_URL = "https://prowexa.com";
+const SITE_URL = "https://www.prowexa.com";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.png`;
 
 export function SEOHead({
@@ -103,8 +103,8 @@ export const defaultOrganizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Prowexa Technologies Pvt. Ltd.",
-  "url": "https://prowexa.com",
-  "logo": "https://prowexa.com/favicon.png",
+  "url": "https://www.prowexa.com",
+  "logo": "https://www.prowexa.com/favicon.png",
   "description": "Next-generation product development solutions from MVP to scale. React, Flutter, AI, and Cloud solutions.",
   "address": {
     "@type": "PostalAddress",
@@ -122,7 +122,7 @@ export const defaultOrganizationSchema = {
     "availableLanguage": ["English", "Hindi", "Marathi"]
   },
   "sameAs": [
-    "https://prowexa.com"
+    "https://www.prowexa.com"
   ]
 };
 
@@ -130,9 +130,9 @@ export const defaultLocalBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Prowexa Technologies",
-  "image": "https://prowexa.com/favicon.png",
-  "@id": "https://prowexa.com/#organization",
-  "url": "https://prowexa.com",
+  "image": "https://www.prowexa.com/favicon.png",
+  "@id": "https://www.prowexa.com/#organization",
+  "url": "https://www.prowexa.com",
   "telephone": "+917030347209",
   "priceRange": "$$",
   "address": {

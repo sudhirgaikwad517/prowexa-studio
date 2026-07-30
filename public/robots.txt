@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://prowexa.com/sitemap.xml
+Sitemap: https://www.prowexa.com/sitemap.xml
