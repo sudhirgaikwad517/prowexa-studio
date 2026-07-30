@@ -1,3 +1,8 @@
+import officeTeam from "@/assets/office-team.webp";
+import officeWorkspace from "@/assets/office-workspace.webp";
+import officeReception from "@/assets/office-reception.webp";
+import officeNight from "@/assets/office-night.webp";
+import officeCoding from "@/assets/office-coding.webp";
 import heroBg from "@/assets/hero-bg.webp";
 import { SEOHead, defaultOrganizationSchema, defaultLocalBusinessSchema } from "./seo-head";
 import { trackWhatsAppClick, trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
