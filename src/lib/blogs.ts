@@ -85,13 +85,17 @@ export async function submitBlog(data: Omit<BlogData, "id" | "created_at">) {
 
   try {
     if (supabase) {
-      const { data: inserted, error } = await supabase.from("blogs").insert([record]).select();
-      if (!error) return { success: true, data: inserted };
+      const { error } = await supabase.from("blogs").insert([record]);
+      if (error) {
+        console.error("Supabase blog insert error:", error);
+      } else {
+        return { success: true };
+      }
     }
   } catch (err) {
     console.warn("Submit blog error:", err);
   }
-  return { success: true, mock: true, data: record };
+  return { success: true, mock: true };
 }
 
 export async function updateBlogStatus(id: string, is_published: boolean) {

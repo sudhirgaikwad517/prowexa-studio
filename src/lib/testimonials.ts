@@ -95,13 +95,17 @@ export async function submitTestimonial(data: Omit<TestimonialData, "id" | "crea
 
   try {
     if (supabase) {
-      const { data: inserted, error } = await supabase.from("testimonials").insert([record]).select();
-      if (!error) return { success: true, data: inserted };
+      const { error } = await supabase.from("testimonials").insert([record]);
+      if (error) {
+        console.error("Supabase testimonial insert error:", error);
+      } else {
+        return { success: true };
+      }
     }
   } catch (err) {
     console.warn("Submit testimonial exception:", err);
   }
-  return { success: true, mock: true, data: record };
+  return { success: true, mock: true };
 }
 
 export async function updateTestimonialStatus(id: string, is_published: boolean) {
