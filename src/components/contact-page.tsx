@@ -2,6 +2,8 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
+import { trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
 import {
   Mail,
   Phone,
@@ -32,6 +34,7 @@ export function ContactPage() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
+    trackContactFormSubmit(formState.service);
     // Simulate API request
     setTimeout(() => {
       setLoading(false);
@@ -68,6 +71,11 @@ export function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Contact Us & Get a Quote | Prowexa Technologies Pune"
+        description="Get in touch with Prowexa Technologies in Balewadi, Pune. Schedule a project consultation for web, mobile app, AI, or enterprise software development."
+        canonicalPath="/contact"
+      />
       <SiteHeader />
 
       <main>

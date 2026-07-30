@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
 import {
   Sparkles,
   ArrowRight,
@@ -58,6 +59,11 @@ export function CaseStudiesPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Client Case Studies & Success Stories | Prowexa Technologies"
+        description="Read how Prowexa Technologies delivered high-scale engineering: 70% latency reduction for Fintech, 80% legal AI review efficiency, and zero-downtime EHR cloud migrations."
+        canonicalPath="/case-studies"
+      />
       <SiteHeader />
 
       <main>
