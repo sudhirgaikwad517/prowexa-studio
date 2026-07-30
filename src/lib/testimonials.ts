@@ -59,7 +59,9 @@ export async function fetchPublishedTestimonials(): Promise<TestimonialData[]> {
         .order("created_at", { ascending: false });
 
       if (!error && data && data.length > 0) {
-        return data;
+        const existingIds = new Set(data.map((d) => d.id));
+        const extraFallbacks = fallbackTestimonials.filter((f) => !existingIds.has(f.id));
+        return [...data, ...extraFallbacks];
       }
     }
   } catch (err) {
