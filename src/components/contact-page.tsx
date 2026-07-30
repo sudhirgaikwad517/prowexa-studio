@@ -3,7 +3,8 @@ import type { FormEvent } from "react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
-import { trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
+import { trackPhoneClick, trackEmailClick } from "@/lib/gtag";
+import { submitLead } from "@/lib/api";
 import {
   Mail,
   Phone,
@@ -31,23 +32,20 @@ export function ContactPage() {
 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    trackContactFormSubmit(formState.service);
-    // Simulate API request
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-      setFormState({
-        name: "",
-        email: "",
-        company: "",
-        service: "custom-software",
-        budget: "$5,000 - $10,000",
-        message: "",
-      });
-    }, 1200);
+    await submitLead(formState);
+    setLoading(false);
+    setSubmitted(true);
+    setFormState({
+      name: "",
+      email: "",
+      company: "",
+      service: "custom-software",
+      budget: "$5,000 - $10,000",
+      message: "",
+    });
   }
 
   const faqs = [
