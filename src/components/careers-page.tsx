@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
+import { scrollToSection } from "@/utils/scroll";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -74,6 +76,11 @@ export function CareersPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Careers & Open Tech Roles | Prowexa Technologies Pune"
+        description="Join Prowexa Technologies. We are hiring Senior Full Stack Engineers, UI/UX Designers, React/Flutter Developers, and AI Engineers in Pune & Remote."
+        canonicalPath="/careers"
+      />
       <SiteHeader />
 
       <main>

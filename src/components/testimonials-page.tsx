@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { motion, useInView } from "framer-motion";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
 import {
   ArrowRight,
   Star,
@@ -108,6 +109,11 @@ export function TestimonialsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Client Reviews & Student Testimonials | Prowexa Technologies"
+        description="Read genuine reviews and success stories from CTOs, founders, product managers, and academy graduates who worked with Prowexa Technologies."
+        canonicalPath="/testimonials"
+      />
       <SiteHeader />
 
       <main>

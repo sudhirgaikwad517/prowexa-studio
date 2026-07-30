@@ -1,11 +1,13 @@
 import { useRef, type RefObject } from "react";
 import { motion, useScroll, useTransform, useInView as useFramerInView } from "framer-motion";
-import officeTeam from "@/assets/office-team.jpg";
-import officeWorkspace from "@/assets/office-workspace.jpg";
-import officeReception from "@/assets/office-reception.jpg";
-import officeNight from "@/assets/office-night.jpg";
-import officeCoding from "@/assets/office-coding.jpg";
-import heroBg from "@/assets/hero-bg.png";
+import officeTeam from "@/assets/office-team.webp";
+import officeWorkspace from "@/assets/office-workspace.webp";
+import officeReception from "@/assets/office-reception.webp";
+import officeNight from "@/assets/office-night.webp";
+import officeCoding from "@/assets/office-coding.webp";
+import heroBg from "@/assets/hero-bg.webp";
+import { SEOHead, defaultOrganizationSchema, defaultLocalBusinessSchema } from "./seo-head";
+import { trackWhatsAppClick, trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
 import {
   ArrowRight,
   Lightbulb,
@@ -83,6 +85,11 @@ const slideInRight = {
 export function HomePage() {
   return (
     <main id="top" className="flex flex-col w-full">
+      <SEOHead
+        title="Prowexa Technologies | Software Development Company Pune | Build Fast. Scale Smart."
+        description="Prowexa Technologies Pvt. Ltd. is a top software development company in Pune, India. We build scalable products, React & Flutter mobile apps, AI solutions, and custom ERP/CRM software."
+        structuredData={[defaultOrganizationSchema, defaultLocalBusinessSchema]}
+      />
       <Hero />
       <StatsBar />
       <BrandTicker />
@@ -111,6 +118,7 @@ function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
+      onClick={trackWhatsAppClick}
       className="fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       style={{ background: "#25D366" }}
     >

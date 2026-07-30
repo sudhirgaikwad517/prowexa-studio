@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { motion, useInView } from "framer-motion";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
 import {
   ArrowRight,
   MonitorSmartphone,
@@ -228,6 +229,11 @@ export function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Our Portfolio & Case Projects | Prowexa Technologies Pune"
+        description="Explore Prowexa Technologies' portfolio of web applications, React & Flutter mobile apps, AI solutions, and custom enterprise software built for client success."
+        canonicalPath="/portfolio"
+      />
       <SiteHeader />
 
       {/* Hero */}

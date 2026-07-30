@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import type { MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/prowexa-logo.png";
+import { ThemeToggle } from "./theme-toggle";
+import logo from "@/assets/prowexa-logo.webp";
 import { Menu, X } from "lucide-react";
+import { trackCTAClick } from "@/lib/gtag";
 
 import { scrollToSection } from "@/utils/scroll";
 
@@ -65,6 +67,8 @@ export function SiteHeader() {
           <motion.img
             src={logo}
             alt="Prowexa Technologies"
+            width={180}
+            height={44}
             className="h-9 md:h-11 w-auto"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

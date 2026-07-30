@@ -15,5 +15,26 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    target: "es2022",
+    cssCodeSplit: true,
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (
+              id.includes("react") ||
+              id.includes("react-dom") ||
+              id.includes("@tanstack")
+            ) {
+              return "vendor-core";
+            }
+            if (id.includes("lucide-react") || id.includes("framer-motion")) {
+              return "vendor-ui";
+            }
+          }
+        },
+      },
+    },
   },
 });
