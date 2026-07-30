@@ -74,12 +74,12 @@ export function TestimonialsPage() {
         </section>
 
         {/* Filter Controls */}
-        <section className="py-8 bg-surface/30 border-y border-border">
-          <div className="mx-auto max-w-7xl px-6 flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-2">
+        <section className="py-6 bg-surface/30 border-y border-border">
+          <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
               <button
                 onClick={() => setFilter("all")}
-                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold whitespace-nowrap shrink-0 transition ${
                   filter === "all"
                     ? "bg-gradient-brand text-primary-foreground shadow-glow"
                     : "border border-border bg-card text-muted-foreground hover:text-foreground"
@@ -89,7 +89,7 @@ export function TestimonialsPage() {
               </button>
               <button
                 onClick={() => setFilter("client")}
-                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold whitespace-nowrap shrink-0 transition ${
                   filter === "client"
                     ? "bg-gradient-brand text-primary-foreground shadow-glow"
                     : "border border-border bg-card text-muted-foreground hover:text-foreground"
@@ -99,7 +99,7 @@ export function TestimonialsPage() {
               </button>
               <button
                 onClick={() => setFilter("academy")}
-                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                className={`rounded-full px-5 py-2.5 text-xs font-semibold whitespace-nowrap shrink-0 transition ${
                   filter === "academy"
                     ? "bg-gradient-brand text-primary-foreground shadow-glow"
                     : "border border-border bg-card text-muted-foreground hover:text-foreground"
@@ -111,9 +111,9 @@ export function TestimonialsPage() {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="text-xs text-brand hover:underline font-semibold flex items-center gap-1"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-6 py-2.5 text-xs font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition whitespace-nowrap shrink-0"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-4 w-4" />
               Write a Review
             </button>
           </div>
