@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
 import { scrollToSection } from "@/utils/scroll";
 
 export function CareersPage() {
@@ -28,7 +29,7 @@ export function CareersPage() {
       type: "Full-time",
       location: "Pune",
       category: "Design",
-      description: "Create stunning, intuitive interfaces for next-gen startups and enterprise products."
+      description: "Craft beautiful, intuitive user experiences for web and mobile applications."
     },
     {
       title: "AI / ML Engineer",
@@ -41,6 +42,11 @@ export function CareersPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Careers & Open Tech Roles | Prowexa Technologies Pune"
+        description="Join Prowexa Technologies. We are hiring Senior Full Stack Engineers, UI/UX Designers, React/Flutter Developers, and AI Engineers in Pune & Remote."
+        canonicalPath="/careers"
+      />
       <SiteHeader />
       
       <main>
