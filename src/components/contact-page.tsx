@@ -35,17 +35,20 @@ export function ContactPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await submitLead(formState);
-    setLoading(false);
-    setSubmitted(true);
-    setFormState({
-      name: "",
-      email: "",
-      company: "",
-      service: "custom-software",
-      budget: "$5,000 - $10,000",
-      message: "",
-    });
+    try {
+      await submitLead(formState);
+      setSubmitted(true);
+      setFormState({
+        name: "",
+        email: "",
+        company: "",
+        service: "custom-software",
+        budget: "$5,000 - $10,000",
+        message: "",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   const faqs = [
