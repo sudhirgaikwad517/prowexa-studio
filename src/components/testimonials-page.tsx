@@ -142,7 +142,7 @@ export function TestimonialsPage() {
             <AnimatedStat value={4} suffix=".9/5" label="Average Rating" />
             <AnimatedStat value={25} suffix="+" label="Shipped Products" />
             <AnimatedStat value={500} suffix="+" label="Academy Alumni" />
-            <AnimatedStat value={95} suffix="%" label="Placement Success" />
+            <AnimatedStat value={95} suffix="%" label="Practical Mastery" />
           </div>
         </section>
 

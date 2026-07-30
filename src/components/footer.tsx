@@ -56,58 +56,61 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Column 2: Quick Links */}
-        <div>
-          <h4 className="font-label text-xs font-bold uppercase tracking-wider text-brand-glow mb-5">Quick Links</h4>
-          <ul className="space-y-3">
-            {quickLinks.map((link) => (
-              <li key={link.label}>
-                {"to" in link && link.to ? (
+        {/* Columns 2 & 3: Quick Links + Company (2-column layout on mobile) */}
+        <div className="grid grid-cols-2 gap-6 sm:gap-8 md:col-span-2 lg:col-span-2">
+          {/* Column 2: Quick Links */}
+          <div>
+            <h4 className="font-label text-xs font-bold uppercase tracking-wider text-brand-glow mb-5">Quick Links</h4>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  {"to" in link && link.to ? (
+                    <Link
+                      to={link.to as "/portfolio" | "/case-studies" | "/testimonials" | "/academy" | "/careers" | "/contact"}
+                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                      <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                      <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div>
+            <h4 className="font-label text-xs font-bold uppercase tracking-wider text-brand-glow mb-5">Company</h4>
+            <ul className="space-y-3">
+              {companyLinks.map((link) => (
+                <li key={link.label}>
                   <Link
-                    to={link.to as "/portfolio" | "/case-studies" | "/testimonials" | "/academy" | "/careers" | "/contact"}
+                    to={link.to as "/academy" | "/careers" | "/contact"}
                     className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
                     <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
                   </Link>
-                ) : (
-                  <a
-                    href={link.href}
-                    className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* Column 3: Company */}
-        <div>
-          <h4 className="font-label text-xs font-bold uppercase tracking-wider text-brand-glow mb-5">Company</h4>
-          <ul className="space-y-3">
-            {companyLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  to={link.to as "/academy" | "/careers" | "/contact"}
-                  className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                  <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-8">
+          {/* Registered Office: Full width across mobile grid columns */}
+          <div className="col-span-2 mt-4 pt-4 border-t border-border/30">
             <h4 className="font-label text-xs font-bold uppercase tracking-wider text-brand-glow mb-3">Registered Office</h4>
-            <div className="flex items-start gap-2 text-sm text-muted-foreground">
-              <MapPin className="h-4 w-4 mt-0.5 flex-none text-brand-glow/60" />
-              <p className="leading-relaxed">
-                Survey No 44 H. No. 8/1 (P, Plot A, opp. Bhartiya Vidyapeeth School,
-                Balewadi, Pune, Maharashtra - 411045
+            <div className="flex items-start gap-2.5 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4 mt-0.5 flex-none text-brand-glow" />
+              <p className="leading-relaxed text-xs sm:text-sm">
+                Survey No 44 H. No. 8/1 (P, Plot A, opp. Bhartiya Vidyapeeth School, Balewadi, Pune, Maharashtra - 411045
               </p>
             </div>
           </div>

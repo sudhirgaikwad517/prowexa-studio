@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { ThemeToggle } from "./theme-toggle";
 import logo from "@/assets/prowexa-logo.png";
 import { Menu, X } from "lucide-react";
 
@@ -54,10 +53,10 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 text-nav-foreground ${
+      className={`sticky top-0 z-50 backdrop-blur-xl border-b border-nav-border transition-all duration-300 text-nav-foreground ${
         scrolled
-          ? "bg-nav-background border-nav-border shadow-lg shadow-black/5"
-          : "bg-nav-background/70 border-transparent"
+          ? "bg-nav-background shadow-lg shadow-black/5"
+          : "bg-nav-background/85"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -113,7 +112,6 @@ export function SiteHeader() {
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-3">
-          <ThemeToggle />
           <Link
             to="/careers"
             className="inline-flex items-center rounded-full bg-purple-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/20 hover:bg-purple-700 transition-all duration-300 hover:scale-[1.03]"
@@ -130,7 +128,6 @@ export function SiteHeader() {
 
         {/* Mobile Hamburger */}
         <div className="flex lg:hidden items-center gap-3">
-          <ThemeToggle />
           <button
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"

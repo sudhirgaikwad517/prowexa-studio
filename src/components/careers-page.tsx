@@ -109,11 +109,12 @@ export function CareersPage() {
         {/* Culture Section */}
         <section className="py-24 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
-            <div ref={cultureRef} className="grid gap-12 lg:grid-cols-2 items-center">
+            <div ref={cultureRef} className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <motion.div
                 initial={{ opacity: 0, x: -32 }}
                 animate={cultureInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.7 }}
+                className="lg:col-span-5"
               >
                 <h2 className="font-display text-3xl font-bold md:text-4xl">Why Work at Prowexa?</h2>
                 <p className="mt-4 text-muted-foreground leading-relaxed">
@@ -121,7 +122,7 @@ export function CareersPage() {
                   We believe in building products that solve real problems, and we know that starts
                   with an exceptional team.
                 </p>
-                <div className="mt-8 space-y-4">
+                <div className="mt-8 space-y-3.5">
                   {[
                     "Ownership & Autonomy",
                     "Modern Tech Stack (React, Next.js, AI)",
@@ -136,51 +137,37 @@ export function CareersPage() {
                       transition={{ delay: i * 0.08, duration: 0.5 }}
                       className="flex items-center gap-3"
                     >
-                      <CheckCircle2 className="h-5 w-5 text-purple-500" />
-                      <span className="font-medium">{item}</span>
+                      <CheckCircle2 className="h-5 w-5 text-purple-500 flex-shrink-0" />
+                      <span className="font-medium text-sm md:text-base">{item}</span>
                     </motion.div>
                   ))}
                 </div>
               </motion.div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  {[
-                    { icon: Users, title: "Collaborative Team", desc: "Work with the brightest minds in engineering and design." },
-                    { icon: Zap, title: "Fast Execution", desc: "We value speed and shipping quality products quickly." },
-                  ].map((card, i) => (
-                    <motion.div
-                      key={card.title}
-                      custom={i}
-                      initial="hidden"
-                      animate={cultureInView ? "visible" : "hidden"}
-                      variants={fadeUp}
-                      className="group rounded-3xl border border-border bg-card p-6 shadow-card hover:border-purple-500/30 hover:-translate-y-1 transition-all duration-300"
-                    >
-                      <card.icon className="h-8 w-8 text-purple-400 mb-4 transition-transform group-hover:scale-110" />
+
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {[
+                  { icon: Users, title: "Collaborative Team", desc: "Work with the brightest minds in engineering and design." },
+                  { icon: Trophy, title: "Impactful Projects", desc: "Build products that scale and make a real difference." },
+                  { icon: Zap, title: "Fast Execution", desc: "We value speed and shipping quality products quickly." },
+                  { icon: Globe, title: "Global Reach", desc: "Our products are used by businesses and users worldwide." },
+                ].map((card, i) => (
+                  <motion.div
+                    key={card.title}
+                    custom={i}
+                    initial="hidden"
+                    animate={cultureInView ? "visible" : "hidden"}
+                    variants={fadeUp}
+                    className="group rounded-3xl border border-border bg-card p-6 shadow-card hover:border-purple-500/30 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 mb-4 transition-transform group-hover:scale-110">
+                        <card.icon className="h-6 w-6" />
+                      </span>
                       <h3 className="font-bold text-lg">{card.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-2">{card.desc}</p>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="space-y-4 mt-8">
-                  {[
-                    { icon: Trophy, title: "Impactful Projects", desc: "Build products that scale and make a real difference." },
-                    { icon: Globe, title: "Global Reach", desc: "Our products are used by businesses and users worldwide." },
-                  ].map((card, i) => (
-                    <motion.div
-                      key={card.title}
-                      custom={i + 2}
-                      initial="hidden"
-                      animate={cultureInView ? "visible" : "hidden"}
-                      variants={fadeUp}
-                      className="group rounded-3xl border border-border bg-card p-6 shadow-card hover:border-purple-500/30 hover:-translate-y-1 transition-all duration-300"
-                    >
-                      <card.icon className="h-8 w-8 text-purple-400 mb-4 transition-transform group-hover:scale-110" />
-                      <h3 className="font-bold text-lg">{card.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-2">{card.desc}</p>
-                    </motion.div>
-                  ))}
-                </div>
+                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{card.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </div>

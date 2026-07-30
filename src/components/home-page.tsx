@@ -146,22 +146,19 @@ function Hero() {
 
   return (
     <section ref={heroRef} className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center justify-center">
-      {/* Parallax background */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
+      {/* Hero background image (static, non-scrolling) */}
+      <div className="absolute inset-0 z-0">
         <img
           src={heroBg}
           alt="Prowexa Technologies Hero Background"
-          className="h-full w-full object-cover scale-110"
+          className="h-full w-full object-cover scale-105"
           width={1920}
           height={1080}
           loading="eager"
           decoding="async"
         />
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/80"
-          style={{ opacity: overlayOpacity }}
-        />
-      </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/85" />
+      </div>
 
       {/* Floating Orbs */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
@@ -466,12 +463,12 @@ function InsideProwexa() {
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.06]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
               {/* Hover zoom icon overlay */}
               <div className="absolute inset-0 flex items-center justify-center bg-brand/0 transition-all duration-300 group-hover:bg-brand/10">
                 <ArrowUpRight className="h-8 w-8 text-white/0 transition-all duration-300 group-hover:text-white/80 group-hover:scale-100 scale-50" />
               </div>
-              <figcaption className="font-label absolute bottom-5 left-5 rounded-full bg-background/80 backdrop-blur-md px-4 py-1.5 text-xs tracking-wider">
+              <figcaption className="font-label absolute bottom-5 left-5 rounded-full bg-slate-950/80 text-white backdrop-blur-md px-4 py-1.5 text-xs tracking-wider">
                 {img.label}
               </figcaption>
             </motion.figure>
@@ -633,7 +630,7 @@ function WhyUs() {
 
   const items = [
     { icon: Users, text: "Experienced Technology Professionals", stat: "10+", statLabel: "Engineers" },
-    { icon: Zap, text: "Agile Development Process", stat: "2wk", statLabel: "Sprint Cycles" },
+    { icon: Zap, text: "Agile Development Process", stat: "2 Weeks", statLabel: "Sprint Cycles" },
     { icon: TrendingUp, text: "Scalable Solutions", stat: "100K+", statLabel: "Users Served" },
     { icon: Layers, text: "End-to-End Project Delivery", stat: "25+", statLabel: "Projects" },
     { icon: LifeBuoy, text: "Dedicated Support", stat: "24/7", statLabel: "Availability" },
@@ -790,7 +787,7 @@ function EdTech() {
               <div ref={statRef as React.Ref<HTMLDivElement>} className="mt-8 flex gap-8 flex-wrap">
                 {[
                   { end: 500, suffix: "+", label: "Alumni" },
-                  { end: 95, suffix: "%", label: "Placed" },
+                  { end: 95, suffix: "%", label: "Course Completion" },
                   { end: 4, suffix: ".9★", label: "Rating" },
                 ].map((s) => (
                   <StatItem key={s.label} end={s.end} suffix={s.suffix} label={s.label} />

@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
 
-type Theme = "dark" | "light";
+type Theme = "dark";
 
 const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
   theme: "dark",
@@ -8,27 +8,17 @@ const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const stored = (typeof window !== "undefined" &&
-      localStorage.getItem("prowexa-theme")) as Theme | null;
-    if (stored === "light" || stored === "dark") setTheme(stored);
-  }, []);
-
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
+    root.classList.remove("light");
+    root.classList.add("dark");
     try {
-      localStorage.setItem("prowexa-theme", theme);
+      localStorage.removeItem("prowexa-theme");
     } catch {}
-  }, [theme]);
+  }, []);
 
   return (
-    <ThemeContext.Provider
-      value={{ theme, toggle: () => setTheme(theme === "dark" ? "light" : "dark") }}
-    >
+    <ThemeContext.Provider value={{ theme: "dark", toggle: () => {} }}>
       {children}
     </ThemeContext.Provider>
   );

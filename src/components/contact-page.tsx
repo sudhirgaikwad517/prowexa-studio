@@ -85,7 +85,7 @@ export function ContactPage() {
 
   const trustBadges = [
     { icon: Shield, label: "100% Confidential" },
-    { icon: Zap, label: "24hr Response Time" },
+    { icon: Zap, label: "24-Hour Response Time" },
     { icon: MessageCircle, label: "No-Obligation Quote" },
   ];
 

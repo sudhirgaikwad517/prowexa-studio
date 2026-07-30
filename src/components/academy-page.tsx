@@ -119,7 +119,7 @@ export function AcademyPage() {
 
   const partners = [
     { college: "Modern College of Engineering", location: "Pune", type: "Syllabus Integration & Labs" },
-    { college: "DY Patil Institute of Technology", location: "Pune", type: "Campus Placement Partner" },
+    { college: "DY Patil Institute of Technology", location: "Pune", type: "Industry Skills Partner" },
     { college: "Sinhgad Institutes", location: "Pune", type: "Faculty Development Programs" },
   ];
 
@@ -128,7 +128,7 @@ export function AcademyPage() {
     { step: "02", title: "Hands-on Training", desc: "Interactive daily lectures combined with immediate coding exercises and module tests." },
     { step: "03", title: "Capstone Projects", desc: "Build 2 major, industry-relevant applications matching enterprise development standards." },
     { step: "04", title: "Guaranteed Internship", desc: "Join Prowexa's internal development team or our partner firms to work on live projects." },
-    { step: "05", title: "Placements & Success", desc: "Mock interviews, resume building, profile optimization, and direct placement drives." },
+    { step: "05", title: "Career Readiness", desc: "Mock interviews, resume building, profile optimization, and portfolio reviews." },
   ];
 
   const testimonials = [

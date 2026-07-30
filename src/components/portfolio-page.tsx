@@ -143,6 +143,82 @@ const fadeUp = {
   }),
 };
 
+function CategorySection({ cat }: { cat: (typeof projects)[number] }) {
+  const catRef = useRef<HTMLDivElement>(null);
+  const catInView = useInView(catRef, { once: true, margin: "-60px" });
+
+  return (
+    <div ref={catRef}>
+      {/* Category Header */}
+      <motion.div
+        initial={{ opacity: 0, x: -24 }}
+        animate={catInView ? { opacity: 1, x: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="flex items-center gap-4 mb-10"
+      >
+        <span
+          className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${cat.color} text-white shadow-glow`}
+        >
+          <cat.icon className="h-5 w-5" />
+        </span>
+        <h2 className="font-display text-2xl font-bold">{cat.category}</h2>
+        <div className="flex-1 h-px bg-border" />
+      </motion.div>
+
+      {/* Project Cards */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {cat.items.map((p, i) => (
+          <motion.div
+            key={p.title}
+            custom={i}
+            initial="hidden"
+            animate={catInView ? "visible" : "hidden"}
+            variants={fadeUp}
+            className="group rounded-3xl border border-border bg-card p-8 shadow-card hover:border-brand/30 hover:-translate-y-1 transition-all duration-300"
+          >
+            <div className="flex items-start justify-between">
+              <h3 className="font-display text-xl font-bold">{p.title}</h3>
+              <div className="text-right">
+                <span className="font-display text-2xl font-extrabold text-brand-glow">{p.metric}</span>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{p.metricLabel}</p>
+              </div>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.overview}</p>
+
+            {/* Tech Stack */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {p.tech.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* Details */}
+            <div className="mt-6 grid gap-3">
+              {[
+                { label: "Problem", value: p.problem, color: "text-red-400" },
+                { label: "Solution", value: p.solution, color: "text-purple-400" },
+                { label: "Outcome", value: p.outcome, color: "text-emerald-400" },
+              ].map((row) => (
+                <div key={row.label} className="rounded-2xl bg-surface/60 px-4 py-3">
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${row.color}`}>
+                    {row.label}
+                  </span>
+                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{row.value}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState("All");
   const heroRef = useRef<HTMLDivElement>(null);
@@ -199,81 +275,9 @@ export function PortfolioPage() {
       {/* Projects */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-6 space-y-20">
-          {filteredProjects.map((cat) => {
-            const catRef = useRef<HTMLDivElement>(null);
-            const catInView = useInView(catRef, { once: true, margin: "-60px" });
-
-            return (
-              <div key={cat.category} ref={catRef}>
-                {/* Category Header */}
-                <motion.div
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={catInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6 }}
-                  className="flex items-center gap-4 mb-10"
-                >
-                  <span
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${cat.color} text-white shadow-glow`}
-                  >
-                    <cat.icon className="h-5 w-5" />
-                  </span>
-                  <h2 className="font-display text-2xl font-bold">{cat.category}</h2>
-                  <div className="flex-1 h-px bg-border" />
-                </motion.div>
-
-                {/* Project Cards */}
-                <div className="grid gap-6 md:grid-cols-2">
-                  {cat.items.map((p, i) => (
-                    <motion.div
-                      key={p.title}
-                      custom={i}
-                      initial="hidden"
-                      animate={catInView ? "visible" : "hidden"}
-                      variants={fadeUp}
-                      className="group rounded-3xl border border-border bg-card p-8 shadow-card hover:border-brand/30 hover:-translate-y-1 transition-all duration-300"
-                    >
-                      <div className="flex items-start justify-between">
-                        <h3 className="font-display text-xl font-bold">{p.title}</h3>
-                        <div className="text-right">
-                          <span className="font-display text-2xl font-extrabold text-brand-glow">{p.metric}</span>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{p.metricLabel}</p>
-                        </div>
-                      </div>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.overview}</p>
-
-                      {/* Tech Stack */}
-                      <div className="mt-5 flex flex-wrap gap-2">
-                        {p.tech.map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Details */}
-                      <div className="mt-6 grid gap-3">
-                        {[
-                          { label: "Problem", value: p.problem, color: "text-red-400" },
-                          { label: "Solution", value: p.solution, color: "text-purple-400" },
-                          { label: "Outcome", value: p.outcome, color: "text-emerald-400" },
-                        ].map((row) => (
-                          <div key={row.label} className="rounded-2xl bg-surface/60 px-4 py-3">
-                            <span className={`text-xs font-semibold uppercase tracking-wider ${row.color}`}>
-                              {row.label}
-                            </span>
-                            <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{row.value}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          {filteredProjects.map((cat) => (
+            <CategorySection key={cat.category} cat={cat} />
+          ))}
         </div>
       </section>
 
