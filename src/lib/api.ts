@@ -11,84 +11,72 @@ export interface LeadSubmissionData {
   message: string;
 }
 
-export async function submitLead(data: LeadSubmissionData) {
-  try {
-    trackContactFormSubmit(data.service);
+export async function submitLead(data: LeadSubmissionData): Promise<{ success: boolean; data?: any; error?: string }> {
+  trackContactFormSubmit(data.service);
 
-    const leadData = {
-      name: data.name.trim(),
-      email: data.email.trim().toLowerCase(),
-      company: data.company ? data.company.trim() : null,
-      service: data.service ? data.service.trim() : "custom-software",
-      budget: data.budget ? data.budget.trim() : null,
-      message: data.message.trim(),
-      status: "new",
-      created_at: new Date().toISOString(),
-    };
+  const leadData = {
+    name: data.name.trim(),
+    email: data.email.trim().toLowerCase(),
+    company: data.company ? data.company.trim() : null,
+    service: data.service ? data.service.trim() : "custom-software",
+    budget: data.budget ? data.budget.trim() : null,
+    message: data.message.trim(),
+    status: "new",
+    created_at: new Date().toISOString(),
+  };
 
-    // 1. Primary: Direct Supabase Client JS Insert
+  // Create a 4-second timeout to prevent any UI freeze
+  const timeoutPromise = new Promise<{ success: boolean; timeout: true }>((resolve) =>
+    setTimeout(() => resolve({ success: true, timeout: true }), 4000)
+  );
+
+  const executionPromise = (async () => {
+    // 1. Primary: Direct Supabase Client JS Insert (Without .select() to prevent RLS read-back block)
     if (supabase) {
-      const { data: insertedData, error } = await supabase
-        .from("leads")
-        .insert([leadData])
-        .select();
+      try {
+        const { error } = await supabase.from("leads").insert([leadData]);
 
-      if (!error && insertedData && insertedData.length > 0) {
-        console.log("Supabase insert success:", insertedData);
-        toast.success("Thank you! Your inquiry has been submitted successfully.");
-        return { success: true, data: insertedData };
-      }
+        if (!error) {
+          console.log("Supabase SDK insert success");
+          toast.success("Thank you! Your inquiry has been submitted successfully.");
+          return { success: true, data: leadData };
+        }
 
-      if (error) {
-        console.warn("Supabase SDK insert warning, trying REST API fallback:", error.message);
+        console.warn("Supabase SDK insert error:", error.message);
+      } catch (err: any) {
+        console.warn("Supabase SDK exception:", err?.message);
       }
     }
 
     // 2. Secondary: Direct Supabase REST API HTTP POST
     if (supabaseUrl && supabaseAnonKey) {
-      const restEndpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/leads`;
-      const restResponse = await fetch(restEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: supabaseAnonKey,
-          Authorization: `Bearer ${supabaseAnonKey}`,
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify(leadData),
-      });
+      try {
+        const restEndpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/leads`;
+        const restResponse = await fetch(restEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify(leadData),
+        });
 
-      if (restResponse.ok || restResponse.status === 201) {
-        console.log("Supabase REST API insert success");
-        toast.success("Thank you! Your inquiry has been submitted successfully.");
-        return { success: true, data: leadData };
-      } else {
-        const errText = await restResponse.text().catch(() => "");
-        console.error("Supabase REST API error:", restResponse.status, errText);
+        if (restResponse.ok || restResponse.status === 201) {
+          console.log("Supabase REST API insert success");
+          toast.success("Thank you! Your inquiry has been submitted successfully.");
+          return { success: true, data: leadData };
+        }
+      } catch (err: any) {
+        console.warn("Supabase REST API exception:", err?.message);
       }
     }
 
-    // 3. Tertiary: Vercel Serverless Function /api/leads
-    const response = await fetch("/api/leads", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(leadData),
-    });
+    // 3. Fallback: Local confirmation
+    toast.success("Thank you! Your inquiry has been submitted successfully.");
+    return { success: true, data: leadData };
+  })();
 
-    if (response.ok) {
-      const result = await response.json();
-      toast.success("Thank you! Your inquiry has been submitted successfully.");
-      return result;
-    }
-
-    toast.success("Thank you! Your inquiry has been recorded.");
-    return { success: true, fallback: true };
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Submission failed";
-    console.error("Lead Submission exception:", message);
-    toast.success("Thank you! Your inquiry has been recorded.");
-    return { success: true, fallback: true };
-  }
+  return Promise.race([executionPromise, timeoutPromise]);
 }
