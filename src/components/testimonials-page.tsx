@@ -1,228 +1,176 @@
-import { Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
+import { SubmitTestimonialModal } from "./submit-testimonial-modal";
+import { fetchPublishedTestimonials, type TestimonialData } from "@/lib/testimonials";
 import {
-  Sparkles,
-  ArrowRight,
   Star,
   Quote,
-  Users,
-  Award,
-  ShieldCheck,
-  Building,
-  CheckCircle,
+  Building2,
+  GraduationCap,
+  Sparkles,
+  Plus,
+  CheckCircle2,
 } from "lucide-react";
 
 export function TestimonialsPage() {
-  const clientTestimonials = [
-    {
-      name: "Siddharth Mehta",
-      role: "CTO, CapitalVibe Inc.",
-      type: "Software Services",
-      quote: "Prowexa Technologies helped us completely re-architect our monolithic backend. Their engineers integrated seamlessly with our core team, delivered on strict timelines, and helped us scale to handle 100K+ daily active users without single hitch.",
-      companyLogo: "CapitalVibe"
-    },
-    {
-      name: "Sanjana Sharma",
-      role: "Founder, DocuMind Legal",
-      type: "AI & SaaS Development",
-      quote: "We partnered with Prowexa to build our core Generative AI legal analysis tool. Their deep understanding of LLMs, vector embedding storage, and user experience design allowed us to ship a fully functional beta within 3 months.",
-      companyLogo: "DocuMind"
-    },
-    {
-      name: "Vikram Malhotra",
-      role: "Operations Director, Runners Express",
-      type: "Mobile App & Logistics",
-      quote: "The dispatch and routing engine built by Prowexa has streamlined our last-mile deliveries. Our fuel costs are down 18% and customer satisfaction ratings have shot up.",
-      companyLogo: "Runners Express"
-    }
-  ];
+  const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
+  const [filter, setFilter] = useState<"all" | "client" | "academy">("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const studentTestimonials = [
-    {
-      name: "Amit Deshmukh",
-      role: "Software Engineer at Cognizant",
-      type: "Prowexa Academy",
-      quote: "The Java Full Stack program completely changed my career path. The live internship at Prowexa gave me the hands-on project experience that standard courses lack. The mock interviews were extremely close to the real thing.",
-      course: "Java Full Stack (Batch of 2025)"
-    },
-    {
-      name: "Priyanka Patil",
-      role: "Associate Data Analyst at Tech M",
-      type: "Prowexa Academy",
-      quote: "Learning Python and AI from developers who write code daily made a huge difference. I built a working recommendation engine during the course. The career support team was exceptional.",
-      course: "Python + AI & ML Program"
-    },
-    {
-      name: "Rahul Kulkarni",
-      role: "Junior Frontend Developer, Prowexa Technologies",
-      type: "Prowexa Academy",
-      quote: "I joined the coding bootcamp as a mechanical engineering graduate. The step-by-step roadmap and mentor support helped me clear the core concepts and land an internship, which led to a full-time role.",
-      course: "React Front-End Specialization"
-    }
-  ];
+  useEffect(() => {
+    loadTestimonials();
+  }, []);
+
+  async function loadTestimonials() {
+    setLoading(true);
+    const data = await fetchPublishedTestimonials();
+    setTestimonials(data);
+    setLoading(false);
+  }
+
+  const filtered = testimonials.filter((t) => {
+    if (filter === "all") return true;
+    return t.type === filter;
+  });
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SEOHead
-        title="Client Reviews & Student Testimonials | Prowexa Technologies"
-        description="Read genuine reviews and success stories from CTOs, founders, product managers, and academy graduates who worked with Prowexa Technologies."
-        canonicalPath="/testimonials"
+        title="Client & Student Testimonials | Prowexa Technologies Pune"
+        description="Read real client reviews and student testimonials about software development projects and tech courses at Prowexa Technologies Pune."
+        canonicalUrl="https://www.prowexa.com/testimonials"
       />
       <SiteHeader />
 
-      <main>
-        {/* Hero */}
+      <main className="flex-1">
+        {/* Hero Section */}
         <section className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
-          <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-brand opacity-10 blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
-              <Award className="h-3.5 w-3.5" />
-              Client &amp; Student Reviews
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-400 backdrop-blur-sm animate-fade-up">
+              <Star className="h-3.5 w-3.5 fill-current" />
+              Verified Testimonials & Reviews
             </div>
             <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
-              Graduates &amp; <span className="text-gradient-purple">Partners</span>
+              Trusted by <span className="text-gradient-amber">Clients & Students</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
-              See how our engineering expertise and practical academy training have empowered businesses and accelerated careers.
+              Hear directly from technical leaders, founders, and academy graduates who have built products and accelerated careers with Prowexa.
             </p>
-          </div>
-        </section>
 
-        {/* Stats Strip */}
-        <section className="py-10 border-y border-border bg-surface/20">
-          <div className="mx-auto max-w-7xl px-6 grid gap-6 grid-cols-2 md:grid-cols-4 text-center">
-            <div>
-              <p className="text-3xl font-extrabold text-brand-glow">4.9/5</p>
-              <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider font-semibold">Average Rating</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extrabold text-brand-glow">25+</p>
-              <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider font-semibold">Shipped Products</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extrabold text-brand-glow">500+</p>
-              <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider font-semibold">Academy Alumni</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extrabold text-brand-glow">95%</p>
-              <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider font-semibold">Placement Success</p>
+            <div className="mt-8 flex justify-center gap-4">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition animate-fade-up"
+              >
+                <Plus className="h-4 w-4" />
+                Submit Your Testimonial
+              </button>
             </div>
           </div>
         </section>
 
-        {/* Client reviews */}
+        {/* Filter Controls */}
+        <section className="py-8 bg-surface/30 border-y border-border">
+          <div className="mx-auto max-w-7xl px-6 flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFilter("all")}
+                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                  filter === "all"
+                    ? "bg-gradient-brand text-primary-foreground shadow-glow"
+                    : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                All Reviews ({testimonials.length})
+              </button>
+              <button
+                onClick={() => setFilter("client")}
+                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                  filter === "client"
+                    ? "bg-gradient-brand text-primary-foreground shadow-glow"
+                    : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Client Projects
+              </button>
+              <button
+                onClick={() => setFilter("academy")}
+                className={`rounded-full px-5 py-2 text-xs font-semibold transition ${
+                  filter === "academy"
+                    ? "bg-gradient-brand text-primary-foreground shadow-glow"
+                    : "border border-border bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Academy Students
+              </button>
+            </div>
+
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-xs text-brand hover:underline font-semibold flex items-center gap-1"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Write a Review
+            </button>
+          </div>
+        </section>
+
+        {/* Testimonials Grid */}
         <section className="py-24">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Software Clients</span>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">Client Testimonials</h2>
-              <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-                Read feedback from CTOs, founders, and directors who partnered with Prowexa to build high-performance products.
-              </p>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-3">
-              {clientTestimonials.map((t) => (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((t) => (
                 <div
-                  key={t.name}
-                  className="group relative rounded-3xl border border-border bg-card p-8 shadow-card flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300"
+                  key={t.id || t.name}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-amber-500/40 transition-all duration-300 animate-fade-up"
                 >
-                  <Quote className="absolute top-6 right-6 h-8 w-8 text-purple-500/10" />
-                  
-                  <div>
-                    <div className="flex gap-1 text-yellow-500 mb-6">
-                      {[...Array(5)].map((_, i) => (
+                  <div className="relative">
+                    <Quote className="h-10 w-10 text-amber-500/20 mb-4" />
+                    <div className="flex items-center gap-1 text-amber-400 mb-4">
+                      {[...Array(t.rating || 5)].map((_, i) => (
                         <Star key={i} className="h-4 w-4 fill-current" />
                       ))}
                     </div>
-
-                    <p className="text-sm text-muted-foreground leading-relaxed italic">
+                    <p className="text-sm leading-relaxed text-foreground/90 italic">
                       "{t.quote}"
                     </p>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-border">
-                    <h4 className="font-bold text-sm text-foreground">{t.name}</h4>
-                    <p className="text-xs text-purple-400 font-semibold mt-0.5">{t.role}</p>
-                    <span className="text-[10px] text-muted-foreground font-medium block mt-1">{t.companyLogo}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+                  <div className="mt-8 border-t border-border pt-6 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-base">{t.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">{t.role}</p>
+                      {t.company_or_course && (
+                        <span className="mt-1 inline-block text-[11px] font-semibold text-brand">
+                          {t.company_or_course}
+                        </span>
+                      )}
+                    </div>
 
-        {/* Student reviews */}
-        <section className="py-24 bg-surface/30">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Prowexa Academy</span>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">Student Success Stories</h2>
-              <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-                Real feedback from graduates who transitioned from academic training into successful software development careers.
-              </p>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-3">
-              {studentTestimonials.map((t) => (
-                <div
-                  key={t.name}
-                  className="relative rounded-3xl border border-border bg-card p-8 shadow-card flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300"
-                >
-                  <Quote className="absolute top-6 right-6 h-8 w-8 text-purple-500/10" />
-
-                  <div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-[10px] font-semibold text-purple-400 mb-6">
-                      <CheckCircle className="h-3 w-3" />
-                      Verified Graduate
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface text-muted-foreground">
+                      {t.type === "client" ? (
+                        <Building2 className="h-4 w-4 text-brand" />
+                      ) : (
+                        <GraduationCap className="h-4 w-4 text-purple-400" />
+                      )}
                     </span>
-
-                    <p className="text-sm text-muted-foreground leading-relaxed italic">
-                      "{t.quote}"
-                    </p>
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-border">
-                    <h4 className="font-bold text-sm text-foreground">{t.name}</h4>
-                    <p className="text-xs text-purple-400 font-semibold mt-0.5">{t.role}</p>
-                    <span className="text-[10px] text-muted-foreground font-medium block mt-1">Course: {t.course}</span>
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-20">
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-brand p-12 shadow-glow">
-              <div className="absolute -top-20 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-              <div className="relative">
-                <h2 className="text-3xl md:text-4xl font-bold text-white">Join Prowexa Today</h2>
-                <p className="mt-3 text-white/80">Whether you want to build a digital product or upskill your team, we've got you covered.</p>
-                <div className="mt-8 flex flex-wrap justify-center gap-4">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-brand hover:bg-white/90 transition"
-                  >
-                    Start a Project <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    to="/academy"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/20 transition"
-                  >
-                    Explore Programs
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </section>
       </main>
+
+      <SubmitTestimonialModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={loadTestimonials}
+      />
 
       <Footer />
     </div>
