@@ -1,9 +1,11 @@
-import officeTeam from "@/assets/office-team.jpg";
-import officeWorkspace from "@/assets/office-workspace.jpg";
-import officeReception from "@/assets/office-reception.jpg";
-import officeNight from "@/assets/office-night.jpg";
-import officeCoding from "@/assets/office-coding.jpg";
-import heroBg from "@/assets/hero-bg.png";
+import officeTeam from "@/assets/office-team.webp";
+import officeWorkspace from "@/assets/office-workspace.webp";
+import officeReception from "@/assets/office-reception.webp";
+import officeNight from "@/assets/office-night.webp";
+import officeCoding from "@/assets/office-coding.webp";
+import heroBg from "@/assets/hero-bg.webp";
+import { SEOHead, defaultOrganizationSchema, defaultLocalBusinessSchema } from "./seo-head";
+import { trackWhatsAppClick, trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
 import {
   ArrowRight,
   Lightbulb,
@@ -49,6 +51,11 @@ import { Footer } from "./footer";
 export function HomePage() {
   return (
     <main id="top">
+      <SEOHead
+        title="Prowexa Technologies | Software Development Company Pune | Build Fast. Scale Smart."
+        description="Prowexa Technologies Pvt. Ltd. is a top software development company in Pune, India. We build scalable products, React & Flutter mobile apps, AI solutions, and custom ERP/CRM software."
+        structuredData={[defaultOrganizationSchema, defaultLocalBusinessSchema]}
+      />
       <Hero />
       <FeatureStrip />
       <About />
@@ -71,10 +78,11 @@ export function HomePage() {
 function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/917030247209?text=Hi%20Prowexa%2C%20I%20would%20like%20to%20discuss%20a%20project"
+      href="https://wa.me/917030347209?text=Hi%20Prowexa%2C%20I%20would%20like%20to%20discuss%20a%20project"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
+      onClick={trackWhatsAppClick}
       className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-2xl transition-transform hover:scale-110"
       style={{ background: "#25D366" }}
     >
@@ -613,7 +621,7 @@ function Contact() {
           <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-gradient-brand opacity-30 blur-3xl" />
           <div className="relative">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Let's build something amazing together <span className="inline-block">🚀</span>
+              Let's build something amazing together
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
               Tell us about your idea. We'll help you turn it into a product.
@@ -621,7 +629,7 @@ function Contact() {
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
                 { icon: Mail, label: "Email", value: "info@prowexa.com", href: "mailto:info@prowexa.com" },
-                { icon: Phone, label: "Phone", value: "7030247209", href: "tel:7030247209" },
+                { icon: Phone, label: "Phone", value: "7030347209", href: "tel:7030347209" },
                 { icon: Globe, label: "Website", value: "prowexa.com", href: "https://prowexa.com" },
               ].map((c) => (
                 <a

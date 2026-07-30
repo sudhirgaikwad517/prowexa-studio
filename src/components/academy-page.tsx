@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
+import { SEOHead } from "./seo-head";
 import {
   GraduationCap,
   Sparkles,
@@ -127,6 +128,11 @@ export function AcademyPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Prowexa Academy | Tech Courses & Software Development Internships Pune"
+        description="Bridge academia and industry with Prowexa Academy. Practical training in Java Full Stack, MERN Stack, React Native, AI & Data Science in Pune."
+        canonicalPath="/academy"
+      />
       <SiteHeader />
 
       <main>

@@ -1,0 +1,18 @@
+{
+  "name": "Prowexa Technologies Pvt. Ltd.",
+  "short_name": "Prowexa",
+  "description": "Next-generation product development solutions from MVP to scale. React, Flutter, AI, and Cloud solutions in Pune, India.",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#0f051d",
+  "background_color": "#0f051d",
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "portrait"
+}

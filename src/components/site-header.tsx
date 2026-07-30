@@ -2,8 +2,9 @@ import { useState } from "react";
 import type { MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { ThemeToggle } from "./theme-toggle";
-import logo from "@/assets/prowexa-logo.png";
+import logo from "@/assets/prowexa-logo.webp";
 import { Menu, X } from "lucide-react";
+import { trackCTAClick } from "@/lib/gtag";
 
 import { scrollToSection } from "@/utils/scroll";
 
@@ -50,6 +51,8 @@ export function SiteHeader() {
           <img
             src={logo}
             alt="Prowexa Technologies"
+            width={180}
+            height={44}
             className="h-9 md:h-11 w-auto"
           />
         </Link>

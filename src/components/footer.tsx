@@ -16,16 +16,15 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-semibold">Address</h4>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            4th floor, Silviana,<br />
-            Opposite Gera's Regent Park and Towers,<br />
-            Baner, Pune
+            Survey No 44 H. No. 8/1 (P, Plot A, opp. Bhartiya Vidyapeeth School,<br />
+            Balewadi, Pune, Maharashtra - 411045
           </p>
         </div>
         <div>
           <h4 className="text-sm font-semibold">Contact</h4>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li><a href="mailto:info@prowexa.com" className="hover:text-foreground transition-colors">info@prowexa.com</a></li>
-            <li><a href="tel:7030247209" className="hover:text-foreground transition-colors">7030247209</a></li>
+            <li><a href="tel:7030347209" className="hover:text-foreground transition-colors">7030347209</a></li>
             <li><a href="https://prowexa.com" className="hover:text-foreground transition-colors">prowexa.com</a></li>
           </ul>
         </div>
