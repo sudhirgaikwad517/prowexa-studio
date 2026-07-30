@@ -1,4 +1,4 @@
--- Prowexa Technologies Database Schema (Supabase / PostgreSQL)
+-- Prowexa Technologies Complete Database Schema (Supabase / PostgreSQL)
 
 -- 1. Leads & Contact Form Submissions Table
 CREATE TABLE IF NOT EXISTS public.leads (
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS public.testimonials (
   company_or_course TEXT,
   rating INT DEFAULT 5,
   avatar_url TEXT,
-  is_published BOOLEAN DEFAULT true,
+  is_published BOOLEAN DEFAULT false, -- Requires admin approval by default
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -36,8 +36,26 @@ CREATE TABLE IF NOT EXISTS public.blogs (
   content TEXT NOT NULL,
   cover_image TEXT,
   author TEXT DEFAULT 'Prowexa Engineering Team',
-  is_published BOOLEAN DEFAULT true,
+  is_published BOOLEAN DEFAULT false, -- Requires admin approval by default
   published_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Case Studies Table
+CREATE TABLE IF NOT EXISTS public.case_studies (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  client TEXT NOT NULL,
+  industry TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  challenge TEXT NOT NULL,
+  solution TEXT NOT NULL,
+  results TEXT[] DEFAULT '{}',
+  tech_stack TEXT[] DEFAULT '{}',
+  metrics JSONB DEFAULT '{}',
+  cover_image TEXT,
+  is_published BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -45,10 +63,32 @@ CREATE TABLE IF NOT EXISTS public.blogs (
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blogs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.case_studies ENABLE ROW LEVEL SECURITY;
 
--- Allow public anonymous inserts for leads/contact form
-CREATE POLICY "Allow public insert for leads" ON public.leads FOR INSERT WITH CHECK (true);
+-- Table Grants
+GRANT ALL ON TABLE public.leads TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.testimonials TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.blogs TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.case_studies TO anon, authenticated, service_role;
 
--- Allow public read access for published testimonials and blogs
+-- Policies for public lead generation
+DROP POLICY IF EXISTS "Allow public insert for leads" ON public.leads;
+CREATE POLICY "Allow public insert for leads" ON public.leads FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+-- Policies for public testimonials
+DROP POLICY IF EXISTS "Allow public read for testimonials" ON public.testimonials;
 CREATE POLICY "Allow public read for testimonials" ON public.testimonials FOR SELECT USING (is_published = true);
+
+DROP POLICY IF EXISTS "Allow public insert for testimonials" ON public.testimonials;
+CREATE POLICY "Allow public insert for testimonials" ON public.testimonials FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+-- Policies for public blogs
+DROP POLICY IF EXISTS "Allow public read for blogs" ON public.blogs;
 CREATE POLICY "Allow public read for blogs" ON public.blogs FOR SELECT USING (is_published = true);
+
+DROP POLICY IF EXISTS "Allow public insert for blogs" ON public.blogs;
+CREATE POLICY "Allow public insert for blogs" ON public.blogs FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+-- Policies for public case studies
+DROP POLICY IF EXISTS "Allow public read for case studies" ON public.case_studies;
+CREATE POLICY "Allow public read for case studies" ON public.case_studies FOR SELECT USING (is_published = true);

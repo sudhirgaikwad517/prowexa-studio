@@ -48,6 +48,12 @@ const routes = [
     title: "Contact Us & Get a Quote | Prowexa Technologies Pune",
     description: "Get in touch with Prowexa Technologies in Balewadi, Pune. Schedule a project consultation for web, mobile app, AI, or enterprise software development.",
     canonical: "https://www.prowexa.com/contact"
+  },
+  {
+    path: "/admin",
+    title: "Admin Management Portal | Prowexa Technologies",
+    description: "Executive Admin Portal for managing leads, case studies, testimonials, and blog approvals.",
+    canonical: "https://www.prowexa.com/admin"
   }
 ];
 

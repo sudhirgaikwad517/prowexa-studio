@@ -26,6 +26,7 @@ export function SiteHeader() {
     { label: "Case Studies", to: "/case-studies" as const },
     { label: "Academy", to: "/academy" as const },
     { label: "Testimonials", to: "/testimonials" as const },
+    { label: "Admin", to: "/admin" as const },
   ];
 
   function handleHomeNavClick(event: MouseEvent, target: string) {
