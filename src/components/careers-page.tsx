@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { 
   Briefcase, 
   MapPin, 
@@ -8,14 +9,23 @@ import {
   Trophy, 
   Globe,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  Send
 } from "lucide-react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
-import { scrollToSection } from "@/utils/scroll";
+import { ApplyJobModal } from "./apply-job-modal";
 
 export function CareersPage() {
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState("Senior Full Stack Engineer");
+
+  function openApplyModal(jobTitle?: string) {
+    if (jobTitle) setSelectedJob(jobTitle);
+    setIsApplyModalOpen(true);
+  }
+
   const jobs = [
     {
       title: "Senior Full Stack Engineer",
@@ -41,7 +51,7 @@ export function CareersPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SEOHead
         title="Careers & Open Tech Roles | Prowexa Technologies Pune"
         description="Join Prowexa Technologies. We are hiring Senior Full Stack Engineers, UI/UX Designers, React/Flutter Developers, and AI Engineers in Pune & Remote."
@@ -49,7 +59,7 @@ export function CareersPage() {
       />
       <SiteHeader />
       
-      <main>
+      <main className="flex-1">
         {/* Careers Hero */}
         <section className="relative py-24 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
@@ -133,8 +143,8 @@ export function CareersPage() {
                 <p className="mt-2 text-muted-foreground">Find your next challenge and join our mission.</p>
               </div>
               <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <span className="flex h-2 w-2 rounded-full bg-green-500" />
-                Waitlist currently open for all roles
+                <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                Applications active for all roles
               </div>
             </div>
 
@@ -166,33 +176,40 @@ export function CareersPage() {
                         {job.description}
                       </p>
                     </div>
-                    <a 
-                      href="mailto:careers@prowexa.com" 
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-surface-elevated border border-border px-8 py-3.5 text-sm font-semibold hover:bg-purple-500 hover:text-white transition-all duration-300 whitespace-nowrap"
+                    <button 
+                      onClick={() => openApplyModal(job.title)}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition-all duration-300 whitespace-nowrap"
                     >
                       Apply Now <ArrowRight className="h-4 w-4" />
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-16 text-center rounded-[2.5rem] bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-12">
+            <div className="mt-16 text-center rounded-[2.5rem] bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-12 shadow-glow">
               <h3 className="text-2xl font-bold">Don't see a perfect fit?</h3>
               <p className="mt-4 text-muted-foreground">
-                We're always looking for talented individuals. Send us your resume and tell us 
+                We're always looking for talented individuals. Submit an open application and tell us 
                 how you can make an impact at Prowexa.
               </p>
-              <a 
-                href="mailto:careers@prowexa.com" 
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-purple-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/20 hover:bg-purple-700 transition"
+              <button 
+                onClick={() => openApplyModal("Open Role Application")}
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
               >
                 Send Open Application <Briefcase className="h-4 w-4 ml-1" />
-              </a>
+              </button>
             </div>
           </div>
         </section>
       </main>
+
+      <ApplyJobModal
+        isOpen={isApplyModalOpen}
+        onClose={() => setIsApplyModalOpen(false)}
+        defaultRole={selectedJob}
+      />
+
       <Footer />
     </div>
   );
