@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
 import { SubmitBlogModal } from "./submit-blog-modal";
 import { fetchPublishedBlogs, type BlogData } from "@/lib/blogs";
+import { toast } from "sonner";
 import {
   FileText,
   Plus,
   Calendar,
   User,
-  Clock,
   ArrowRight,
   BookOpen,
+  Share2,
+  Linkedin,
+  Twitter,
+  Facebook,
+  MessageCircle,
+  Copy,
 } from "lucide-react";
 
 export function BlogsPage() {
@@ -28,6 +35,16 @@ export function BlogsPage() {
     const data = await fetchPublishedBlogs();
     setBlogs(data);
     setLoading(false);
+  }
+
+  function handleShare(e: React.MouseEvent, slug: string, title: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/blogs/${slug}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      toast.success(`Share link for "${title}" copied to clipboard!`);
+    }
   }
 
   return (
@@ -52,7 +69,7 @@ export function BlogsPage() {
               Engineering <span className="text-gradient-purple">Blogs & Insights</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
-              In-depth software engineering guides, frontend architecture best practices, and Generative AI implementation insights.
+              In-depth software engineering guides, frontend architecture best practices, and Generative AI implementation insights. Click any article to read in detail.
             </p>
 
             <div className="mt-8 flex justify-center gap-4">
@@ -72,9 +89,11 @@ export function BlogsPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {blogs.map((b) => (
-                <article
+                <Link
                   key={b.id || b.slug}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-purple-500/40 transition-all duration-300 animate-fade-up"
+                  to="/blogs/$slug"
+                  params={{ slug: b.slug }}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-purple-500/40 transition-all duration-300 animate-fade-up text-left"
                 >
                   <div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
@@ -103,13 +122,17 @@ export function BlogsPage() {
 
                   <div className="mt-8 border-t border-border pt-6 flex items-center justify-between">
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand group-hover:underline">
-                      Read Article <ArrowRight className="h-3.5 w-3.5" />
+                      Read Full Article <ArrowRight className="h-3.5 w-3.5" />
                     </span>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface text-muted-foreground group-hover:text-foreground">
-                      <BookOpen className="h-4 w-4" />
-                    </span>
+                    <button
+                      onClick={(e) => handleShare(e, b.slug, b.title)}
+                      className="p-2 text-muted-foreground hover:text-purple-400 transition rounded-lg hover:bg-surface"
+                      title="Quick Share Link"
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           </div>

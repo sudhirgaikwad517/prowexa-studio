@@ -32,6 +32,18 @@ const routes = [
     canonical: "https://www.prowexa.com/blogs"
   },
   {
+    path: "/blogs/building-microservices-react19-supabase",
+    title: "Building Microservices with React 19, Vite & Supabase PostgreSQL | Prowexa Blog",
+    description: "Learn how we architect high-throughput digital platforms with pre-rendering and real-time database syncing.",
+    canonical: "https://www.prowexa.com/blogs/building-microservices-react19-supabase"
+  },
+  {
+    path: "/blogs/ai-integration-modern-erp-systems",
+    title: "AI Integration in Modern ERP Systems: Lessons Learned | Prowexa Blog",
+    description: "Discover practical strategies for integrating LLMs and generative AI tools into enterprise workflows safely.",
+    canonical: "https://www.prowexa.com/blogs/ai-integration-modern-erp-systems"
+  },
+  {
     path: "/academy",
     title: "Prowexa Academy | Tech Courses & Software Development Internships Pune",
     description: "Bridge academia and industry with Prowexa Academy. Practical training in Java Full Stack, MERN Stack, React Native, AI & Data Science in Pune.",
