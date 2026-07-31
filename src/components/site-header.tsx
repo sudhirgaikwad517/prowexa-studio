@@ -27,7 +27,6 @@ export function SiteHeader() {
     { label: "Blogs", to: "/blogs" as const },
     { label: "Academy", to: "/academy" as const },
     { label: "Testimonials", to: "/testimonials" as const },
-    { label: "Admin", to: "/admin" as const },
   ];
 
   function handleHomeNavClick(event: MouseEvent, target: string) {
