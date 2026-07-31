@@ -24,6 +24,7 @@ export function SiteHeader() {
   const pageLinks = [
     { label: "Portfolio", to: "/portfolio" as const },
     { label: "Case Studies", to: "/case-studies" as const },
+    { label: "Blogs", to: "/blogs" as const },
     { label: "Academy", to: "/academy" as const },
     { label: "Testimonials", to: "/testimonials" as const },
     { label: "Admin", to: "/admin" as const },

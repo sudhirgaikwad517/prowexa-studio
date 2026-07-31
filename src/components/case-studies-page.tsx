@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
-import { SubmitBlogModal } from "./submit-blog-modal";
 import { fetchPublishedCaseStudies, type CaseStudyData } from "@/lib/case-studies";
 import {
   Layers,
@@ -11,13 +10,10 @@ import {
   Building2,
   CheckCircle2,
   Cpu,
-  Plus,
-  FileText,
 } from "lucide-react";
 
 export function CaseStudiesPage() {
   const [caseStudies, setCaseStudies] = useState<CaseStudyData[]>([]);
-  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +30,7 @@ export function CaseStudiesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SEOHead
-        title="Case Studies & Engineering Success Stories | Prowexa Pune"
+        title="Case Studies & Enterprise Architecture Success Stories | Prowexa Pune"
         description="Explore in-depth technical case studies on microservices architecture, real-time trading engines, and Generative AI legal platforms built by Prowexa."
         canonicalUrl="https://www.prowexa.com/case-studies"
       />
@@ -47,7 +43,7 @@ export function CaseStudiesPage() {
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-xs text-blue-400 backdrop-blur-sm animate-fade-up">
               <Layers className="h-3.5 w-3.5" />
-              Engineering Case Studies & Knowledge Base
+              Enterprise Case Studies
             </div>
             <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
               Real Impact. <span className="text-gradient-brand">Real Results.</span>
@@ -55,16 +51,6 @@ export function CaseStudiesPage() {
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
               Detailed technical breakdowns of how Prowexa engineers solved complex software bottlenecks, scaled databases, and built AI systems.
             </p>
-
-            <div className="mt-8 flex justify-center gap-4">
-              <button
-                onClick={() => setIsBlogModalOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition animate-fade-up"
-              >
-                <Plus className="h-4 w-4" />
-                Submit / Write a Blog Article
-              </button>
-            </div>
           </div>
         </section>
 
@@ -72,7 +58,7 @@ export function CaseStudiesPage() {
         <section className="py-24 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             <div className="space-y-16">
-              {caseStudies.map((cs, idx) => (
+              {caseStudies.map((cs) => (
                 <div
                   key={cs.id || cs.title}
                   className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-8 md:p-12 shadow-glow animate-fade-up"
@@ -140,11 +126,6 @@ export function CaseStudiesPage() {
           </div>
         </section>
       </main>
-
-      <SubmitBlogModal
-        isOpen={isBlogModalOpen}
-        onClose={() => setIsBlogModalOpen(false)}
-      />
 
       <Footer />
     </div>

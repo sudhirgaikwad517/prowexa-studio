@@ -26,6 +26,12 @@ const routes = [
     canonical: "https://www.prowexa.com/case-studies"
   },
   {
+    path: "/blogs",
+    title: "Engineering Blogs & Technical Articles | Prowexa Technologies",
+    description: "Read technical insights, system architecture guides, React 19 microservices, and AI engineering articles written by Prowexa engineers.",
+    canonical: "https://www.prowexa.com/blogs"
+  },
+  {
     path: "/academy",
     title: "Prowexa Academy | Tech Courses & Software Development Internships Pune",
     description: "Bridge academia and industry with Prowexa Academy. Practical training in Java Full Stack, MERN Stack, React Native, AI & Data Science in Pune.",
