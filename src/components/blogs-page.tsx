@@ -14,11 +14,6 @@ import {
   ArrowRight,
   BookOpen,
   Share2,
-  Linkedin,
-  Twitter,
-  Facebook,
-  MessageCircle,
-  Copy,
 } from "lucide-react";
 
 export function BlogsPage() {
@@ -37,13 +32,27 @@ export function BlogsPage() {
     setLoading(false);
   }
 
-  function handleShare(e: React.MouseEvent, slug: string, title: string) {
+  async function handleShare(e: React.MouseEvent, blog: BlogData) {
     e.preventDefault();
     e.stopPropagation();
-    const url = `${window.location.origin}/blogs/${slug}`;
+    const shareUrl = `${window.location.origin}/blogs/${blog.slug}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: blog.title,
+          text: blog.description,
+          url: shareUrl,
+        });
+        return;
+      } catch (err) {
+        // User cancelled native share sheet
+      }
+    }
+
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      toast.success(`Share link for "${title}" copied to clipboard!`);
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success(`Blog link for "${blog.title}" copied to clipboard!`);
     }
   }
 
@@ -89,13 +98,11 @@ export function BlogsPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {blogs.map((b) => (
-                <Link
+                <div
                   key={b.id || b.slug}
-                  to="/blogs/$slug"
-                  params={{ slug: b.slug }}
                   className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-purple-500/40 transition-all duration-300 animate-fade-up text-left"
                 >
-                  <div>
+                  <Link to="/blogs/$slug" params={{ slug: b.slug }} className="block flex-1">
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
                       <span className="flex items-center gap-1.5 text-purple-400 font-semibold">
                         <User className="h-3.5 w-3.5" />
@@ -118,21 +125,27 @@ export function BlogsPage() {
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-3">
                       {b.description}
                     </p>
-                  </div>
+                  </Link>
 
                   <div className="mt-8 border-t border-border pt-6 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand group-hover:underline">
+                    <Link
+                      to="/blogs/$slug"
+                      params={{ slug: b.slug }}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand group-hover:underline"
+                    >
                       Read Full Article <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
+                    </Link>
+
                     <button
-                      onClick={(e) => handleShare(e, b.slug, b.title)}
-                      className="p-2 text-muted-foreground hover:text-purple-400 transition rounded-lg hover:bg-surface"
-                      title="Quick Share Link"
+                      type="button"
+                      onClick={(e) => handleShare(e, b)}
+                      className="relative z-10 p-2 text-muted-foreground hover:text-purple-400 transition rounded-lg hover:bg-surface"
+                      title="Share Article"
                     >
                       <Share2 className="h-4 w-4" />
                     </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
