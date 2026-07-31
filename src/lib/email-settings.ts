@@ -1,4 +1,5 @@
 export interface EmailConfigSettings {
+  emailLogoUrl: string;
   hrSenderName: string;
   hrSenderEmail: string;
   hrSignatureName: string;
@@ -12,6 +13,7 @@ export interface EmailConfigSettings {
 }
 
 export const defaultEmailSettings: EmailConfigSettings = {
+  emailLogoUrl: "https://www.prowexa.com/assets/prowexa-logo.webp",
   hrSenderName: "Prowexa Talent Acquisition",
   hrSenderEmail: "hr@prowexa.com",
   hrSignatureName: "Team Talent Acquisition",

@@ -168,6 +168,7 @@ export function AdminPage() {
       senderName: type === "job_application" ? emailConfig.hrSenderName : emailConfig.businessSenderName,
       signatureName: type === "job_application" ? emailConfig.hrSignatureName : emailConfig.businessSignatureName,
       signatureDesignation: type === "job_application" ? emailConfig.hrSignatureDesignation : emailConfig.businessSignatureDesignation,
+      logoUrl: emailConfig.emailLogoUrl,
       details: {
         role: type === "job_application" ? "Senior Full Stack Engineer" : undefined,
         service: type === "contact" ? "Custom Enterprise ERP Platform" : undefined,
@@ -1015,6 +1016,33 @@ export function AdminPage() {
                 </div>
 
                 <form onSubmit={handleSaveEmailConfig} className="space-y-8">
+                  {/* Email Logo Configuration Card */}
+                  <div className="rounded-3xl border border-brand/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand/10 text-brand border border-brand/20">
+                        <Sparkles className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">Email Header Branding Logo</h3>
+                        <p className="text-xs text-muted-foreground">Specify the public URL of the Prowexa logo image displayed in HTML emails</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                        Prowexa Logo Image URL *
+                      </label>
+                      <input
+                        type="url"
+                        required
+                        placeholder="https://www.prowexa.com/assets/prowexa-logo.webp"
+                        value={emailConfig.emailLogoUrl}
+                        onChange={(e) => setEmailConfig({ ...emailConfig, emailLogoUrl: e.target.value })}
+                        className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                      />
+                    </div>
+                  </div>
+
                   {/* HR Email Config Card */}
                   <div className="rounded-3xl border border-purple-500/30 bg-card p-6 md:p-8 shadow-card">
                     <div className="flex items-center gap-3 border-b border-border pb-4">
