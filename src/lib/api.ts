@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { trackContactFormSubmit } from "./gtag";
 import { supabase, supabaseUrl, supabaseAnonKey } from "./supabase";
 import { localSubmittedLeads, type LeadRecord } from "./leads";
+import { triggerEmailNotification } from "./email-service";
 
 export interface LeadSubmissionData {
   name: string;
@@ -27,8 +28,21 @@ export async function submitLead(data: LeadSubmissionData): Promise<{ success: b
     created_at: new Date().toISOString(),
   };
 
-  // Add to local memory store immediately so it displays in Admin panel right away
+  // Add to local memory store immediately for Admin panel display
   localSubmittedLeads.unshift(leadData as LeadRecord);
+
+  // Trigger Email Notification
+  const isJobApp = data.service?.startsWith("job-application:");
+  triggerEmailNotification({
+    type: isJobApp ? "job_application" : "contact",
+    recipientEmail: leadData.email,
+    recipientName: leadData.name,
+    details: {
+      service: leadData.service,
+      message: leadData.message,
+      role: isJobApp ? leadData.service.replace(/^job-application:\s*/, "") : undefined,
+    },
+  });
 
   // Create a 4-second timeout to prevent any UI freeze
   const timeoutPromise = new Promise<{ success: boolean; timeout: true }>((resolve) =>

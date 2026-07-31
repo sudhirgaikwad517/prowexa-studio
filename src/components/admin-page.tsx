@@ -27,6 +27,7 @@ import {
   deleteBlog,
   type BlogData,
 } from "@/lib/blogs";
+import { triggerEmailNotification } from "@/lib/email-service";
 import {
   ShieldCheck,
   Lock,
@@ -150,6 +151,16 @@ export function AdminPage() {
     await updateTestimonialStatus(id, newStatus);
     setTestimonials(testimonials.map((t) => (t.id === id ? { ...t, is_published: newStatus } : t)));
     toast.success(newStatus ? "Testimonial Approved & Published!" : "Testimonial unpublished");
+    if (newStatus) {
+      const target = testimonials.find((t) => t.id === id);
+      if (target) {
+        triggerEmailNotification({
+          type: "testimonial_approved",
+          recipientEmail: "info@prowexa.com",
+          recipientName: target.name,
+        });
+      }
+    }
   }
 
   async function handleTestimonialDelete(id: string) {
@@ -164,6 +175,17 @@ export function AdminPage() {
     await updateBlogStatus(id, newStatus);
     setBlogs(blogs.map((b) => (b.id === id ? { ...b, is_published: newStatus } : b)));
     toast.success(newStatus ? "Blog Approved & Published!" : "Blog unpublished");
+    if (newStatus) {
+      const target = blogs.find((b) => b.id === id);
+      if (target) {
+        triggerEmailNotification({
+          type: "blog_approved",
+          recipientEmail: "info@prowexa.com",
+          recipientName: target.author,
+          details: { title: target.title, slug: target.slug },
+        });
+      }
+    }
   }
 
   async function handleBlogDelete(id: string) {
