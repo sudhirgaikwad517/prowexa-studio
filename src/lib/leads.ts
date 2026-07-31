@@ -20,6 +20,17 @@ export const fallbackLeads: LeadRecord[] = [
     created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
   },
   {
+    id: "lead-job-1",
+    name: "Aman Verma",
+    email: "aman.verma@example.com",
+    company: "Phone: +91 98123 45678 | Exp: 3-5 years",
+    service: "job-application: Senior Full Stack Engineer",
+    budget: "Portfolio: https://github.com/amanverma",
+    message: "Application for Senior Full Stack Engineer. 4 years of experience building React and Node.js microservices.",
+    status: "new",
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+  },
+  {
     id: "lead-2",
     name: "Ananya Deshmukh",
     email: "ananya@academy.edu",
@@ -32,6 +43,8 @@ export const fallbackLeads: LeadRecord[] = [
   },
 ];
 
+export const localSubmittedLeads: LeadRecord[] = [];
+
 export async function fetchAllLeadsAdmin(): Promise<LeadRecord[]> {
   try {
     if (supabase) {
@@ -40,14 +53,23 @@ export async function fetchAllLeadsAdmin(): Promise<LeadRecord[]> {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (!error && data) {
-        return data;
+      if (error) {
+        console.warn("Fetch leads admin Supabase error:", error);
+      } else if (data) {
+        const existingIds = new Set(data.map((d) => d.id));
+        const extraLocal = localSubmittedLeads.filter((l) => !existingIds.has(l.id));
+        const extraFallbacks = fallbackLeads.filter(
+          (f) => !existingIds.has(f.id) && !extraLocal.some((l) => l.id === f.id)
+        );
+        return [...extraLocal, ...data, ...extraFallbacks];
       }
     }
   } catch (err) {
     console.warn("Fetch leads admin error:", err);
   }
-  return fallbackLeads;
+  const existingIds = new Set(localSubmittedLeads.map((d) => d.id));
+  const extraFallbacks = fallbackLeads.filter((f) => !existingIds.has(f.id));
+  return [...localSubmittedLeads, ...extraFallbacks];
 }
 
 export async function updateLeadStatus(id: string, status: "new" | "contacted" | "archived") {

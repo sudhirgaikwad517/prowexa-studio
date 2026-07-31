@@ -34,6 +34,7 @@ import {
   Star,
   FileText,
   Inbox,
+  Briefcase,
   Plus,
   Trash2,
   Check,
@@ -45,12 +46,17 @@ import {
   RefreshCw,
   LogOut,
   ChevronRight,
+  ExternalLink,
+  Phone,
+  Mail,
+  User,
+  X,
 } from "lucide-react";
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"leads" | "casestudies" | "testimonials" | "blogs">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "applications" | "casestudies" | "testimonials" | "blogs">("leads");
 
   // Data states
   const [leads, setLeads] = useState<LeadRecord[]>([]);
@@ -129,13 +135,13 @@ export function AdminPage() {
   async function handleLeadStatus(id: string, status: "new" | "contacted" | "archived") {
     await updateLeadStatus(id, status);
     setLeads(leads.map((l) => (l.id === id ? { ...l, status } : l)));
-    toast.success(`Lead marked as ${status}`);
+    toast.success(`Marked as ${status}`);
   }
 
   async function handleLeadDelete(id: string) {
     await deleteLead(id);
     setLeads(leads.filter((l) => l.id !== id));
-    toast.success("Lead removed");
+    toast.success("Record removed");
   }
 
   // Testimonial status actions
@@ -233,11 +239,15 @@ export function AdminPage() {
     toast.success("Case Study removed");
   }
 
+  // Filter leads vs job applications
+  const jobApplications = leads.filter((l) => l.service?.startsWith("job-application:"));
+  const contactLeads = leads.filter((l) => !l.service?.startsWith("job-application:"));
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SEOHead
         title="Admin Management Portal | Prowexa Technologies"
-        description="Prowexa Technologies Admin Portal for managing leads, case studies, testimonials, and blog approvals."
+        description="Prowexa Technologies Admin Portal for managing leads, job applications, case studies, testimonials, and blog approvals."
         canonicalUrl="https://www.prowexa.com/admin"
       />
       <SiteHeader />
@@ -314,15 +324,26 @@ export function AdminPage() {
             </div>
 
             {/* Quick Metrics Bar */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
                 <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-xs uppercase tracking-wider font-semibold">Total Inquiries</span>
+                  <span className="text-xs uppercase tracking-wider font-semibold">Contact Leads</span>
                   <Inbox className="h-5 w-5 text-brand" />
                 </div>
-                <div className="mt-2 text-3xl font-bold">{leads.length}</div>
+                <div className="mt-2 text-3xl font-bold">{contactLeads.length}</div>
                 <p className="mt-1 text-xs text-emerald-400">
-                  {leads.filter((l) => l.status === "new").length} New Leads
+                  {contactLeads.filter((l) => l.status === "new").length} New Leads
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-xs uppercase tracking-wider font-semibold">Job Applicants</span>
+                  <Briefcase className="h-5 w-5 text-purple-400" />
+                </div>
+                <div className="mt-2 text-3xl font-bold">{jobApplications.length}</div>
+                <p className="mt-1 text-xs text-purple-400">
+                  {jobApplications.filter((l) => l.status === "new").length} New Candidates
                 </p>
               </div>
 
@@ -353,7 +374,7 @@ export function AdminPage() {
                 </div>
                 <div className="mt-2 text-3xl font-bold">{blogs.length}</div>
                 <p className="mt-1 text-xs text-amber-400">
-                  {blogs.filter((b) => !b.is_published).length} Pending Approval
+                  {blogs.filter((b) => !b.is_published).length} Pending Review
                 </p>
               </div>
             </div>
@@ -361,10 +382,11 @@ export function AdminPage() {
             {/* Navigation Tabs */}
             <div className="mt-10 flex border-b border-border overflow-x-auto">
               {[
-                { id: "leads", label: `Leads & Inquiries (${leads.length})`, icon: Inbox },
+                { id: "leads", label: `Leads & Inquiries (${contactLeads.length})`, icon: Inbox },
+                { id: "applications", label: `Job Applications (${jobApplications.length})`, icon: Briefcase },
                 { id: "casestudies", label: `Case Studies (${caseStudies.length})`, icon: Layers },
                 { id: "testimonials", label: `Testimonials (${testimonials.length})`, icon: Star },
-                { id: "blogs", label: `Blogs & Articles (${blogs.length})`, icon: FileText },
+                { id: "blogs", label: `Blogs (${blogs.length})`, icon: FileText },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -381,12 +403,12 @@ export function AdminPage() {
               ))}
             </div>
 
-            {/* TAB CONTENT 1: LEADS MANAGER */}
+            {/* TAB CONTENT 1: CONTACT LEADS MANAGER */}
             {activeTab === "leads" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">Inquiries & Contact Leads</h2>
-                  <span className="text-xs text-muted-foreground">Real-time Lead Capture Log</span>
+                  <h2 className="text-xl font-bold">Client Inquiries & Contact Leads</h2>
+                  <span className="text-xs text-muted-foreground">Direct Lead Submissions</span>
                 </div>
 
                 <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-card">
@@ -401,7 +423,7 @@ export function AdminPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {leads.map((lead) => (
+                      {contactLeads.map((lead) => (
                         <tr key={lead.id} className="hover:bg-surface/30 transition">
                           <td className="px-6 py-4">
                             <div className="font-semibold text-foreground">{lead.name}</div>
@@ -459,7 +481,118 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 2: CASE STUDIES MANAGER */}
+            {/* TAB CONTENT 2: SEPARATE JOB APPLICATIONS MANAGER */}
+            {activeTab === "applications" && (
+              <div className="mt-8 space-y-4 animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-purple-400">Job Applications & Hiring Portal</h2>
+                    <p className="text-xs text-muted-foreground">Candidate resumes, experience levels, and portfolio submissions</p>
+                  </div>
+                  <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold text-purple-400">
+                    {jobApplications.length} Candidates Applied
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-card">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-surface/80 text-xs uppercase tracking-wider text-muted-foreground border-b border-border">
+                      <tr>
+                        <th className="px-6 py-4">Applicant Candidate</th>
+                        <th className="px-6 py-4">Role & Experience</th>
+                        <th className="px-6 py-4">Portfolio / GitHub Link</th>
+                        <th className="px-6 py-4">Cover Note / Details</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {jobApplications.map((app) => {
+                        const portfolioUrlMatch = app.budget?.replace(/^Portfolio:\s*/, "") || app.message?.match(/https?:\/\/[^\s]+/)?.[0];
+                        const roleTitle = app.service?.replace(/^job-application:\s*/, "") || "Software Engineer";
+
+                        return (
+                          <tr key={app.id} className="hover:bg-surface/30 transition">
+                            <td className="px-6 py-4">
+                              <div className="font-semibold text-foreground flex items-center gap-1.5">
+                                <User className="h-3.5 w-3.5 text-purple-400" />
+                                {app.name}
+                              </div>
+                              <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                                <Mail className="h-3 w-3" />
+                                {app.email}
+                              </div>
+                              {app.company && (
+                                <div className="text-xs text-purple-400 flex items-center gap-1 mt-0.5">
+                                  <Phone className="h-3 w-3" />
+                                  {app.company}
+                                </div>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="inline-block rounded-md bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 text-xs font-semibold text-purple-300">
+                                {roleTitle}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              {portfolioUrlMatch ? (
+                                <a
+                                  href={portfolioUrlMatch}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 rounded-lg bg-surface border border-border px-3 py-1.5 text-xs font-semibold text-brand hover:underline"
+                                >
+                                  View Portfolio <ExternalLink className="h-3.5 w-3.5" />
+                                </a>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">Not Provided</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 max-w-md">
+                              <p className="line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                                {app.message}
+                              </p>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                                  app.status === "new"
+                                    ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                    : app.status === "contacted"
+                                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                    : "bg-surface text-muted-foreground"
+                                }`}
+                              >
+                                {app.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-right space-x-2">
+                              {app.status !== "contacted" && (
+                                <button
+                                  onClick={() => handleLeadStatus(app.id, "contacted")}
+                                  className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition"
+                                >
+                                  Mark Interviewed
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleLeadDelete(app.id)}
+                                className="p-1.5 text-muted-foreground hover:text-rose-400 transition"
+                                title="Delete Candidate"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 3: CASE STUDIES MANAGER */}
             {activeTab === "casestudies" && (
               <div className="mt-8 space-y-6 animate-fade-in">
                 <div className="flex items-center justify-between">
@@ -679,7 +812,7 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 3: TESTIMONIALS MANAGER */}
+            {/* TAB CONTENT 4: TESTIMONIALS MANAGER */}
             {activeTab === "testimonials" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
@@ -746,7 +879,7 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 4: BLOGS MANAGER */}
+            {/* TAB CONTENT 5: BLOGS MANAGER */}
             {activeTab === "blogs" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
