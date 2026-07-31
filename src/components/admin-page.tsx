@@ -4,6 +4,12 @@ import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
 import { toast } from "sonner";
 import {
+  getEmailSettings,
+  saveEmailSettings,
+  type EmailConfigSettings,
+} from "@/lib/email-settings";
+import { triggerEmailNotification } from "@/lib/email-service";
+import {
   fetchAllLeadsAdmin,
   updateLeadStatus,
   deleteLead,
@@ -27,7 +33,6 @@ import {
   deleteBlog,
   type BlogData,
 } from "@/lib/blogs";
-import { triggerEmailNotification } from "@/lib/email-service";
 import {
   ShieldCheck,
   Lock,
@@ -52,12 +57,15 @@ import {
   Mail,
   User,
   X,
+  Settings,
+  Send,
+  Sliders,
 } from "lucide-react";
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"leads" | "applications" | "casestudies" | "testimonials" | "blogs">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "applications" | "casestudies" | "testimonials" | "blogs" | "email_settings">("leads");
 
   // Data states
   const [leads, setLeads] = useState<LeadRecord[]>([]);
@@ -65,6 +73,10 @@ export function AdminPage() {
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
   const [blogs, setBlogs] = useState<BlogData[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Email Settings State
+  const [emailConfig, setEmailConfig] = useState<EmailConfigSettings>(getEmailSettings());
+  const [testEmailRecipient, setTestEmailRecipient] = useState("connect@prowexa.com");
 
   // Case Study Upload Form State
   const [showCaseStudyForm, setShowCaseStudyForm] = useState(false);
@@ -132,6 +144,42 @@ export function AdminPage() {
     toast.info("Logged out of Admin Portal");
   }
 
+  // Save Email Settings
+  function handleSaveEmailConfig(e: FormEvent) {
+    e.preventDefault();
+    saveEmailSettings(emailConfig);
+    toast.success("Email Aliases & MNC Signatures Saved!");
+  }
+
+  // Trigger Live Test MNC Email from Admin Panel
+  async function handleSendTestEmail(type: "job_application" | "contact") {
+    if (!testEmailRecipient) {
+      toast.error("Please enter a test recipient email.");
+      return;
+    }
+
+    toast.info(`Sending test MNC email (${type}) to ${testEmailRecipient}...`);
+
+    const res = await triggerEmailNotification({
+      type,
+      recipientEmail: testEmailRecipient,
+      recipientName: "Test Recipient",
+      senderEmail: type === "job_application" ? emailConfig.hrSenderEmail : emailConfig.businessSenderEmail,
+      senderName: type === "job_application" ? emailConfig.hrSenderName : emailConfig.businessSenderName,
+      signatureName: type === "job_application" ? emailConfig.hrSignatureName : emailConfig.businessSignatureName,
+      signatureDesignation: type === "job_application" ? emailConfig.hrSignatureDesignation : emailConfig.businessSignatureDesignation,
+      details: {
+        role: type === "job_application" ? "Senior Full Stack Engineer" : undefined,
+        service: type === "contact" ? "Custom Enterprise ERP Platform" : undefined,
+        message: "This is a live MNC-grade email template test triggered from Prowexa Admin Panel.",
+      },
+    });
+
+    if (res.success) {
+      toast.success(`MNC Test Email sent to ${testEmailRecipient}! Check inbox.`);
+    }
+  }
+
   // Lead status actions
   async function handleLeadStatus(id: string, status: "new" | "contacted" | "archived") {
     await updateLeadStatus(id, status);
@@ -156,7 +204,7 @@ export function AdminPage() {
       if (target) {
         triggerEmailNotification({
           type: "testimonial_approved",
-          recipientEmail: "info@prowexa.com",
+          recipientEmail: "connect@prowexa.com",
           recipientName: target.name,
         });
       }
@@ -180,7 +228,7 @@ export function AdminPage() {
       if (target) {
         triggerEmailNotification({
           type: "blog_approved",
-          recipientEmail: "info@prowexa.com",
+          recipientEmail: "connect@prowexa.com",
           recipientName: target.author,
           details: { title: target.title, slug: target.slug },
         });
@@ -409,6 +457,7 @@ export function AdminPage() {
                 { id: "casestudies", label: `Case Studies (${caseStudies.length})`, icon: Layers },
                 { id: "testimonials", label: `Testimonials (${testimonials.length})`, icon: Star },
                 { id: "blogs", label: `Blogs (${blogs.length})`, icon: FileText },
+                { id: "email_settings", label: `Email Templates & Signatures`, icon: Settings },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -948,6 +997,201 @@ export function AdminPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 6: EMAIL TEMPLATES & SIGNATURES MANAGER */}
+            {activeTab === "email_settings" && (
+              <div className="mt-8 space-y-8 animate-fade-in">
+                <div className="flex items-center justify-between border-b border-border pb-4">
+                  <div>
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                      <Settings className="h-5 w-5 text-brand" />
+                      Email Aliases & MNC Signatures Config
+                    </h2>
+                    <p className="text-xs text-muted-foreground">Manage sender names, emails, and signatures for HR & Client notifications</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSaveEmailConfig} className="space-y-8">
+                  {/* HR Email Config Card */}
+                  <div className="rounded-3xl border border-purple-500/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                        <Briefcase className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">HR / Hiring Email Alias Config</h3>
+                        <p className="text-xs text-muted-foreground">Used for Job Applications, candidate receipts, and interview scheduling</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Sender Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSenderName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSenderName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Sender Email Alias *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={emailConfig.hrSenderEmail}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSenderEmail: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Signature Title *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSignatureName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSignatureName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Signature Designation *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSignatureDesignation}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSignatureDesignation: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business Email Config Card */}
+                  <div className="rounded-3xl border border-blue-500/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <Inbox className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">Business & Client Inquiry Config</h3>
+                        <p className="text-xs text-muted-foreground">Used for Contact forms, quote inquiries, blog approvals & testimonials</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Sender Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSenderName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSenderName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Sender Email Alias *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={emailConfig.businessSenderEmail}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSenderEmail: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Signature Title *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSignatureName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSignatureName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Signature Designation *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSignatureDesignation}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSignatureDesignation: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
+                    >
+                      <Check className="h-4 w-4" /> Save Configuration Settings
+                    </button>
+                  </div>
+                </form>
+
+                {/* Live Test Email Trigger Box */}
+                <div className="rounded-3xl border border-emerald-500/30 bg-card p-6 md:p-8 shadow-glow">
+                  <h3 className="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                    <Send className="h-5 w-5" /> 1-Click Live Test MNC Email Trigger
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Send a real test email to any email address to inspect the MNC template rendering & signatures.
+                  </p>
+
+                  <div className="mt-6 flex flex-col sm:flex-row items-center gap-4">
+                    <input
+                      type="email"
+                      required
+                      placeholder="Enter recipient email (e.g. connect@prowexa.com)"
+                      value={testEmailRecipient}
+                      onChange={(e) => setTestEmailRecipient(e.target.value)}
+                      className="w-full sm:w-80 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                    />
+
+                    <button
+                      onClick={() => handleSendTestEmail("job_application")}
+                      className="w-full sm:w-auto inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-xs font-semibold text-white shadow-glow hover:bg-purple-500 transition whitespace-nowrap"
+                    >
+                      <Briefcase className="h-4 w-4" /> Send Test HR Candidate Email
+                    </button>
+
+                    <button
+                      onClick={() => handleSendTestEmail("contact")}
+                      className="w-full sm:w-auto inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-xs font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition whitespace-nowrap"
+                    >
+                      <Mail className="h-4 w-4" /> Send Test Client Inquiry Email
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
