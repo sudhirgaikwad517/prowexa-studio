@@ -3,12 +3,9 @@ import { SiteHeader } from "./site-header";
 import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
 import { toast } from "sonner";
-import {
-  getEmailSettings,
-  saveEmailSettings,
-  type EmailConfigSettings,
-} from "@/lib/email-settings";
+import { getEmailSettings, saveEmailSettings, type EmailConfigSettings } from "@/lib/email-settings";
 import { triggerEmailNotification } from "@/lib/email-service";
+import { requestAdminOTP, verifyAdminOTP } from "@/lib/admin-auth";
 import {
   fetchAllLeadsAdmin,
   updateLeadStatus,
@@ -60,11 +57,16 @@ import {
   Settings,
   Send,
   Sliders,
+  KeyRound,
+  ArrowRight,
 } from "lucide-react";
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pinInput, setPinInput] = useState("");
+  const [adminEmailInput, setAdminEmailInput] = useState("connect@prowexa.com");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
   const [activeTab, setActiveTab] = useState<"leads" | "applications" | "casestudies" | "testimonials" | "blogs" | "email_settings">("leads");
 
   // Data states
@@ -126,15 +128,31 @@ export function AdminPage() {
     }
   }
 
-  function handleAuthSubmit(e: FormEvent) {
+  async function handleRequestOTP(e: FormEvent) {
     e.preventDefault();
-    if (pinInput === "prowexa2026" || pinInput === "admin123") {
+    setSendingOtp(true);
+    try {
+      const res = await requestAdminOTP(adminEmailInput);
+      if (res.success) {
+        setOtpSent(true);
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } finally {
+      setSendingOtp(false);
+    }
+  }
+
+  function handleVerifyOTP(e: FormEvent) {
+    e.preventDefault();
+    const res = verifyAdminOTP(adminEmailInput, otpInput);
+    if (res.success) {
       setIsAuthenticated(true);
-      localStorage.setItem("prowexa_admin_authed", "true");
-      toast.success("Welcome Admin! Access Granted.");
+      toast.success(res.message);
       loadAdminData();
     } else {
-      toast.error("Incorrect Admin PIN! Default PIN: prowexa2026");
+      toast.error(res.message);
     }
   }
 
@@ -325,39 +343,96 @@ export function AdminPage() {
 
       <main className="flex-1 py-12">
         {!isAuthenticated ? (
-          /* Authentication Screen */
-          <div className="mx-auto max-w-md px-6 py-16 animate-fade-up">
+          /* Email OTP Authentication Screen */
+          <div className="mx-auto max-w-md px-6 py-12 animate-fade-up">
             <div className="overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-glow text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
-                <Lock className="h-8 w-8" />
+                <ShieldCheck className="h-8 w-8" />
               </div>
-              <h1 className="mt-6 text-2xl font-bold">Admin Portal Login</h1>
+              <h1 className="mt-6 text-2xl font-bold">Executive Admin Login</h1>
               <p className="mt-2 text-xs text-muted-foreground">
-                Enter your Admin Security PIN to access the Prowexa Management Dashboard.
+                Secure Email OTP Authentication for Prowexa Management Portal.
               </p>
 
-              <form onSubmit={handleAuthSubmit} className="mt-6 space-y-4 text-left">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                    Admin Passcode / PIN *
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="Enter admin PIN (default: prowexa2026)"
-                    value={pinInput}
-                    onChange={(e) => setPinInput(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-brand transition tracking-widest text-center text-lg"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
-                >
-                  <ShieldCheck className="h-4 w-4" />
-                  Unlock Admin Dashboard
-                </button>
-              </form>
+              {!otpSent ? (
+                /* Step 1: Request OTP Form */
+                <form onSubmit={handleRequestOTP} className="mt-6 space-y-4 text-left">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                      Authorized Admin Email *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="e.g. connect@prowexa.com"
+                      value={adminEmailInput}
+                      onChange={(e) => setAdminEmailInput(e.target.value)}
+                      className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-brand transition"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={sendingOtp}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition disabled:opacity-50"
+                  >
+                    {sendingOtp ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin" /> Sending Security Code...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" /> Send Verification OTP
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                /* Step 2: Verify OTP Form */
+                <form onSubmit={handleVerifyOTP} className="mt-6 space-y-4 text-left">
+                  <div className="rounded-xl bg-purple-500/10 border border-purple-500/20 p-3 text-center text-xs text-purple-300">
+                    Security OTP sent to <strong>{adminEmailInput}</strong>.<br />Check your email inbox.
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                      6-Digit Verification Code *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      placeholder="Enter 6-digit OTP"
+                      value={otpInput}
+                      onChange={(e) => setOtpInput(e.target.value)}
+                      className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-lg font-mono font-bold tracking-widest text-center outline-none focus:border-brand transition"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
+                  >
+                    <KeyRound className="h-4 w-4" /> Verify & Unlock Dashboard
+                  </button>
+
+                  <div className="flex items-center justify-between text-xs pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setOtpSent(false)}
+                      className="text-muted-foreground hover:text-foreground underline"
+                    >
+                      Change Email
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleRequestOTP}
+                      className="text-brand font-semibold hover:underline"
+                    >
+                      Resend OTP Code
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         ) : (

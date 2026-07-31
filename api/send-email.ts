@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import nodemailer from "nodemailer";
 
 interface EmailRequestBody {
-  type: "contact" | "job_application" | "blog_approved" | "testimonial_approved" | "subscribe";
+  type: "contact" | "job_application" | "blog_approved" | "testimonial_approved" | "subscribe" | "admin_otp";
   recipientEmail: string;
   recipientName?: string;
   senderEmail?: string;
@@ -83,7 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             </td>
             <td align="right" style="vertical-align: middle; white-space: nowrap;">
               <span style="color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px; white-space: nowrap; background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 20px;">
-                ${isJob ? "Talent Acquisition" : "Enterprise Solutions"}
+                ${type === "admin_otp" ? "Security Portal" : isJob ? "Talent Acquisition" : "Enterprise Solutions"}
               </span>
             </td>
           </tr>
@@ -117,6 +117,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let bodyHtml = "";
 
     switch (type) {
+      case "admin_otp":
+        subject = `🔐 Prowexa Admin Security OTP Code: ${details.otp}`;
+        bodyHtml = `
+          <div style="font-family: 'Segoe UI', Arial, sans-serif; padding: 32px 24px; color: #0f172a !important; background: #ffffff;">
+            <h1 style="color: #0f172a !important; font-size: 22px; font-weight: 700; margin-top: 0; line-height: 1.3;">Admin Security Verification Code</h1>
+            <p style="font-size: 15px; line-height: 1.6; color: #0f172a !important;">Hello <strong>Prowexa Administrator</strong>,</p>
+            <p style="font-size: 15px; line-height: 1.6; color: #334155 !important;">Use the following 6-digit One-Time Password (OTP) to unlock access to the Executive Admin Management Dashboard:</p>
+            
+            <div style="background: #f8fafc; border: 2px dashed #9333ea; padding: 20px; border-radius: 12px; margin: 24px 0; text-align: center;">
+              <div style="font-size: 11px; text-transform: uppercase; color: #475569 !important; font-weight: 700; margin-bottom: 6px; letter-spacing: 1px;">Your Admin Verification OTP</div>
+              <div style="font-size: 34px; font-weight: 800; color: #0f172a !important; letter-spacing: 8px; font-family: monospace;">${details.otp}</div>
+            </div>
+
+            <p style="font-size: 13px; line-height: 1.5; color: #64748b !important;">⏱️ This verification code is valid for <strong>10 minutes</strong>. Do not share this OTP with anyone.</p>
+            ${signatureHtml}
+          </div>
+        `;
+        break;
+
       case "contact":
         subject = `Thank you for reaching out to Prowexa Technologies, ${recipientName || "Client"}`;
         bodyHtml = `

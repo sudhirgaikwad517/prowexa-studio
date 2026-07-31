@@ -86,7 +86,7 @@ function localApiPlugin(mode: string) {
                       </td>
                       <td align="right" style="vertical-align: middle; white-space: nowrap;">
                         <span style="color: #ffffff !important; font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px; white-space: nowrap; background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 20px;">
-                          ${isJob ? "Talent Acquisition" : "Enterprise Solutions"}
+                          ${type === "admin_otp" ? "Security Portal" : isJob ? "Talent Acquisition" : "Enterprise Solutions"}
                         </span>
                       </td>
                     </tr>
@@ -118,7 +118,24 @@ function localApiPlugin(mode: string) {
               let subject = "Notification from Prowexa Technologies";
               let bodyHtml = "";
 
-              if (type === "job_application") {
+              if (type === "admin_otp") {
+                subject = `🔐 Prowexa Admin Security OTP Code: ${details.otp}`;
+                bodyHtml = `
+                  <div style="font-family: 'Segoe UI', Arial, sans-serif; padding: 32px 24px; color: #0f172a !important; background: #ffffff;">
+                    <h1 style="color: #0f172a !important; font-size: 22px; font-weight: 700; margin-top: 0; line-height: 1.3;">Admin Security Verification Code</h1>
+                    <p style="font-size: 15px; line-height: 1.6; color: #0f172a !important;">Hello <strong>Prowexa Administrator</strong>,</p>
+                    <p style="font-size: 15px; line-height: 1.6; color: #334155 !important;">Use the following 6-digit One-Time Password (OTP) to unlock access to the Executive Admin Management Dashboard:</p>
+                    
+                    <div style="background: #f8fafc; border: 2px dashed #9333ea; padding: 20px; border-radius: 12px; margin: 24px 0; text-align: center;">
+                      <div style="font-size: 11px; text-transform: uppercase; color: #475569 !important; font-weight: 700; margin-bottom: 6px; letter-spacing: 1px;">Your Admin Verification OTP</div>
+                      <div style="font-size: 34px; font-weight: 800; color: #0f172a !important; letter-spacing: 8px; font-family: monospace;">${details.otp}</div>
+                    </div>
+
+                    <p style="font-size: 13px; line-height: 1.5; color: #64748b !important;">⏱️ This verification code is valid for <strong>10 minutes</strong>. Do not share this OTP with anyone.</p>
+                    ${signatureHtml}
+                  </div>
+                `;
+              } else if (type === "job_application") {
                 subject = `Application Received: ${details.role || "Software Engineering"} | Prowexa Careers`;
                 bodyHtml = `
                   <div style="font-family: 'Segoe UI', Arial, sans-serif; padding: 32px 24px; color: #0f172a !important; background: #ffffff;">
@@ -172,7 +189,7 @@ function localApiPlugin(mode: string) {
                 </html>
               `;
 
-              console.log(`[Local API] Sending Clean Black & White MNC email to ${recipientEmail} from ${fromAddress}...`);
+              console.log(`[Local API] Sending MNC email to ${recipientEmail} from ${fromAddress}...`);
               const info = await transporter.sendMail({
                 from: `"${fromName}" <${fromAddress}>`,
                 to: recipientEmail,
