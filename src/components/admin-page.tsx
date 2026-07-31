@@ -4,6 +4,12 @@ import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
 import { toast } from "sonner";
 import {
+  getEmailSettings,
+  saveEmailSettings,
+  type EmailConfigSettings,
+} from "@/lib/email-settings";
+import { triggerEmailNotification } from "@/lib/email-service";
+import {
   fetchAllLeadsAdmin,
   updateLeadStatus,
   deleteLead,
@@ -34,6 +40,7 @@ import {
   Star,
   FileText,
   Inbox,
+  Briefcase,
   Plus,
   Trash2,
   Check,
@@ -45,12 +52,20 @@ import {
   RefreshCw,
   LogOut,
   ChevronRight,
+  ExternalLink,
+  Phone,
+  Mail,
+  User,
+  X,
+  Settings,
+  Send,
+  Sliders,
 } from "lucide-react";
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"leads" | "casestudies" | "testimonials" | "blogs">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "applications" | "casestudies" | "testimonials" | "blogs" | "email_settings">("leads");
 
   // Data states
   const [leads, setLeads] = useState<LeadRecord[]>([]);
@@ -58,6 +73,10 @@ export function AdminPage() {
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
   const [blogs, setBlogs] = useState<BlogData[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Email Settings State
+  const [emailConfig, setEmailConfig] = useState<EmailConfigSettings>(getEmailSettings());
+  const [testEmailRecipient, setTestEmailRecipient] = useState("connect@prowexa.com");
 
   // Case Study Upload Form State
   const [showCaseStudyForm, setShowCaseStudyForm] = useState(false);
@@ -125,17 +144,54 @@ export function AdminPage() {
     toast.info("Logged out of Admin Portal");
   }
 
+  // Save Email Settings
+  function handleSaveEmailConfig(e: FormEvent) {
+    e.preventDefault();
+    saveEmailSettings(emailConfig);
+    toast.success("Email Aliases & MNC Signatures Saved!");
+  }
+
+  // Trigger Live Test MNC Email from Admin Panel
+  async function handleSendTestEmail(type: "job_application" | "contact") {
+    if (!testEmailRecipient) {
+      toast.error("Please enter a test recipient email.");
+      return;
+    }
+
+    toast.info(`Sending test MNC email (${type}) to ${testEmailRecipient}...`);
+
+    const res = await triggerEmailNotification({
+      type,
+      recipientEmail: testEmailRecipient,
+      recipientName: "Test Recipient",
+      senderEmail: type === "job_application" ? emailConfig.hrSenderEmail : emailConfig.businessSenderEmail,
+      senderName: type === "job_application" ? emailConfig.hrSenderName : emailConfig.businessSenderName,
+      signatureName: type === "job_application" ? emailConfig.hrSignatureName : emailConfig.businessSignatureName,
+      signatureDesignation: type === "job_application" ? emailConfig.hrSignatureDesignation : emailConfig.businessSignatureDesignation,
+      logoUrl: emailConfig.emailLogoUrl,
+      details: {
+        role: type === "job_application" ? "Senior Full Stack Engineer" : undefined,
+        service: type === "contact" ? "Custom Enterprise ERP Platform" : undefined,
+        message: "This is a live MNC-grade email template test triggered from Prowexa Admin Panel.",
+      },
+    });
+
+    if (res.success) {
+      toast.success(`MNC Test Email sent to ${testEmailRecipient}! Check inbox.`);
+    }
+  }
+
   // Lead status actions
   async function handleLeadStatus(id: string, status: "new" | "contacted" | "archived") {
     await updateLeadStatus(id, status);
     setLeads(leads.map((l) => (l.id === id ? { ...l, status } : l)));
-    toast.success(`Lead marked as ${status}`);
+    toast.success(`Marked as ${status}`);
   }
 
   async function handleLeadDelete(id: string) {
     await deleteLead(id);
     setLeads(leads.filter((l) => l.id !== id));
-    toast.success("Lead removed");
+    toast.success("Record removed");
   }
 
   // Testimonial status actions
@@ -144,6 +200,16 @@ export function AdminPage() {
     await updateTestimonialStatus(id, newStatus);
     setTestimonials(testimonials.map((t) => (t.id === id ? { ...t, is_published: newStatus } : t)));
     toast.success(newStatus ? "Testimonial Approved & Published!" : "Testimonial unpublished");
+    if (newStatus) {
+      const target = testimonials.find((t) => t.id === id);
+      if (target) {
+        triggerEmailNotification({
+          type: "testimonial_approved",
+          recipientEmail: "connect@prowexa.com",
+          recipientName: target.name,
+        });
+      }
+    }
   }
 
   async function handleTestimonialDelete(id: string) {
@@ -158,6 +224,17 @@ export function AdminPage() {
     await updateBlogStatus(id, newStatus);
     setBlogs(blogs.map((b) => (b.id === id ? { ...b, is_published: newStatus } : b)));
     toast.success(newStatus ? "Blog Approved & Published!" : "Blog unpublished");
+    if (newStatus) {
+      const target = blogs.find((b) => b.id === id);
+      if (target) {
+        triggerEmailNotification({
+          type: "blog_approved",
+          recipientEmail: "connect@prowexa.com",
+          recipientName: target.author,
+          details: { title: target.title, slug: target.slug },
+        });
+      }
+    }
   }
 
   async function handleBlogDelete(id: string) {
@@ -233,11 +310,15 @@ export function AdminPage() {
     toast.success("Case Study removed");
   }
 
+  // Filter leads vs job applications
+  const jobApplications = leads.filter((l) => l.service?.startsWith("job-application:"));
+  const contactLeads = leads.filter((l) => !l.service?.startsWith("job-application:"));
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SEOHead
         title="Admin Management Portal | Prowexa Technologies"
-        description="Prowexa Technologies Admin Portal for managing leads, case studies, testimonials, and blog approvals."
+        description="Prowexa Technologies Admin Portal for managing leads, job applications, case studies, testimonials, and blog approvals."
         canonicalUrl="https://www.prowexa.com/admin"
       />
       <SiteHeader />
@@ -314,15 +395,26 @@ export function AdminPage() {
             </div>
 
             {/* Quick Metrics Bar */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
                 <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-xs uppercase tracking-wider font-semibold">Total Inquiries</span>
+                  <span className="text-xs uppercase tracking-wider font-semibold">Contact Leads</span>
                   <Inbox className="h-5 w-5 text-brand" />
                 </div>
-                <div className="mt-2 text-3xl font-bold">{leads.length}</div>
+                <div className="mt-2 text-3xl font-bold">{contactLeads.length}</div>
                 <p className="mt-1 text-xs text-emerald-400">
-                  {leads.filter((l) => l.status === "new").length} New Leads
+                  {contactLeads.filter((l) => l.status === "new").length} New Leads
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span className="text-xs uppercase tracking-wider font-semibold">Job Applicants</span>
+                  <Briefcase className="h-5 w-5 text-purple-400" />
+                </div>
+                <div className="mt-2 text-3xl font-bold">{jobApplications.length}</div>
+                <p className="mt-1 text-xs text-purple-400">
+                  {jobApplications.filter((l) => l.status === "new").length} New Candidates
                 </p>
               </div>
 
@@ -353,7 +445,7 @@ export function AdminPage() {
                 </div>
                 <div className="mt-2 text-3xl font-bold">{blogs.length}</div>
                 <p className="mt-1 text-xs text-amber-400">
-                  {blogs.filter((b) => !b.is_published).length} Pending Approval
+                  {blogs.filter((b) => !b.is_published).length} Pending Review
                 </p>
               </div>
             </div>
@@ -361,10 +453,12 @@ export function AdminPage() {
             {/* Navigation Tabs */}
             <div className="mt-10 flex border-b border-border overflow-x-auto">
               {[
-                { id: "leads", label: `Leads & Inquiries (${leads.length})`, icon: Inbox },
+                { id: "leads", label: `Leads & Inquiries (${contactLeads.length})`, icon: Inbox },
+                { id: "applications", label: `Job Applications (${jobApplications.length})`, icon: Briefcase },
                 { id: "casestudies", label: `Case Studies (${caseStudies.length})`, icon: Layers },
                 { id: "testimonials", label: `Testimonials (${testimonials.length})`, icon: Star },
-                { id: "blogs", label: `Blogs & Articles (${blogs.length})`, icon: FileText },
+                { id: "blogs", label: `Blogs (${blogs.length})`, icon: FileText },
+                { id: "email_settings", label: `Email Templates & Signatures`, icon: Settings },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -381,12 +475,12 @@ export function AdminPage() {
               ))}
             </div>
 
-            {/* TAB CONTENT 1: LEADS MANAGER */}
+            {/* TAB CONTENT 1: CONTACT LEADS MANAGER */}
             {activeTab === "leads" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">Inquiries & Contact Leads</h2>
-                  <span className="text-xs text-muted-foreground">Real-time Lead Capture Log</span>
+                  <h2 className="text-xl font-bold">Client Inquiries & Contact Leads</h2>
+                  <span className="text-xs text-muted-foreground">Direct Lead Submissions</span>
                 </div>
 
                 <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-card">
@@ -401,7 +495,7 @@ export function AdminPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {leads.map((lead) => (
+                      {contactLeads.map((lead) => (
                         <tr key={lead.id} className="hover:bg-surface/30 transition">
                           <td className="px-6 py-4">
                             <div className="font-semibold text-foreground">{lead.name}</div>
@@ -459,7 +553,118 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 2: CASE STUDIES MANAGER */}
+            {/* TAB CONTENT 2: SEPARATE JOB APPLICATIONS MANAGER */}
+            {activeTab === "applications" && (
+              <div className="mt-8 space-y-4 animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-purple-400">Job Applications & Hiring Portal</h2>
+                    <p className="text-xs text-muted-foreground">Candidate resumes, experience levels, and portfolio submissions</p>
+                  </div>
+                  <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold text-purple-400">
+                    {jobApplications.length} Candidates Applied
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-card">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-surface/80 text-xs uppercase tracking-wider text-muted-foreground border-b border-border">
+                      <tr>
+                        <th className="px-6 py-4">Applicant Candidate</th>
+                        <th className="px-6 py-4">Role & Experience</th>
+                        <th className="px-6 py-4">Portfolio / GitHub Link</th>
+                        <th className="px-6 py-4">Cover Note / Details</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {jobApplications.map((app) => {
+                        const portfolioUrlMatch = app.budget?.replace(/^Portfolio:\s*/, "") || app.message?.match(/https?:\/\/[^\s]+/)?.[0];
+                        const roleTitle = app.service?.replace(/^job-application:\s*/, "") || "Software Engineer";
+
+                        return (
+                          <tr key={app.id} className="hover:bg-surface/30 transition">
+                            <td className="px-6 py-4">
+                              <div className="font-semibold text-foreground flex items-center gap-1.5">
+                                <User className="h-3.5 w-3.5 text-purple-400" />
+                                {app.name}
+                              </div>
+                              <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                                <Mail className="h-3 w-3" />
+                                {app.email}
+                              </div>
+                              {app.company && (
+                                <div className="text-xs text-purple-400 flex items-center gap-1 mt-0.5">
+                                  <Phone className="h-3 w-3" />
+                                  {app.company}
+                                </div>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="inline-block rounded-md bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 text-xs font-semibold text-purple-300">
+                                {roleTitle}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              {portfolioUrlMatch ? (
+                                <a
+                                  href={portfolioUrlMatch}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 rounded-lg bg-surface border border-border px-3 py-1.5 text-xs font-semibold text-brand hover:underline"
+                                >
+                                  View Portfolio <ExternalLink className="h-3.5 w-3.5" />
+                                </a>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">Not Provided</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 max-w-md">
+                              <p className="line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                                {app.message}
+                              </p>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                                  app.status === "new"
+                                    ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                    : app.status === "contacted"
+                                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                    : "bg-surface text-muted-foreground"
+                                }`}
+                              >
+                                {app.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-right space-x-2">
+                              {app.status !== "contacted" && (
+                                <button
+                                  onClick={() => handleLeadStatus(app.id, "contacted")}
+                                  className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition"
+                                >
+                                  Mark Interviewed
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleLeadDelete(app.id)}
+                                className="p-1.5 text-muted-foreground hover:text-rose-400 transition"
+                                title="Delete Candidate"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 3: CASE STUDIES MANAGER */}
             {activeTab === "casestudies" && (
               <div className="mt-8 space-y-6 animate-fade-in">
                 <div className="flex items-center justify-between">
@@ -679,7 +884,7 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 3: TESTIMONIALS MANAGER */}
+            {/* TAB CONTENT 4: TESTIMONIALS MANAGER */}
             {activeTab === "testimonials" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
@@ -746,7 +951,7 @@ export function AdminPage() {
               </div>
             )}
 
-            {/* TAB CONTENT 4: BLOGS MANAGER */}
+            {/* TAB CONTENT 5: BLOGS MANAGER */}
             {activeTab === "blogs" && (
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
@@ -793,6 +998,228 @@ export function AdminPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 6: EMAIL TEMPLATES & SIGNATURES MANAGER */}
+            {activeTab === "email_settings" && (
+              <div className="mt-8 space-y-8 animate-fade-in">
+                <div className="flex items-center justify-between border-b border-border pb-4">
+                  <div>
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                      <Settings className="h-5 w-5 text-brand" />
+                      Email Aliases & MNC Signatures Config
+                    </h2>
+                    <p className="text-xs text-muted-foreground">Manage sender names, emails, and signatures for HR & Client notifications</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSaveEmailConfig} className="space-y-8">
+                  {/* Email Logo Configuration Card */}
+                  <div className="rounded-3xl border border-brand/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand/10 text-brand border border-brand/20">
+                        <Sparkles className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">Email Header Branding Logo</h3>
+                        <p className="text-xs text-muted-foreground">Specify the public URL of the Prowexa logo image displayed in HTML emails</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                        Prowexa Logo Image URL *
+                      </label>
+                      <input
+                        type="url"
+                        required
+                        placeholder="https://www.prowexa.com/assets/prowexa-logo.webp"
+                        value={emailConfig.emailLogoUrl}
+                        onChange={(e) => setEmailConfig({ ...emailConfig, emailLogoUrl: e.target.value })}
+                        className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  {/* HR Email Config Card */}
+                  <div className="rounded-3xl border border-purple-500/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                        <Briefcase className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">HR / Hiring Email Alias Config</h3>
+                        <p className="text-xs text-muted-foreground">Used for Job Applications, candidate receipts, and interview scheduling</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Sender Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSenderName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSenderName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Sender Email Alias *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={emailConfig.hrSenderEmail}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSenderEmail: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Signature Title *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSignatureName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSignatureName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          HR Signature Designation *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.hrSignatureDesignation}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, hrSignatureDesignation: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business Email Config Card */}
+                  <div className="rounded-3xl border border-blue-500/30 bg-card p-6 md:p-8 shadow-card">
+                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <Inbox className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold">Business & Client Inquiry Config</h3>
+                        <p className="text-xs text-muted-foreground">Used for Contact forms, quote inquiries, blog approvals & testimonials</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Sender Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSenderName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSenderName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Sender Email Alias *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={emailConfig.businessSenderEmail}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSenderEmail: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Signature Title *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSignatureName}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSignatureName: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Business Signature Designation *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={emailConfig.businessSignatureDesignation}
+                          onChange={(e) => setEmailConfig({ ...emailConfig, businessSignatureDesignation: e.target.value })}
+                          className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
+                    >
+                      <Check className="h-4 w-4" /> Save Configuration Settings
+                    </button>
+                  </div>
+                </form>
+
+                {/* Live Test Email Trigger Box */}
+                <div className="rounded-3xl border border-emerald-500/30 bg-card p-6 md:p-8 shadow-glow">
+                  <h3 className="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                    <Send className="h-5 w-5" /> 1-Click Live Test MNC Email Trigger
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Send a real test email to any email address to inspect the MNC template rendering & signatures.
+                  </p>
+
+                  <div className="mt-6 flex flex-col sm:flex-row items-center gap-4">
+                    <input
+                      type="email"
+                      required
+                      placeholder="Enter recipient email (e.g. connect@prowexa.com)"
+                      value={testEmailRecipient}
+                      onChange={(e) => setTestEmailRecipient(e.target.value)}
+                      className="w-full sm:w-80 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition"
+                    />
+
+                    <button
+                      onClick={() => handleSendTestEmail("job_application")}
+                      className="w-full sm:w-auto inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-xs font-semibold text-white shadow-glow hover:bg-purple-500 transition whitespace-nowrap"
+                    >
+                      <Briefcase className="h-4 w-4" /> Send Test HR Candidate Email
+                    </button>
+
+                    <button
+                      onClick={() => handleSendTestEmail("contact")}
+                      className="w-full sm:w-auto inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-xs font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition whitespace-nowrap"
+                    >
+                      <Mail className="h-4 w-4" /> Send Test Client Inquiry Email
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

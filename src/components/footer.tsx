@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 export function Footer() {
   return (
     <footer className="border-t border-border bg-surface/40">
@@ -30,8 +32,13 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border">
-        <div className="mx-auto max-w-7xl px-6 py-6 text-center text-xs text-muted-foreground">
-          © 2026 Prowexa Technologies Pvt. Ltd. All rights reserved
+        <div className="mx-auto max-w-7xl px-6 py-6 text-center text-xs text-muted-foreground flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>© 2026 Prowexa Technologies Pvt. Ltd. All rights reserved</div>
+          <div>
+            <Link to="/admin" className="text-muted-foreground/40 hover:text-muted-foreground transition">
+              Staff Portal
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

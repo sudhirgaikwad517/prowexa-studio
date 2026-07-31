@@ -77,18 +77,18 @@ CREATE POLICY "Allow public insert for leads" ON public.leads FOR INSERT TO anon
 
 -- Policies for public testimonials
 DROP POLICY IF EXISTS "Allow public read for testimonials" ON public.testimonials;
-CREATE POLICY "Allow public read for testimonials" ON public.testimonials FOR SELECT USING (is_published = true);
+CREATE POLICY "Allow public read for testimonials" ON public.testimonials FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Allow public insert for testimonials" ON public.testimonials;
 CREATE POLICY "Allow public insert for testimonials" ON public.testimonials FOR INSERT TO anon, authenticated WITH CHECK (true);
 
 -- Policies for public blogs
 DROP POLICY IF EXISTS "Allow public read for blogs" ON public.blogs;
-CREATE POLICY "Allow public read for blogs" ON public.blogs FOR SELECT USING (is_published = true);
+CREATE POLICY "Allow public read for blogs" ON public.blogs FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Allow public insert for blogs" ON public.blogs;
 CREATE POLICY "Allow public insert for blogs" ON public.blogs FOR INSERT TO anon, authenticated WITH CHECK (true);
 
 -- Policies for public case studies
 DROP POLICY IF EXISTS "Allow public read for case studies" ON public.case_studies;
-CREATE POLICY "Allow public read for case studies" ON public.case_studies FOR SELECT USING (is_published = true);
+CREATE POLICY "Allow public read for case studies" ON public.case_studies FOR SELECT TO anon, authenticated USING (true);

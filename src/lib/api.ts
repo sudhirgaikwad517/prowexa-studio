@@ -1,6 +1,8 @@
 import { toast } from "sonner";
 import { trackContactFormSubmit } from "./gtag";
 import { supabase, supabaseUrl, supabaseAnonKey } from "./supabase";
+import { localSubmittedLeads, type LeadRecord } from "./leads";
+import { triggerEmailNotification } from "./email-service";
 
 export interface LeadSubmissionData {
   name: string;
@@ -15,15 +17,32 @@ export async function submitLead(data: LeadSubmissionData): Promise<{ success: b
   trackContactFormSubmit(data.service);
 
   const leadData = {
+    id: `lead-${Date.now()}`,
     name: data.name.trim(),
     email: data.email.trim().toLowerCase(),
     company: data.company ? data.company.trim() : null,
     service: data.service ? data.service.trim() : "custom-software",
     budget: data.budget ? data.budget.trim() : null,
     message: data.message.trim(),
-    status: "new",
+    status: "new" as const,
     created_at: new Date().toISOString(),
   };
+
+  // Add to local memory store immediately for Admin panel display
+  localSubmittedLeads.unshift(leadData as LeadRecord);
+
+  // Trigger Email Notification
+  const isJobApp = data.service?.startsWith("job-application:");
+  triggerEmailNotification({
+    type: isJobApp ? "job_application" : "contact",
+    recipientEmail: leadData.email,
+    recipientName: leadData.name,
+    details: {
+      service: leadData.service,
+      message: leadData.message,
+      role: isJobApp ? leadData.service.replace(/^job-application:\s*/, "") : undefined,
+    },
+  });
 
   // Create a 4-second timeout to prevent any UI freeze
   const timeoutPromise = new Promise<{ success: boolean; timeout: true }>((resolve) =>
@@ -31,10 +50,19 @@ export async function submitLead(data: LeadSubmissionData): Promise<{ success: b
   );
 
   const executionPromise = (async () => {
-    // 1. Primary: Direct Supabase Client JS Insert (Without .select() to prevent RLS read-back block)
+    // 1. Primary: Direct Supabase Client JS Insert
     if (supabase) {
       try {
-        const { error } = await supabase.from("leads").insert([leadData]);
+        const { error } = await supabase.from("leads").insert([{
+          name: leadData.name,
+          email: leadData.email,
+          company: leadData.company,
+          service: leadData.service,
+          budget: leadData.budget,
+          message: leadData.message,
+          status: leadData.status,
+          created_at: leadData.created_at,
+        }]);
 
         if (!error) {
           console.log("Supabase SDK insert success");
@@ -60,7 +88,16 @@ export async function submitLead(data: LeadSubmissionData): Promise<{ success: b
             Authorization: `Bearer ${supabaseAnonKey}`,
             Prefer: "return=minimal",
           },
-          body: JSON.stringify(leadData),
+          body: JSON.stringify({
+            name: leadData.name,
+            email: leadData.email,
+            company: leadData.company,
+            service: leadData.service,
+            budget: leadData.budget,
+            message: leadData.message,
+            status: leadData.status,
+            created_at: leadData.created_at,
+          }),
         });
 
         if (restResponse.ok || restResponse.status === 201) {
