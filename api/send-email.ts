@@ -34,21 +34,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "Missing recipientEmail or type." });
   }
 
-  // Configure SMTP Transporter using Google Workspace SMTP
+  // Configure SMTP Transporter using Google Workspace SMTP with Production Fallback
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const smtpPort = parseInt(process.env.SMTP_PORT || "465", 10);
   const smtpUser = process.env.SMTP_USER || "connect@prowexa.com";
-  const smtpPass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
-
-  if (!smtpPass) {
-    console.warn("SMTP_PASS is not set. Email simulation mode active.");
-    return res.status(200).json({
-      success: true,
-      simulated: true,
-      message: "Email simulated successfully.",
-      details: { type, recipientEmail, recipientName },
-    });
-  }
+  const smtpPass = (process.env.SMTP_PASS || "bfjihplckbamdjhy").replace(/\s+/g, "");
 
   try {
     const transporter = nodemailer.createTransport({
