@@ -77,7 +77,7 @@ CREATE POLICY "Allow public insert for leads" ON public.leads FOR INSERT TO anon
 
 -- Policies for public testimonials
 DROP POLICY IF EXISTS "Allow public read for testimonials" ON public.testimonials;
-CREATE POLICY "Allow public read for testimonials" ON public.testimonials FOR SELECT USING (is_published = true);
+CREATE POLICY "Allow public read for testimonials" ON public.testimonials FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Allow public insert for testimonials" ON public.testimonials;
 CREATE POLICY "Allow public insert for testimonials" ON public.testimonials FOR INSERT TO anon, authenticated WITH CHECK (true);

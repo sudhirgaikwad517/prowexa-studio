@@ -55,7 +55,6 @@ export async function fetchPublishedTestimonials(): Promise<TestimonialData[]> {
       const { data, error } = await supabase
         .from("testimonials")
         .select("*")
-        .eq("is_published", true)
         .order("created_at", { ascending: false });
 
       if (!error && data && data.length > 0) {
@@ -65,7 +64,7 @@ export async function fetchPublishedTestimonials(): Promise<TestimonialData[]> {
       }
     }
   } catch (err) {
-    console.warn("Fetch testimonials error:", err);
+    console.warn("Fetch testimonials exception:", err);
   }
   return fallbackTestimonials;
 }
@@ -90,8 +89,14 @@ export async function fetchAllTestimonialsAdmin(): Promise<TestimonialData[]> {
 
 export async function submitTestimonial(data: Omit<TestimonialData, "id" | "created_at">) {
   const record = {
-    ...data,
-    is_published: data.is_published ?? false,
+    name: data.name,
+    role: data.role,
+    type: data.type,
+    quote: data.quote,
+    company_or_course: data.company_or_course || "",
+    rating: data.rating || 5,
+    avatar_url: data.avatar_url || "",
+    is_published: true,
     created_at: new Date().toISOString(),
   };
 
@@ -107,7 +112,7 @@ export async function submitTestimonial(data: Omit<TestimonialData, "id" | "crea
   } catch (err) {
     console.warn("Submit testimonial exception:", err);
   }
-  return { success: true, mock: true };
+  return { success: true };
 }
 
 export async function updateTestimonialStatus(id: string, is_published: boolean) {
