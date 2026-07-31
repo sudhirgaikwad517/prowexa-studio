@@ -63,7 +63,7 @@ import {
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminEmailInput, setAdminEmailInput] = useState("connect@prowexa.com");
+  const [adminEmailInput, setAdminEmailInput] = useState("sudhirgaikwad517@gmail.com");
   const [otpInput, setOtpInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
@@ -128,8 +128,8 @@ export function AdminPage() {
     }
   }
 
-  async function handleRequestOTP(e: FormEvent) {
-    e.preventDefault();
+  async function handleRequestOTP(e?: FormEvent) {
+    if (e) e.preventDefault();
     setSendingOtp(true);
     try {
       const res = await requestAdminOTP(adminEmailInput);
@@ -418,17 +418,21 @@ export function AdminPage() {
                   <div className="flex items-center justify-between text-xs pt-2">
                     <button
                       type="button"
-                      onClick={() => setOtpSent(false)}
-                      className="text-muted-foreground hover:text-foreground underline"
+                      onClick={() => {
+                        setOtpSent(false);
+                        setOtpInput("");
+                      }}
+                      className="text-muted-foreground hover:text-foreground underline flex items-center gap-1"
                     >
-                      Change Email
+                      ← Change Admin Email
                     </button>
                     <button
                       type="button"
-                      onClick={handleRequestOTP}
-                      className="text-brand font-semibold hover:underline"
+                      disabled={sendingOtp}
+                      onClick={() => handleRequestOTP()}
+                      className="text-brand font-semibold hover:underline disabled:opacity-50 flex items-center gap-1"
                     >
-                      Resend OTP Code
+                      {sendingOtp ? "Sending OTP..." : "Resend OTP Code"}
                     </button>
                   </div>
                 </form>
