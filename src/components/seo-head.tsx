@@ -121,6 +121,16 @@ export const defaultOrganizationSchema = {
     "email": "info@prowexa.com",
     "availableLanguage": ["English", "Hindi", "Marathi"]
   },
+  "areaServed": [
+    { "@type": "City", "name": "Pune" },
+    { "@type": "City", "name": "Hyderabad" },
+    { "@type": "City", "name": "Bengaluru" },
+    { "@type": "Country", "name": "India" },
+    { "@type": "Country", "name": "United States" },
+    { "@type": "Country", "name": "United Arab Emirates" },
+    { "@type": "Country", "name": "Germany" },
+    { "@type": "Country", "name": "United Kingdom" }
+  ],
   "sameAs": [
     "https://www.prowexa.com"
   ]
@@ -148,6 +158,16 @@ export const defaultLocalBusinessSchema = {
     "latitude": 18.5793,
     "longitude": 73.7712
   },
+  "areaServed": [
+    { "@type": "City", "name": "Pune" },
+    { "@type": "City", "name": "Hyderabad" },
+    { "@type": "City", "name": "Bengaluru" },
+    { "@type": "Country", "name": "India" },
+    { "@type": "Country", "name": "United States" },
+    { "@type": "Country", "name": "United Arab Emirates" },
+    { "@type": "Country", "name": "Germany" },
+    { "@type": "Country", "name": "United Kingdom" }
+  ],
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],

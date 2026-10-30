@@ -64,6 +64,7 @@ export function HomePage() {
       <Services />
       <WhyUs />
       <Industries />
+      <Locations />
       <EdTech />
       <ContactCTA />
       <CompanyDetails />
@@ -478,6 +479,67 @@ function Industries() {
                 <div>
                   <h3 className="text-lg font-semibold">{ind.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{ind.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────── Locations We Serve ─────────────────────── */
+function Locations() {
+  const regions = [
+    {
+      icon: MapPin,
+      name: "India",
+      desc: "On-ground delivery teams serving clients across major tech hubs.",
+      places: ["Pune", "Hyderabad", "Bengaluru"],
+    },
+    {
+      icon: Globe2,
+      name: "Global",
+      desc: "Remote-first engagements for international businesses and startups.",
+      places: ["USA", "UAE", "Germany", "UK", "& other countries worldwide"],
+    },
+  ];
+  return (
+    <section id="locations" className="py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <SectionHeading
+          eyebrow="Locations"
+          title="Where We Serve"
+          subtitle="We deliver software development services to clients across India and around the globe."
+        />
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          {regions.map((region) => (
+            <div
+              key={region.name}
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
+            >
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-3xl group-hover:opacity-30 transition" />
+              <div className="relative">
+                <div className="flex items-center gap-4">
+                  <span className="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
+                    <region.icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold">{region.name}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{region.desc}</p>
+                  </div>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {region.places.map((place) => (
+                    <span
+                      key={place}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm font-medium"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5 text-brand-glow" />
+                      {place}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
