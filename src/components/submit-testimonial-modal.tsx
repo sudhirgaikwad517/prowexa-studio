@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
 import { submitTestimonial } from "@/lib/testimonials";
 import { X, Send, Star, CheckCircle2, Loader2 } from "lucide-react";
 
@@ -28,10 +29,11 @@ export function SubmitTestimonialModal({ isOpen, onClose, onSuccess }: SubmitTes
     e.preventDefault();
     setLoading(true);
     try {
-      await submitTestimonial({
-        ...formState,
-        is_published: true, // Auto-publish so it displays on the frontend live immediately!
-      });
+      const result = await submitTestimonial(formState);
+      if (!result.success) {
+        toast.error(result.error || "Could not submit your review. Please try again.");
+        return;
+      }
       setSubmitted(true);
       if (onSuccess) onSuccess();
     } finally {
@@ -67,7 +69,7 @@ export function SubmitTestimonialModal({ isOpen, onClose, onSuccess }: SubmitTes
 
         {submitted ? (
           <div className="py-8 text-center animate-fade-up">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h3 className="mt-4 text-2xl font-bold">Review Submitted!</h3>
@@ -176,11 +178,11 @@ export function SubmitTestimonialModal({ isOpen, onClose, onSuccess }: SubmitTes
                       key={star}
                       type="button"
                       onClick={() => setFormState({ ...formState, rating: star })}
-                      className="p-1 text-amber-400 transition hover:scale-110"
+                      className="p-1 text-amber-500 transition hover:scale-110"
                     >
                       <Star
                         className={`h-6 w-6 ${
-                          star <= formState.rating ? "fill-amber-400 text-amber-400" : "text-border"
+                          star <= formState.rating ? "fill-amber-400 text-amber-500" : "text-border"
                         }`}
                       />
                     </button>

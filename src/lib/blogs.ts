@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { apiFetch, jsonBody } from "./http";
 
 export interface BlogData {
   id?: string;
@@ -16,7 +16,7 @@ export interface BlogData {
 export const fallbackBlogs: BlogData[] = [
   {
     id: "b-1",
-    title: "Building Microservices with React 19, Vite & Supabase PostgreSQL",
+    title: "Building Microservices with React 19, Vite & PostgreSQL",
     slug: "building-microservices-react19-supabase",
     description: "Learn how we architect high-throughput digital platforms with pre-rendering and real-time database syncing.",
     content: "Building modern scalable applications requires separating concerns between static pre-rendered routes and dynamic API workloads...",
@@ -39,85 +39,27 @@ export const fallbackBlogs: BlogData[] = [
 ];
 
 export async function fetchPublishedBlogs(): Promise<BlogData[]> {
-  try {
-    if (supabase) {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false });
-
-      if (!error && data && data.length > 0) {
-        return data;
-      }
-    }
-  } catch (err) {
-    console.warn("Fetch blogs error:", err);
-  }
-  return fallbackBlogs;
+  const result = await apiFetch<BlogData[]>("/api/content?type=blogs");
+  return result.data && result.data.length > 0 ? result.data : fallbackBlogs;
 }
 
 export async function fetchAllBlogsAdmin(): Promise<BlogData[]> {
-  try {
-    if (supabase) {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        return data;
-      }
-    }
-  } catch (err) {
-    console.warn("Admin fetch blogs error:", err);
-  }
-  return fallbackBlogs;
+  const result = await apiFetch<BlogData[]>("/api/admin?resource=blogs");
+  return result.data || [];
 }
 
-export async function submitBlog(data: Omit<BlogData, "id" | "created_at">) {
-  const record = {
-    ...data,
-    is_published: data.is_published ?? false,
-    published_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-  };
-
-  try {
-    if (supabase) {
-      const { error } = await supabase.from("blogs").insert([record]);
-      if (error) {
-        console.error("Supabase blog insert error:", error);
-      } else {
-        return { success: true };
-      }
-    }
-  } catch (err) {
-    console.warn("Submit blog error:", err);
-  }
-  return { success: true, mock: true };
+// Submitted articles stay hidden until an admin approves them.
+export async function submitBlog(data: Omit<BlogData, "id" | "created_at" | "is_published" | "published_at">) {
+  return apiFetch("/api/content?type=blogs", { method: "POST", body: jsonBody(data) });
 }
 
 export async function updateBlogStatus(id: string, is_published: boolean) {
-  try {
-    if (supabase) {
-      const { error } = await supabase.from("blogs").update({ is_published }).eq("id", id);
-      if (!error) return { success: true };
-    }
-  } catch (err) {
-    console.warn("Update blog status error:", err);
-  }
-  return { success: true };
+  return apiFetch(`/api/admin?resource=blogs&id=${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: jsonBody({ is_published }),
+  });
 }
 
 export async function deleteBlog(id: string) {
-  try {
-    if (supabase) {
-      const { error } = await supabase.from("blogs").delete().eq("id", id);
-      if (!error) return { success: true };
-    }
-  } catch (err) {
-    console.warn("Delete blog error:", err);
-  }
-  return { success: true };
+  return apiFetch(`/api/admin?resource=blogs&id=${encodeURIComponent(id)}`, { method: "DELETE" });
 }

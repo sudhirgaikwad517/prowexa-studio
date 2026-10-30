@@ -23,7 +23,7 @@ export const defaultEmailSettings: EmailConfigSettings = {
   businessSignatureName: "Enterprise Client Solutions Team",
   businessSignatureDesignation: "Software Engineering & Digital Transformation | Prowexa Technologies",
   companyAddress: "Survey No 44, Plot A, Opp. Bhartiya Vidyapeeth School, Balewadi, Pune - 411045",
-  companyPhone: "+91 7030347209",
+  companyPhone: "+91 70303 47209",
 };
 
 export function getEmailSettings(): EmailConfigSettings {

@@ -4,111 +4,68 @@ import { Footer } from "./footer";
 import { SEOHead } from "./seo-head";
 import {
   ArrowRight,
-  MonitorSmartphone,
-  Smartphone,
   Server,
-  Cpu,
   Globe,
   ExternalLink,
+  MessageCircle,
+  Receipt,
+  Milk,
+  Hospital,
 } from "lucide-react";
 
-const projects = [
+type Project = {
+  title: string;
+  icon: typeof Receipt;
+  overview: string;
+  problem: string;
+  solution: string;
+  outcome: string;
+  link?: { label: string; href: string };
+};
+
+const projects: { category: string; icon: typeof Globe; items: Project[] }[] = [
   {
-    category: "Web Applications",
-    icon: MonitorSmartphone,
-    color: "from-blue-500 to-cyan-400",
-    items: [
-      {
-        title: "EduTrack LMS",
-        overview: "A full-featured Learning Management System for colleges and coaching institutes.",
-        tech: ["React", "Node.js", "PostgreSQL", "AWS"],
-        problem: "Institutes needed a centralized digital platform to manage courses, students, and assessments.",
-        solution: "Built a scalable LMS with live classes, assignment tracking, attendance, and analytics dashboards.",
-        outcome: "Onboarded 5,000+ students across 3 institutes in the first quarter.",
-      },
-      {
-        title: "RetailEdge POS",
-        overview: "A cloud-based Point-of-Sale system for retail chains with real-time inventory management.",
-        tech: ["Next.js", "Supabase", "Tailwind CSS", "Stripe"],
-        problem: "Retail chain struggled with disconnected billing, stock, and analytics across 12 outlets.",
-        solution: "Unified POS with live stock sync, billing, GST reports, and multi-branch dashboard.",
-        outcome: "Reduced billing errors by 80% and inventory discrepancies by 65%.",
-      },
-    ],
-  },
-  {
-    category: "Mobile Apps",
-    icon: Smartphone,
-    color: "from-violet-500 to-purple-400",
-    items: [
-      {
-        title: "FitPulse",
-        overview: "A fitness tracking app with AI-based workout recommendations for gym members.",
-        tech: ["Flutter", "Firebase", "TensorFlow Lite", "REST API"],
-        problem: "Gym owners had no way to track member progress or offer personalised plans at scale.",
-        solution: "Built a cross-platform app with workout logging, AI plan generation, and trainer dashboards.",
-        outcome: "Active on 2,000+ devices; 4.6-star average rating on app stores.",
-      },
-      {
-        title: "QuickDeliver",
-        overview: "A hyperlocal delivery app for small businesses with live GPS tracking.",
-        tech: ["React Native", "Node.js", "MongoDB", "Google Maps API"],
-        problem: "Small businesses in Pune lacked an affordable same-day delivery platform.",
-        solution: "Designed a rider-merchant-customer tri-sided platform with real-time tracking.",
-        outcome: "Processed 1,200+ orders per week in the pilot city within 2 months.",
-      },
-    ],
-  },
-  {
-    category: "Enterprise Solutions",
-    icon: Server,
-    color: "from-emerald-500 to-teal-400",
-    items: [
-      {
-        title: "HRMatrix",
-        overview: "End-to-end HRMS for mid-size companies covering payroll, leaves, and appraisals.",
-        tech: ["Angular", "Spring Boot", "MySQL", "Docker"],
-        problem: "Manual HR processes caused payroll errors and delayed appraisal cycles.",
-        solution: "Built a modular HRMS with automated payroll, leave calendar, and performance review workflows.",
-        outcome: "Saved 40+ HR hours/month; zero payroll errors since deployment.",
-      },
-    ],
-  },
-  {
-    category: "AI Projects",
-    icon: Cpu,
-    color: "from-orange-500 to-amber-400",
-    items: [
-      {
-        title: "DocuMind",
-        overview: "AI-powered document extraction and summarisation tool for legal and finance firms.",
-        tech: ["Python", "LangChain", "OpenAI GPT-4", "FastAPI", "React"],
-        problem: "Legal teams spent hours manually reviewing lengthy contracts and financial reports.",
-        solution: "Built an LLM-based tool that extracts key clauses, flags risks, and generates summaries in seconds.",
-        outcome: "Reduced document review time by 75% for 3 enterprise clients.",
-      },
-      {
-        title: "SupportBot",
-        overview: "Intelligent customer support chatbot trained on company-specific knowledge bases.",
-        tech: ["Python", "Pinecone", "OpenAI", "Node.js", "React"],
-        problem: "Support teams were overwhelmed with repetitive tickets that drained productivity.",
-        solution: "Deployed a RAG-based chatbot that resolves 70% of tier-1 queries automatically.",
-        outcome: "Ticket volume down 55%; CSAT score improved from 3.2 to 4.5.",
-      },
-    ],
-  },
-  {
-    category: "Internal Products",
+    category: "SaaS Products",
     icon: Globe,
-    color: "from-rose-500 to-pink-400",
     items: [
       {
-        title: "Prowexa Studio",
-        overview: "Internal project management and client portal built for Prowexa's own operations.",
-        tech: ["Next.js", "Supabase", "TypeScript", "Tailwind CSS"],
-        problem: "Managing multiple client projects, deadlines, and deliverables in spreadsheets was error-prone.",
-        solution: "Custom-built studio with project boards, client dashboards, invoice generation, and time tracking.",
-        outcome: "100% internal adoption; reduced project delays by 50%.",
+        title: "Wabtic — WhatsApp CRM",
+        icon: MessageCircle,
+        overview: "A WhatsApp Business automation and Cloud API platform for managing customer conversations from one dashboard.",
+        problem: "Businesses were handling WhatsApp enquiries from personal phones, with no shared view of customers or follow-ups.",
+        solution: "Built a WhatsApp CRM on the official WhatsApp Cloud API that brings conversations, contacts and automation into one place.",
+        outcome: "Teams manage WhatsApp customer communication centrally instead of across individual phones.",
+        link: { label: "Visit wabtic.com", href: "https://wabtic.com" },
+      },
+      {
+        title: "Billing CRM",
+        icon: Receipt,
+        overview: "A billing and customer management system for businesses that invoice customers every day.",
+        problem: "Invoices, customer records and payment follow-ups were spread across spreadsheets and paper registers.",
+        solution: "Built a CRM that combines customer records, invoicing and payment tracking in a single application.",
+        outcome: "Billing, customer history and pending payments are available in one place.",
+      },
+    ],
+  },
+  {
+    category: "Industry ERP & CRM",
+    icon: Server,
+    items: [
+      {
+        title: "Dairy ERP",
+        icon: Milk,
+        overview: "An ERP for dairy businesses covering day-to-day operations from collection to accounts.",
+        problem: "Dairy operations relied on manual registers, making records, payments and reporting slow and error-prone.",
+        solution: "Built an ERP that digitises the dairy's daily operations, records and billing in one system.",
+        outcome: "Daily operations and accounts run from a single, consistent system of record.",
+      },
+      {
+        title: "Hospital CRM",
+        icon: Hospital,
+        overview: "A CRM for hospitals and clinics to manage patients and their journey through the facility.",
+        problem: "Patient details, appointments and follow-ups were tracked manually across departments.",
+        solution: "Built a CRM that keeps patient records, appointments and follow-ups organised for the hospital team.",
+        outcome: "Staff work from one shared view of each patient and their upcoming visits.",
       },
     ],
   },
@@ -119,21 +76,20 @@ export function PortfolioPage() {
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         title="Our Portfolio & Case Projects | Prowexa Technologies Pune"
-        description="Explore Prowexa Technologies' portfolio of web applications, React & Flutter mobile apps, AI solutions, and custom enterprise software built for client success."
+        description="Explore Prowexa Technologies' portfolio: Wabtic WhatsApp CRM, Billing CRM, Dairy ERP and Hospital CRM built for real businesses."
         canonicalPath="/portfolio"
       />
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+      <section className="relative py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-brand opacity-10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-6 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our Work</span>
           <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-6xl">Portfolio</h1>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Real products built for real businesses. Here's a showcase of what we've shipped across web, mobile,
-            enterprise and AI.
+            Products we have built for real businesses: SaaS platforms, CRMs and industry-specific ERP systems.
           </p>
         </div>
       </section>
@@ -145,7 +101,7 @@ export function PortfolioPage() {
             <div key={cat.category}>
               {/* Category Header */}
               <div className="flex items-center gap-4 mb-10">
-                <span className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${cat.color} text-white shadow-glow`}>
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
                   <cat.icon className="h-5 w-5" />
                 </span>
                 <h2 className="text-2xl font-bold">{cat.category}</h2>
@@ -159,23 +115,13 @@ export function PortfolioPage() {
                     key={p.title}
                     className="group rounded-3xl border border-border bg-card p-8 shadow-card hover-lift hover:-translate-y-1 transition"
                   >
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-soft text-brand">
+                        <p.icon className="h-5 w-5" />
+                      </span>
                       <h3 className="text-xl font-bold">{p.title}</h3>
-                      <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition" />
                     </div>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.overview}</p>
-
-                    {/* Tech Stack */}
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {p.tech.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{p.overview}</p>
 
                     {/* Details */}
                     <div className="mt-6 grid gap-3">
@@ -190,6 +136,17 @@ export function PortfolioPage() {
                         </div>
                       ))}
                     </div>
+
+                    {p.link && (
+                      <a
+                        href={p.link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+                      >
+                        {p.link.label} <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>

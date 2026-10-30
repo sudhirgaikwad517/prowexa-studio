@@ -108,7 +108,7 @@ export const defaultOrganizationSchema = {
   "description": "Next-generation product development solutions from MVP to scale. React, Flutter, AI, and Cloud solutions.",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Survey No 44 H. No. 8/1 (P, Plot A, opp. Bhartiya Vidyapeeth School, Balewadi",
+    "streetAddress": "Survey No. 44, H. No. 8/1 (P), Plot A, Opp. Bhartiya Vidyapeeth School, Balewadi",
     "addressLocality": "Pune",
     "addressRegion": "Maharashtra",
     "postalCode": "411045",
@@ -116,7 +116,7 @@ export const defaultOrganizationSchema = {
   },
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+91-7030347209",
+    "telephone": "+91-70303-47209",
     "contactType": "customer service",
     "email": "info@prowexa.com",
     "availableLanguage": ["English", "Hindi", "Marathi"]
@@ -147,7 +147,7 @@ export const defaultLocalBusinessSchema = {
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Survey No 44 H. No. 8/1 (P, Plot A, opp. Bhartiya Vidyapeeth School, Balewadi",
+    "streetAddress": "Survey No. 44, H. No. 8/1 (P), Plot A, Opp. Bhartiya Vidyapeeth School, Balewadi",
     "addressLocality": "Pune",
     "addressRegion": "Maharashtra",
     "postalCode": "411045",
@@ -171,7 +171,7 @@ export const defaultLocalBusinessSchema = {
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    "opens": "09:00",
+    "opens": "10:00",
     "closes": "19:00"
   }
 };

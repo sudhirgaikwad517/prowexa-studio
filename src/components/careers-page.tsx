@@ -61,10 +61,10 @@ export function CareersPage() {
       
       <main className="flex-1">
         {/* Careers Hero */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-brand backdrop-blur-sm animate-fade-up">
               <Sparkles className="h-3.5 w-3.5" />
               Join the Prowexa Team
             </div>
@@ -107,24 +107,24 @@ export function CareersPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="rounded-3xl border border-border bg-card p-6 shadow-card animate-fade-up">
-                    <Users className="h-8 w-8 text-purple-400 mb-4" />
+                    <Users className="h-8 w-8 text-brand mb-4" />
                     <h3 className="font-bold text-lg">Collaborative Team</h3>
                     <p className="text-sm text-muted-foreground mt-2">Work with the brightest minds in engineering and design.</p>
                   </div>
                   <div className="rounded-3xl border border-border bg-card p-6 shadow-card animate-fade-up">
-                    <Zap className="h-8 w-8 text-purple-400 mb-4" />
+                    <Zap className="h-8 w-8 text-brand mb-4" />
                     <h3 className="font-bold text-lg">Fast Execution</h3>
                     <p className="text-sm text-muted-foreground mt-2">We value speed and shipping quality products quickly.</p>
                   </div>
                 </div>
                 <div className="space-y-4 mt-8">
                   <div className="rounded-3xl border border-border bg-card p-6 shadow-card animate-fade-up">
-                    <Trophy className="h-8 w-8 text-purple-400 mb-4" />
+                    <Trophy className="h-8 w-8 text-brand mb-4" />
                     <h3 className="font-bold text-lg">Impactful Projects</h3>
                     <p className="text-sm text-muted-foreground mt-2">Build products that scale and make a real difference.</p>
                   </div>
                   <div className="rounded-3xl border border-border bg-card p-6 shadow-card animate-fade-up">
-                    <Globe className="h-8 w-8 text-purple-400 mb-4" />
+                    <Globe className="h-8 w-8 text-brand mb-4" />
                     <h3 className="font-bold text-lg">Global Reach</h3>
                     <p className="text-sm text-muted-foreground mt-2">Our products are used by businesses and users worldwide.</p>
                   </div>
@@ -157,7 +157,7 @@ export function CareersPage() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-400">
+                        <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-semibold text-brand">
                           {job.category}
                         </span>
                         <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
@@ -169,7 +169,7 @@ export function CareersPage() {
                           {job.type}
                         </div>
                       </div>
-                      <h3 className="text-2xl font-bold group-hover:text-purple-400 transition-colors">
+                      <h3 className="text-2xl font-bold group-hover:text-brand transition-colors">
                         {job.title}
                       </h3>
                       <p className="mt-3 text-muted-foreground leading-relaxed max-w-2xl">

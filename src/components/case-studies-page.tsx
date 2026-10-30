@@ -38,10 +38,10 @@ export function CaseStudiesPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-xs text-blue-400 backdrop-blur-sm animate-fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-xs text-blue-600 backdrop-blur-sm animate-fade-up">
               <Layers className="h-3.5 w-3.5" />
               Enterprise Case Studies
             </div>
@@ -57,6 +57,19 @@ export function CaseStudiesPage() {
         {/* Case Studies Grid */}
         <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
+            {!loading && caseStudies.length === 0 && (
+              <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+                Detailed case studies are being prepared. In the meantime, explore our{" "}
+                <a href="/portfolio" className="font-semibold text-brand hover:underline">
+                  portfolio
+                </a>{" "}
+                or{" "}
+                <a href="/contact" className="font-semibold text-brand hover:underline">
+                  talk to us
+                </a>{" "}
+                about your project.
+              </div>
+            )}
             <div className="space-y-16">
               {caseStudies.map((cs) => (
                 <div
@@ -87,7 +100,7 @@ export function CaseStudiesPage() {
                           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{cs.challenge}</p>
                         </div>
                         <div className="rounded-2xl border border-border bg-surface p-4">
-                          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">The Solution</span>
+                          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">The Solution</span>
                           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{cs.solution}</p>
                         </div>
                       </div>
@@ -107,12 +120,12 @@ export function CaseStudiesPage() {
                       {/* Key Metric Highlights */}
                       <div className="rounded-3xl border border-border bg-gradient-hero p-6 md:p-8 shadow-card">
                         <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                          <TrendingUp className="h-4 w-4 text-emerald-400" /> Key Measured Outcomes
+                          <TrendingUp className="h-4 w-4 text-emerald-600" /> Key Measured Outcomes
                         </h3>
                         <div className="mt-6 space-y-4">
                           {cs.results?.map((res, rIdx) => (
                             <div key={rIdx} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+                              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
                               <span className="text-sm font-medium">{res}</span>
                             </div>
                           ))}

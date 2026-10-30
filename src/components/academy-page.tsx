@@ -16,7 +16,6 @@ import {
   Clock,
   CheckCircle2,
   Building,
-  Star,
   MapPin,
   ChevronRight,
   Code,
@@ -38,8 +37,6 @@ export function AcademyPage() {
       title: "Java Full Stack Development",
       duration: "6 Months",
       type: "Online / Classroom",
-      rating: "4.9",
-      reviews: "120+",
       description: "Master core Java, Advanced Java, Spring Boot, Hibernate, microservices, React, and databases. Build robust enterprise-grade applications.",
       syllabus: ["Core Java & OOPS", "Spring Boot & Microservices", "React Front-end Integration", "SQL & NoSQL Databases", "Deployment & AWS Basics"],
       outcome: "Full Stack Java Developer, Backend Engineer"
@@ -48,8 +45,6 @@ export function AcademyPage() {
       title: "Python + AI & Machine Learning",
       duration: "6 Months",
       type: "Online / Classroom",
-      rating: "4.8",
-      reviews: "95+",
       description: "Dive deep into Python, Data Science, Machine Learning, Deep Learning, NLP, and AI models integration. Learn to build and deploy intelligent software.",
       syllabus: ["Python Foundations", "Data Analysis (Pandas, NumPy)", "Scikit-Learn Machine Learning", "Neural Networks & TensorFlow", "LLMs & OpenAI Integration"],
       outcome: "AI Engineer, Data Scientist, ML Developer"
@@ -58,8 +53,6 @@ export function AcademyPage() {
       title: "Data Analytics Masterclass",
       duration: "4 Months",
       type: "Online / Classroom",
-      rating: "4.7",
-      reviews: "80+",
       description: "Learn to process, analyze, and visualize data to make business decisions. Master Excel, SQL, Tableau, Power BI, and basic Python statistics.",
       syllabus: ["Advanced Excel & Statistics", "SQL Queries & Databases", "Power BI & Tableau Dashboards", "Python for Data Analysis", "Business Case Studies"],
       outcome: "Data Analyst, Business Analyst, BI Developer"
@@ -68,8 +61,6 @@ export function AcademyPage() {
       title: "Corporate Training Program",
       duration: "Custom",
       type: "On-site / Online",
-      rating: "5.0",
-      reviews: "15+ Corporates",
       description: "Customized upskilling programs for engineering teams. Modernize your team's tech stack with hands-on practice and real-world case studies.",
       syllabus: ["Customized Tech Stacks", "Agile & DevOps Workflows", "Hands-on Capstone Projects", "Post-Training Support", "Assessments & Dashboards"],
       outcome: "High Performance Upskilled Development Team"
@@ -148,11 +139,11 @@ export function AcademyPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-brand opacity-10 blur-3xl" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-brand backdrop-blur-sm animate-fade-up">
               <GraduationCap className="h-3.5 w-3.5" />
               Prowexa Academy
             </div>
@@ -200,7 +191,7 @@ export function AcademyPage() {
                   <div>
                     <div className="flex justify-between items-start gap-4 flex-wrap">
                       <div>
-                        <h3 className="text-2xl font-bold group-hover:text-purple-400 transition-colors">
+                        <h3 className="text-2xl font-bold group-hover:text-brand transition-colors">
                           {program.title}
                         </h3>
                         <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
@@ -215,11 +206,6 @@ export function AcademyPage() {
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold border border-amber-500/20">
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        <span>{program.rating}</span>
-                        <span className="text-muted-foreground">({program.reviews})</span>
-                      </div>
                     </div>
 
                     <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
@@ -231,7 +217,7 @@ export function AcademyPage() {
                       <div className="mt-3 flex flex-wrap gap-2">
                         {program.syllabus.map((item) => (
                           <span key={item} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1 text-xs">
-                            <CheckCircle2 className="h-3 w-3 text-purple-400" />
+                            <CheckCircle2 className="h-3 w-3 text-brand" />
                             {item}
                           </span>
                         ))}
@@ -240,7 +226,7 @@ export function AcademyPage() {
 
                     <div className="mt-6 pt-6 border-t border-border flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Career Outcome:</span>
-                      <span className="font-semibold text-purple-400">{program.outcome}</span>
+                      <span className="font-semibold text-brand">{program.outcome}</span>
                     </div>
                   </div>
 
@@ -273,7 +259,7 @@ export function AcademyPage() {
               {partners.map((partner) => (
                 <div key={partner.college} className="rounded-2xl border border-border bg-card p-6 shadow-card hover-lift transition">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-brand">
                       <Building className="h-5 w-5" />
                     </span>
                     <div>

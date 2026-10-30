@@ -81,7 +81,7 @@ export function ContactPage() {
 
       <main>
         {/* Header */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Get In Touch</span>
@@ -117,7 +117,7 @@ export function ContactPage() {
                     </a>
 
                     <a
-                      href="tel:+917030247209"
+                      href="tel:+917030347209"
                       className="flex items-start gap-4 group text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
@@ -125,8 +125,8 @@ export function ContactPage() {
                       </span>
                       <div>
                         <span className="text-xs uppercase tracking-wider font-semibold block text-brand-glow">Call Us</span>
-                        <p className="mt-1 font-medium text-foreground group-hover:text-brand transition-colors">+91 7030 347 209</p>
-                        <p className="text-xs mt-0.5">Mon-Sat, 10 AM - 7 PM IST</p>
+                        <p className="mt-1 font-medium text-foreground group-hover:text-brand transition-colors">+91 70303 47209</p>
+                        <p className="text-xs mt-0.5">Mon–Fri, 10 AM – 7 PM IST</p>
                       </div>
                     </a>
 
@@ -166,7 +166,7 @@ export function ContactPage() {
                 <div className="rounded-[2rem] border border-border bg-card p-8 md:p-10 shadow-card">
                   {submitted ? (
                     <div className="text-center py-12">
-                      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 mx-auto mb-6">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 mx-auto mb-6">
                         <CheckCircle className="h-8 w-8" />
                       </span>
                       <h2 className="text-2xl font-bold text-foreground">Message Sent Successfully!</h2>

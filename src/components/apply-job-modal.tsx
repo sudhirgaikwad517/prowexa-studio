@@ -70,12 +70,12 @@ export function ApplyJobModal({ isOpen, onClose, defaultRole = "Senior Full Stac
 
         {submitted ? (
           <div className="py-8 text-center animate-fade-up">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h3 className="mt-4 text-2xl font-bold">Application Submitted!</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Thank you, <span className="font-semibold text-foreground">{formState.name}</span>. Our HR and engineering team will review your profile for the <span className="font-semibold text-purple-400">{formState.role}</span> role and contact you via email.
+              Thank you, <span className="font-semibold text-foreground">{formState.name}</span>. Our HR and engineering team will review your profile for the <span className="font-semibold text-brand">{formState.role}</span> role and contact you via email.
             </p>
             <button
               onClick={handleReset}

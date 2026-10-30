@@ -93,12 +93,6 @@ export function SiteHeader() {
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-3">
           <Link
-            to="/careers"
-            className="inline-flex items-center rounded-full bg-purple-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/20 hover:bg-purple-700 transition"
-          >
-            Join Us
-          </Link>
-          <Link
             to="/contact"
             className="inline-flex items-center rounded-full bg-gradient-brand px-5 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90 transition"
           >
@@ -153,13 +147,6 @@ export function SiteHeader() {
             Careers
           </Link>
           <div className="mt-4 flex flex-col gap-3">
-            <Link
-              to="/careers"
-              onClick={() => setMobileOpen(false)}
-              className="inline-flex justify-center items-center rounded-full bg-purple-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-purple-700 transition"
-            >
-              Join Us
-            </Link>
             <Link
               to="/contact"
               onClick={() => setMobileOpen(false)}

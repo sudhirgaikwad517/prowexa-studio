@@ -47,10 +47,10 @@ export function TestimonialsPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-400 backdrop-blur-sm animate-fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-500 backdrop-blur-sm animate-fade-up">
               <Star className="h-3.5 w-3.5 fill-current" />
               Verified Testimonials & Reviews
             </div>
@@ -122,6 +122,11 @@ export function TestimonialsPage() {
         {/* Testimonials Grid */}
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
+            {!loading && filtered.length === 0 && (
+              <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+                No reviews here yet. Worked with us or studied at Prowexa Academy? Be the first to share your experience.
+              </div>
+            )}
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((t) => (
                 <div
@@ -130,7 +135,7 @@ export function TestimonialsPage() {
                 >
                   <div className="relative">
                     <Quote className="h-10 w-10 text-amber-500/20 mb-4" />
-                    <div className="flex items-center gap-1 text-amber-400 mb-4">
+                    <div className="flex items-center gap-1 text-amber-500 mb-4">
                       {[...Array(t.rating || 5)].map((_, i) => (
                         <Star key={i} className="h-4 w-4 fill-current" />
                       ))}
@@ -155,7 +160,7 @@ export function TestimonialsPage() {
                       {t.type === "client" ? (
                         <Building2 className="h-4 w-4 text-brand" />
                       ) : (
-                        <GraduationCap className="h-4 w-4 text-purple-400" />
+                        <GraduationCap className="h-4 w-4 text-brand" />
                       )}
                     </span>
                   </div>

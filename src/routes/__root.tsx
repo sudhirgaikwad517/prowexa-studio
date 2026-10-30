@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { useLayoutEffect } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -56,6 +57,9 @@ function RootComponent() {
   }, []);
 
   return (
-    <Outlet />
+    <>
+      <Outlet />
+      <Toaster position="top-center" richColors />
+    </>
   );
 }

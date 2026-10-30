@@ -68,7 +68,7 @@ export function AcademyEnquireModal({ isOpen, onClose, defaultCourse = "Java Ful
 
         {submitted ? (
           <div className="py-8 text-center animate-fade-up">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h3 className="mt-4 text-2xl font-bold">Inquiry Received!</h3>

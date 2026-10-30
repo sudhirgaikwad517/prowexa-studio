@@ -5,7 +5,7 @@ import { SEOHead } from "./seo-head";
 import { toast } from "sonner";
 import { getEmailSettings, saveEmailSettings, type EmailConfigSettings } from "@/lib/email-settings";
 import { triggerEmailNotification } from "@/lib/email-service";
-import { requestAdminOTP, verifyAdminOTP } from "@/lib/admin-auth";
+import { requestAdminOTP, verifyAdminOTP, getAdminSession, logoutAdmin } from "@/lib/admin-auth";
 import {
   fetchAllLeadsAdmin,
   updateLeadStatus,
@@ -63,7 +63,7 @@ import {
 
 export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminEmailInput, setAdminEmailInput] = useState("sudhirgaikwad517@gmail.com");
+  const [adminEmailInput, setAdminEmailInput] = useState("");
   const [otpInput, setOtpInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
@@ -92,22 +92,23 @@ export function AdminPage() {
     solution: "",
     resultsStr: "",
     techStackStr: "",
-    metricKey1: "Latency Reduction",
-    metricVal1: "74%",
-    metricKey2: "Uptime",
-    metricVal2: "99.99%",
-    metricKey3: "Cost Saved",
-    metricVal3: "40%",
+    metricKey1: "",
+    metricVal1: "",
+    metricKey2: "",
+    metricVal2: "",
+    metricKey3: "",
+    metricVal3: "",
     cover_image: "",
     is_published: true,
   });
 
   useEffect(() => {
-    const savedPin = localStorage.getItem("prowexa_admin_authed");
-    if (savedPin === "true") {
-      setIsAuthenticated(true);
-      loadAdminData();
-    }
+    getAdminSession().then((session) => {
+      if (session.authenticated) {
+        setIsAuthenticated(true);
+        loadAdminData();
+      }
+    });
   }, []);
 
   async function loadAdminData() {
@@ -144,9 +145,9 @@ export function AdminPage() {
     }
   }
 
-  function handleVerifyOTP(e: FormEvent) {
+  async function handleVerifyOTP(e: FormEvent) {
     e.preventDefault();
-    const res = verifyAdminOTP(adminEmailInput, otpInput);
+    const res = await verifyAdminOTP(adminEmailInput, otpInput);
     if (res.success) {
       setIsAuthenticated(true);
       toast.success(res.message);
@@ -156,9 +157,9 @@ export function AdminPage() {
     }
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    await logoutAdmin();
     setIsAuthenticated(false);
-    localStorage.removeItem("prowexa_admin_authed");
     toast.info("Logged out of Admin Portal");
   }
 
@@ -201,13 +202,21 @@ export function AdminPage() {
 
   // Lead status actions
   async function handleLeadStatus(id: string, status: "new" | "contacted" | "archived") {
-    await updateLeadStatus(id, status);
+    const result = await updateLeadStatus(id, status);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setLeads(leads.map((l) => (l.id === id ? { ...l, status } : l)));
     toast.success(`Marked as ${status}`);
   }
 
   async function handleLeadDelete(id: string) {
-    await deleteLead(id);
+    const result = await deleteLead(id);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setLeads(leads.filter((l) => l.id !== id));
     toast.success("Record removed");
   }
@@ -215,7 +224,11 @@ export function AdminPage() {
   // Testimonial status actions
   async function handleTestimonialApprove(id: string, currentStatus: boolean) {
     const newStatus = !currentStatus;
-    await updateTestimonialStatus(id, newStatus);
+    const result = await updateTestimonialStatus(id, newStatus);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setTestimonials(testimonials.map((t) => (t.id === id ? { ...t, is_published: newStatus } : t)));
     toast.success(newStatus ? "Testimonial Approved & Published!" : "Testimonial unpublished");
     if (newStatus) {
@@ -231,7 +244,11 @@ export function AdminPage() {
   }
 
   async function handleTestimonialDelete(id: string) {
-    await deleteTestimonial(id);
+    const result = await deleteTestimonial(id);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setTestimonials(testimonials.filter((t) => t.id !== id));
     toast.success("Testimonial deleted");
   }
@@ -239,7 +256,11 @@ export function AdminPage() {
   // Blog status actions
   async function handleBlogApprove(id: string, currentStatus: boolean) {
     const newStatus = !currentStatus;
-    await updateBlogStatus(id, newStatus);
+    const result = await updateBlogStatus(id, newStatus);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setBlogs(blogs.map((b) => (b.id === id ? { ...b, is_published: newStatus } : b)));
     toast.success(newStatus ? "Blog Approved & Published!" : "Blog unpublished");
     if (newStatus) {
@@ -256,7 +277,11 @@ export function AdminPage() {
   }
 
   async function handleBlogDelete(id: string) {
-    await deleteBlog(id);
+    const result = await deleteBlog(id);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setBlogs(blogs.filter((b) => b.id !== id));
     toast.success("Blog deleted");
   }
@@ -273,12 +298,12 @@ export function AdminPage() {
       solution: "",
       resultsStr: "99.99% system uptime achieved.\nLatency reduced by 74%.\nOperational costs reduced by 40%.",
       techStackStr: "Node.js, React, TypeScript, PostgreSQL, Redis, Docker",
-      metricKey1: "Latency Reduction",
-      metricVal1: "74%",
-      metricKey2: "Uptime",
-      metricVal2: "99.99%",
-      metricKey3: "Cost Saved",
-      metricVal3: "40%",
+      metricKey1: "",
+      metricVal1: "",
+      metricKey2: "",
+      metricVal2: "",
+      metricKey3: "",
+      metricVal3: "",
       cover_image: "/assets/hero-bg.webp",
       is_published: true,
     });
@@ -316,14 +341,26 @@ export function AdminPage() {
       is_published: csForm.is_published,
     };
 
-    await saveCaseStudy(payload);
+    const result = await saveCaseStudy(payload);
+
+    if (!result.success) {
+
+      toast.error(result.error || "Action failed. Please try again.");
+
+      return;
+
+    }
     toast.success("Case Study Published Live!");
     setShowCaseStudyForm(false);
     loadAdminData();
   }
 
   async function handleCaseStudyDelete(id: string) {
-    await deleteCaseStudy(id);
+    const result = await deleteCaseStudy(id);
+    if (!result.success) {
+      toast.error(result.error || "Action failed. Please try again.");
+      return;
+    }
     setCaseStudies(caseStudies.filter((cs) => cs.id !== id));
     toast.success("Case Study removed");
   }
@@ -389,7 +426,7 @@ export function AdminPage() {
               ) : (
                 /* Step 2: Verify OTP Form */
                 <form onSubmit={handleVerifyOTP} className="mt-6 space-y-4 text-left">
-                  <div className="rounded-xl bg-purple-500/10 border border-purple-500/20 p-3 text-center text-xs text-purple-300">
+                  <div className="rounded-xl bg-purple-500/10 border border-purple-500/20 p-3 text-center text-xs text-brand">
                     Security OTP sent to <strong>{adminEmailInput}</strong>.<br />Check your email inbox.
                   </div>
 
@@ -446,7 +483,7 @@ export function AdminPage() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-border pb-8">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
+                  <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 border border-emerald-500/20">
                     Admin Authenticated
                   </span>
                   <span className="text-xs text-muted-foreground">Prowexa Control System</span>
@@ -481,7 +518,7 @@ export function AdminPage() {
                   <Inbox className="h-5 w-5 text-brand" />
                 </div>
                 <div className="mt-2 text-3xl font-bold">{contactLeads.length}</div>
-                <p className="mt-1 text-xs text-emerald-400">
+                <p className="mt-1 text-xs text-emerald-600">
                   {contactLeads.filter((l) => l.status === "new").length} New Leads
                 </p>
               </div>
@@ -489,10 +526,10 @@ export function AdminPage() {
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
                 <div className="flex items-center justify-between text-muted-foreground">
                   <span className="text-xs uppercase tracking-wider font-semibold">Job Applicants</span>
-                  <Briefcase className="h-5 w-5 text-purple-400" />
+                  <Briefcase className="h-5 w-5 text-brand" />
                 </div>
                 <div className="mt-2 text-3xl font-bold">{jobApplications.length}</div>
-                <p className="mt-1 text-xs text-purple-400">
+                <p className="mt-1 text-xs text-brand">
                   {jobApplications.filter((l) => l.status === "new").length} New Candidates
                 </p>
               </div>
@@ -509,10 +546,10 @@ export function AdminPage() {
               <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
                 <div className="flex items-center justify-between text-muted-foreground">
                   <span className="text-xs uppercase tracking-wider font-semibold">Testimonials</span>
-                  <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+                  <Star className="h-5 w-5 text-amber-500 fill-amber-400" />
                 </div>
                 <div className="mt-2 text-3xl font-bold">{testimonials.length}</div>
-                <p className="mt-1 text-xs text-amber-400">
+                <p className="mt-1 text-xs text-amber-500">
                   {testimonials.filter((t) => !t.is_published).length} Pending Approval
                 </p>
               </div>
@@ -523,7 +560,7 @@ export function AdminPage() {
                   <FileText className="h-5 w-5 text-brand" />
                 </div>
                 <div className="mt-2 text-3xl font-bold">{blogs.length}</div>
-                <p className="mt-1 text-xs text-amber-400">
+                <p className="mt-1 text-xs text-amber-500">
                   {blogs.filter((b) => !b.is_published).length} Pending Review
                 </p>
               </div>
@@ -598,9 +635,9 @@ export function AdminPage() {
                             <span
                               className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
                                 lead.status === "new"
-                                  ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                  ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
                                   : lead.status === "contacted"
-                                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                  ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                                   : "bg-surface text-muted-foreground"
                               }`}
                             >
@@ -611,7 +648,7 @@ export function AdminPage() {
                             {lead.status !== "contacted" && (
                               <button
                                 onClick={() => handleLeadStatus(lead.id, "contacted")}
-                                className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition"
+                                className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-500/20 transition"
                               >
                                 Mark Contacted
                               </button>
@@ -637,10 +674,10 @@ export function AdminPage() {
               <div className="mt-8 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-purple-400">Job Applications & Hiring Portal</h2>
+                    <h2 className="text-xl font-bold text-brand">Job Applications & Hiring Portal</h2>
                     <p className="text-xs text-muted-foreground">Candidate resumes, experience levels, and portfolio submissions</p>
                   </div>
-                  <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold text-purple-400">
+                  <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-3 py-1 text-xs font-semibold text-brand">
                     {jobApplications.length} Candidates Applied
                   </span>
                 </div>
@@ -666,7 +703,7 @@ export function AdminPage() {
                           <tr key={app.id} className="hover:bg-surface/30 transition">
                             <td className="px-6 py-4">
                               <div className="font-semibold text-foreground flex items-center gap-1.5">
-                                <User className="h-3.5 w-3.5 text-purple-400" />
+                                <User className="h-3.5 w-3.5 text-brand" />
                                 {app.name}
                               </div>
                               <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
@@ -674,14 +711,14 @@ export function AdminPage() {
                                 {app.email}
                               </div>
                               {app.company && (
-                                <div className="text-xs text-purple-400 flex items-center gap-1 mt-0.5">
+                                <div className="text-xs text-brand flex items-center gap-1 mt-0.5">
                                   <Phone className="h-3 w-3" />
                                   {app.company}
                                 </div>
                               )}
                             </td>
                             <td className="px-6 py-4">
-                              <span className="inline-block rounded-md bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 text-xs font-semibold text-purple-300">
+                              <span className="inline-block rounded-md bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 text-xs font-semibold text-brand">
                                 {roleTitle}
                               </span>
                             </td>
@@ -708,9 +745,9 @@ export function AdminPage() {
                               <span
                                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
                                   app.status === "new"
-                                    ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                    ? "bg-purple-500/10 text-brand border border-purple-500/20"
                                     : app.status === "contacted"
-                                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                    ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                                     : "bg-surface text-muted-foreground"
                                 }`}
                               >
@@ -721,7 +758,7 @@ export function AdminPage() {
                               {app.status !== "contacted" && (
                                 <button
                                   onClick={() => handleLeadStatus(app.id, "contacted")}
-                                  className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition"
+                                  className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-500/20 transition"
                                 >
                                   Mark Interviewed
                                 </button>
@@ -980,14 +1017,14 @@ export function AdminPage() {
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${
                               t.type === "client"
                                 ? "bg-brand/10 text-brand border border-brand/20"
-                                : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                : "bg-purple-500/10 text-brand border border-purple-500/20"
                             }`}
                           >
                             {t.type === "client" ? "Client Review" : "Academy Student"}
                           </span>
                           <span
                             className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                              t.is_published ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"
+                              t.is_published ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-500"
                             }`}
                           >
                             {t.is_published ? "Published Live" : "Pending Approval"}
@@ -998,7 +1035,7 @@ export function AdminPage() {
                           <div>
                             <span className="font-semibold text-foreground">{t.name}</span> — {t.role}
                           </div>
-                          <div className="flex items-center text-amber-400">
+                          <div className="flex items-center text-amber-500">
                             <Star className="h-3.5 w-3.5 fill-current" />
                             <span className="ml-1 font-bold">{t.rating || 5}</span>
                           </div>
@@ -1046,7 +1083,7 @@ export function AdminPage() {
                           <span className="text-xs text-brand font-semibold">{b.author}</span>
                           <span
                             className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                              b.is_published ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"
+                              b.is_published ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-500"
                             }`}
                           >
                             {b.is_published ? "Published Live" : "Pending Review"}
@@ -1125,7 +1162,7 @@ export function AdminPage() {
                   {/* HR Email Config Card */}
                   <div className="rounded-3xl border border-purple-500/30 bg-card p-6 md:p-8 shadow-card">
                     <div className="flex items-center gap-3 border-b border-border pb-4">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-500/10 text-brand border border-purple-500/20">
                         <Briefcase className="h-5 w-5" />
                       </span>
                       <div>
@@ -1192,7 +1229,7 @@ export function AdminPage() {
                   {/* Business Email Config Card */}
                   <div className="rounded-3xl border border-blue-500/30 bg-card p-6 md:p-8 shadow-card">
                     <div className="flex items-center gap-3 border-b border-border pb-4">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600 border border-blue-500/20">
                         <Inbox className="h-5 w-5" />
                       </span>
                       <div>
@@ -1268,7 +1305,7 @@ export function AdminPage() {
 
                 {/* Live Test Email Trigger Box */}
                 <div className="rounded-3xl border border-emerald-500/30 bg-card p-6 md:p-8 shadow-glow">
-                  <h3 className="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-emerald-600 flex items-center gap-2">
                     <Send className="h-5 w-5" /> 1-Click Live Test MNC Email Trigger
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1">

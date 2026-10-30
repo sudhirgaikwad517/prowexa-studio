@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
 import { submitBlog } from "@/lib/blogs";
 import { X, Send, FileText, CheckCircle2, Loader2 } from "lucide-react";
 
@@ -36,11 +37,14 @@ export function SubmitBlogModal({ isOpen, onClose, onSuccess }: SubmitBlogModalP
     e.preventDefault();
     setLoading(true);
     try {
-      await submitBlog({
+      const result = await submitBlog({
         ...formState,
         slug: formState.slug || formState.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-        is_published: false, // Requires admin approval
       });
+      if (!result.success) {
+        toast.error(result.error || "Could not submit your article. Please try again.");
+        return;
+      }
       setSubmitted(true);
       if (onSuccess) onSuccess();
     } finally {
@@ -75,7 +79,7 @@ export function SubmitBlogModal({ isOpen, onClose, onSuccess }: SubmitBlogModalP
 
         {submitted ? (
           <div className="py-8 text-center animate-fade-up">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h3 className="mt-4 text-2xl font-bold">Blog Article Submitted!</h3>

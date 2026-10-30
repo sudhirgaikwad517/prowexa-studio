@@ -3,7 +3,7 @@ import officeWorkspace from "@/assets/office-workspace.webp";
 import officeReception from "@/assets/office-reception.webp";
 import officeNight from "@/assets/office-night.webp";
 import officeCoding from "@/assets/office-coding.webp";
-import heroBg from "@/assets/hero-bg.webp";
+import heroImage from "@/assets/office-coding.webp";
 import { SEOHead, defaultOrganizationSchema, defaultLocalBusinessSchema } from "./seo-head";
 import { trackWhatsAppClick, trackContactFormSubmit, trackPhoneClick, trackEmailClick } from "@/lib/gtag";
 import {
@@ -26,11 +26,7 @@ import {
   Phone,
   Globe,
   MapPin,
-  Building2,
-  Calendar,
-  FileText,
   CheckCircle2,
-  Megaphone,
   Users,
   BriefcaseBusiness,
   ShoppingCart,
@@ -38,13 +34,12 @@ import {
   HeartPulse,
   BookOpen,
   Banknote,
-  CalendarCheck,
-  MessageCircle,
   Globe2,
   MonitorSmartphone,
   LifeBuoy,
 } from "lucide-react";
 
+import { Link } from "@tanstack/react-router";
 import { scrollToSection } from "@/utils/scroll";
 import { Footer } from "./footer";
 import { PlatformShowcase } from "./platform-showcase";
@@ -58,7 +53,6 @@ export function HomePage() {
         structuredData={[defaultOrganizationSchema, defaultLocalBusinessSchema]}
       />
       <Hero />
-      <FeatureStrip />
       <About />
       <PlatformShowcase />
       <InsideProwexa />
@@ -68,8 +62,6 @@ export function HomePage() {
       <Industries />
       <Locations />
       <EdTech />
-      <ContactCTA />
-      <CompanyDetails />
       <Contact />
       <WhatsAppButton />
       <Footer />
@@ -102,15 +94,15 @@ function Hero() {
     <section className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center">
       <div className="absolute inset-0">
         <img
-          src={heroBg}
-          alt="Prowexa Technologies Hero Background"
-          className="h-full w-full object-cover"
-          width={1920}
-          height={1080}
+          src={heroImage}
+          alt="Prowexa engineers collaborating at the Pune office"
+          className="h-full w-full object-cover object-right"
+          width={1280}
+          height={698}
           loading="eager"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.28_0.14_298/0.85)] via-[oklch(0.32_0.15_300/0.45)] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.26_0.14_298/0.92)] via-[oklch(0.3_0.15_300/0.6)] to-[oklch(0.3_0.15_300/0.15)]" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 md:py-16">
@@ -173,35 +165,6 @@ function Hero() {
   );
 }
 
-/* ─────────────────────── Feature Strip ─────────────────────── */
-function FeatureStrip() {
-  return (
-    <section className="bg-gradient-brand text-primary-foreground">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-6 py-6">
-        <div className="flex items-center gap-4">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary-foreground/15 backdrop-blur">
-            <Megaphone className="h-5 w-5" />
-          </span>
-          <p className="text-sm md:text-base font-medium">
-            Prowexa Technologies Pvt. Ltd. | Turning Ideas into Scalable Digital Solutions
-          </p>
-        </div>
-        <a
-          href="#contact"
-          onClick={(event) => {
-            event.preventDefault();
-            scrollToSection("contact");
-          }}
-          className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 hover:bg-primary-foreground/25 px-6 py-2.5 text-sm font-semibold backdrop-blur transition"
-        >
-          Let's Connect <ArrowRight className="h-4 w-4" />
-        </a>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────── Section Heading ─────────────────────── */
 function SectionHeading({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
     <div className="mx-auto max-w-3xl text-center">
@@ -221,9 +184,9 @@ function About() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
             {
-              icon: Building2,
-              title: "Incorporated 2025",
-              body: "A technology-driven company incorporated on 24 December 2025 under the Companies Act, 2013.",
+              icon: HandshakeIcon,
+              title: "Client-First Partnership",
+              body: "We work as an extension of your team, with transparent communication and clear ownership at every step.",
             },
             {
               icon: Layers,
@@ -498,7 +461,7 @@ function Locations() {
     {
       icon: MapPin,
       name: "India",
-      desc: "On-ground delivery teams serving clients across major tech hubs.",
+      desc: "Serving businesses across India's leading technology hubs.",
       places: ["Pune", "Hyderabad", "Bengaluru"],
     },
     {
@@ -605,78 +568,6 @@ function EdTech() {
   );
 }
 
-/* ─────────────────────── Contact CTA ─────────────────────── */
-function ContactCTA() {
-  return (
-    <section className="py-12 md:py-16 bg-surface">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-brand p-10 md:p-16 shadow-glow text-center animate-fade-up">
-          <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-          <div className="relative">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-              Let's Build Your Next Digital Product
-            </h2>
-            <p className="mt-4 text-white/80 text-lg">
-              Tell us about your vision. We'll help you turn it into a world-class digital product.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <a
-                href="#contact"
-                onClick={(event) => {
-                  event.preventDefault();
-                  scrollToSection("contact");
-                }}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-brand shadow-lg hover:bg-white/90 transition"
-              >
-                <CalendarCheck className="h-4 w-4" />
-                Schedule a Meeting
-              </a>
-              <a
-                href="mailto:info@prowexa.com"
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/20 transition"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Contact Us
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────── Company Details ─────────────────────── */
-function CompanyDetails() {
-  const details = [
-    { icon: Building2, label: "Company Name", value: "Prowexa Technologies Pvt. Ltd." },
-    { icon: Calendar, label: "Incorporation Date", value: "24 December 2025" },
-    { icon: FileText, label: "CIN", value: "U62090PN2025PTC249889" },
-    { icon: Layers, label: "Type", value: "Private Limited" },
-    { icon: MapPin, label: "State", value: "Maharashtra" },
-  ];
-  return (
-    <section className="py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading eyebrow="Company" title="Company Details" />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {details.map((d) => (
-            <div key={d.label} className="rounded-3xl border border-border bg-card p-6 shadow-card hover-lift hover:-translate-y-1 animate-fade-up">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
-                  <d.icon className="h-4 w-4" />
-                </span>
-                <span className="text-xs uppercase tracking-wider">{d.label}</span>
-              </div>
-              <p className="mt-3 text-lg font-semibold">{d.value}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─────────────────────── Contact ─────────────────────── */
 function Contact() {
   return (
@@ -686,15 +577,15 @@ function Contact() {
           <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-gradient-brand opacity-30 blur-3xl" />
           <div className="relative">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Let's build something amazing together
+              Let's Build Your Next Digital Product
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              Tell us about your idea. We'll help you turn it into a product.
+              Tell us about your vision. We'll help you turn it into a world-class digital product.
             </p>
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
                 { icon: Mail, label: "Email", value: "info@prowexa.com", href: "mailto:info@prowexa.com" },
-                { icon: Phone, label: "Phone", value: "7030347209", href: "tel:7030347209" },
+                { icon: Phone, label: "Phone", value: "+91 70303 47209", href: "tel:+917030347209" },
                 { icon: Globe, label: "Website", value: "prowexa.com", href: "https://prowexa.com" },
               ].map((c) => (
                 <a
@@ -710,12 +601,12 @@ function Contact() {
                 </a>
               ))}
             </div>
-            <a
-              href="mailto:info@prowexa.com"
+            <Link
+              to="/contact"
               className="mt-10 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
             >
-              Start a conversation <ArrowRight className="h-4 w-4" />
-            </a>
+              Start a Conversation <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </div>

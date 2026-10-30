@@ -1,6 +1,7 @@
 // Google Analytics 4 (GA4) Utility Library
 
-export const GA_TRACKING_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-PROWEXA2026";
+// Set VITE_GA_MEASUREMENT_ID (e.g. G-XXXXXXXXXX) in the environment to enable tracking.
+export const GA_TRACKING_ID: string = import.meta.env.VITE_GA_MEASUREMENT_ID || "";
 
 declare global {
   interface Window {
@@ -8,6 +9,22 @@ declare global {
     dataLayer?: unknown[];
   }
 }
+
+// Load the GA4 script once, only when a measurement ID is configured
+export const initAnalytics = () => {
+  if (typeof window === "undefined" || !GA_TRACKING_ID || window.gtag) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  };
+  window.gtag("js", new Date());
+  window.gtag("config", GA_TRACKING_ID);
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+  document.head.appendChild(script);
+};
 
 // Track page view
 export const pageview = (url: string) => {

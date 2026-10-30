@@ -67,10 +67,10 @@ export function BlogsPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
+        <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-brand backdrop-blur-sm animate-fade-up">
               <FileText className="h-3.5 w-3.5" />
               Technical Blog & Community Articles
             </div>
@@ -104,7 +104,7 @@ export function BlogsPage() {
                 >
                   <Link to="/blogs/$slug" params={{ slug: b.slug }} className="block flex-1">
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                      <span className="flex items-center gap-1.5 text-purple-400 font-semibold">
+                      <span className="flex items-center gap-1.5 text-brand font-semibold">
                         <User className="h-3.5 w-3.5" />
                         {b.author}
                       </span>
@@ -118,7 +118,7 @@ export function BlogsPage() {
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-bold tracking-tight group-hover:text-purple-400 transition-colors">
+                    <h2 className="text-xl font-bold tracking-tight group-hover:text-brand transition-colors">
                       {b.title}
                     </h2>
 
@@ -139,7 +139,7 @@ export function BlogsPage() {
                     <button
                       type="button"
                       onClick={(e) => handleShare(e, b)}
-                      className="relative z-10 p-2 text-muted-foreground hover:text-purple-400 transition rounded-lg hover:bg-surface"
+                      className="relative z-10 p-2 text-muted-foreground hover:text-brand transition rounded-lg hover:bg-surface"
                       title="Share Article"
                     >
                       <Share2 className="h-4 w-4" />

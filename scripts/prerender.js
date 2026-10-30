@@ -16,13 +16,13 @@ const routes = [
   {
     path: "/portfolio",
     title: "Our Portfolio & Case Projects | Prowexa Technologies Pune",
-    description: "Explore Prowexa Technologies' portfolio of web applications, React & Flutter mobile apps, AI solutions, and custom enterprise software built for client success.",
+    description: "Explore Prowexa Technologies' portfolio: Wabtic WhatsApp CRM, Billing CRM, Dairy ERP and Hospital CRM built for real businesses.",
     canonical: "https://www.prowexa.com/portfolio"
   },
   {
     path: "/case-studies",
     title: "Client Case Studies & Success Stories | Prowexa Technologies",
-    description: "Read how Prowexa Technologies delivered high-scale engineering: 70% latency reduction for Fintech, 80% legal AI review efficiency, and zero-downtime EHR cloud migrations.",
+    description: "See how Prowexa Technologies approaches real business problems with custom software, web and mobile apps, AI and cloud engineering.",
     canonical: "https://www.prowexa.com/case-studies"
   },
   {
@@ -33,7 +33,7 @@ const routes = [
   },
   {
     path: "/blogs/building-microservices-react19-supabase",
-    title: "Building Microservices with React 19, Vite & Supabase PostgreSQL | Prowexa Blog",
+    title: "Building Microservices with React 19, Vite & PostgreSQL | Prowexa Blog",
     description: "Learn how we architect high-throughput digital platforms with pre-rendering and real-time database syncing.",
     canonical: "https://www.prowexa.com/blogs/building-microservices-react19-supabase"
   },
