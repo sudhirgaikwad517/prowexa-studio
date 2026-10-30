@@ -61,7 +61,7 @@ export function CareersPage() {
       
       <main className="flex-1">
         {/* Careers Hero */}
-        <section className="relative py-24 overflow-hidden">
+        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
@@ -79,7 +79,7 @@ export function CareersPage() {
         </section>
 
         {/* Culture Section */}
-        <section className="py-24 bg-surface/30">
+        <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <div>
@@ -135,7 +135,7 @@ export function CareersPage() {
         </section>
 
         {/* Job Listings */}
-        <section id="openings" className="py-24">
+        <section id="openings" className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div>
@@ -187,7 +187,7 @@ export function CareersPage() {
               ))}
             </div>
 
-            <div className="mt-16 text-center rounded-[2.5rem] bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-12 shadow-glow">
+            <div className="mt-12 text-center rounded-[2.5rem] bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-12 shadow-glow">
               <h3 className="text-2xl font-bold">Don't see a perfect fit?</h3>
               <p className="mt-4 text-muted-foreground">
                 We're always looking for talented individuals. Submit an open application and tell us 

@@ -81,7 +81,7 @@ export function ContactPage() {
 
       <main>
         {/* Header */}
-        <section className="relative py-20 overflow-hidden">
+        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Get In Touch</span>
@@ -93,7 +93,7 @@ export function ContactPage() {
         </section>
 
         {/* Contact Grid */}
-        <section className="pb-24">
+        <section className="pb-12 md:pb-16">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-12 lg:grid-cols-12 items-start">
               {/* Information */}
@@ -289,7 +289,7 @@ export function ContactPage() {
         </section>
 
         {/* FAQs */}
-        <section className="py-24 bg-surface/30">
+        <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-4xl px-6">
             <div className="text-center mb-16">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Common Questions</span>

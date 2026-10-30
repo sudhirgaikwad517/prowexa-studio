@@ -241,7 +241,7 @@ export function BlogDetailPage() {
           </div>
 
           {/* Bottom Share & CTA */}
-          <div className="mt-16 rounded-3xl border border-border bg-gradient-hero p-8 text-center shadow-glow">
+          <div className="mt-12 rounded-3xl border border-border bg-gradient-hero p-8 text-center shadow-glow">
             <h3 className="text-xl font-bold">Found this article insightful?</h3>
             <p className="mt-2 text-xs text-muted-foreground">Share it with your engineering team and network</p>
             <div className="mt-6 flex justify-center gap-3 flex-wrap">

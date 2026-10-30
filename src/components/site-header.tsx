@@ -1,8 +1,7 @@
 import { useState } from "react";
 import type { MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { ThemeToggle } from "./theme-toggle";
-import logo from "@/assets/prowexa-logo.webp";
+import logoPurple from "@/assets/prowexa-logo-purple.webp";
 import { Menu, X } from "lucide-react";
 import { trackCTAClick } from "@/lib/gtag";
 
@@ -45,12 +44,12 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-nav-background border-b border-nav-border text-nav-foreground">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-nav-background border-b border-nav-border text-nav-foreground shadow-[0_1px_12px_-6px_oklch(0.3_0.08_300/0.25)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link to="/" className="flex items-center" aria-label="Prowexa Technologies home">
           <img
-            src={logo}
+            src={logoPurple}
             alt="Prowexa Technologies"
             width={180}
             height={44}
@@ -83,8 +82,8 @@ export function SiteHeader() {
           ))}
           <Link
             to="/careers"
-            activeProps={{ className: "text-purple-400" }}
-            inactiveProps={{ className: "text-purple-400/80 hover:text-purple-300" }}
+            activeProps={{ className: "text-brand" }}
+            inactiveProps={{ className: "text-brand/85 hover:text-brand" }}
             className="font-semibold transition-colors"
           >
             Careers
@@ -93,7 +92,6 @@ export function SiteHeader() {
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-3">
-          <ThemeToggle />
           <Link
             to="/careers"
             className="inline-flex items-center rounded-full bg-purple-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/20 hover:bg-purple-700 transition"
@@ -110,7 +108,6 @@ export function SiteHeader() {
 
         {/* Mobile Hamburger */}
         <div className="flex lg:hidden items-center gap-3">
-          <ThemeToggle />
           <button
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"
@@ -149,8 +146,8 @@ export function SiteHeader() {
           <Link
             to="/careers"
             onClick={() => setMobileOpen(false)}
-            activeProps={{ className: "text-purple-400" }}
-            inactiveProps={{ className: "text-purple-400/80 hover:text-purple-300" }}
+            activeProps={{ className: "text-brand" }}
+            inactiveProps={{ className: "text-brand/85 hover:text-brand" }}
             className="py-2 font-semibold transition-colors border-b border-border/40"
           >
             Careers

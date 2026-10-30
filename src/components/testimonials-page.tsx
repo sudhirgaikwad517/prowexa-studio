@@ -47,7 +47,7 @@ export function TestimonialsPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-24 overflow-hidden">
+        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-400 backdrop-blur-sm animate-fade-up">
@@ -120,7 +120,7 @@ export function TestimonialsPage() {
         </section>
 
         {/* Testimonials Grid */}
-        <section className="py-24">
+        <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((t) => (

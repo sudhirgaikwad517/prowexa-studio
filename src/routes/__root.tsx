@@ -1,6 +1,5 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { useLayoutEffect } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
 
 function NotFoundComponent() {
   return (
@@ -57,8 +56,6 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider>
-      <Outlet />
-    </ThemeProvider>
+    <Outlet />
   );
 }

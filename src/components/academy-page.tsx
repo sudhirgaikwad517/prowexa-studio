@@ -148,7 +148,7 @@ export function AcademyPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-24 overflow-hidden">
+        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-brand opacity-10 blur-3xl" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
@@ -172,7 +172,7 @@ export function AcademyPage() {
               </button>
               <a
                 href="#programs"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/20 transition animate-fade-up"
+                className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-card px-7 py-3.5 text-sm font-semibold text-brand hover:bg-brand-soft transition animate-fade-up"
               >
                 Explore Programs <ArrowRight className="h-4 w-4" />
               </a>
@@ -181,7 +181,7 @@ export function AcademyPage() {
         </section>
 
         {/* Programs Section */}
-        <section id="programs" className="py-24 bg-surface/30">
+        <section id="programs" className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-16">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our Courses</span>
@@ -259,7 +259,7 @@ export function AcademyPage() {
         </section>
 
         {/* College Partnerships Section */}
-        <section id="partnerships" className="py-24">
+        <section id="partnerships" className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-16">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Academic Network</span>
@@ -293,7 +293,7 @@ export function AcademyPage() {
         </section>
 
         {/* Training Roadmap */}
-        <section className="py-24 bg-surface/30">
+        <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-16">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Execution</span>
@@ -313,7 +313,7 @@ export function AcademyPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24">
+        <section className="py-12 md:py-16">
           <div className="mx-auto max-w-5xl px-6 text-center">
             <div className="rounded-[2.5rem] border border-border bg-gradient-hero p-10 md:p-16 shadow-glow">
               <h2 className="text-3xl md:text-4xl font-bold">Ready to Start Your Software Career?</h2>

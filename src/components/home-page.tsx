@@ -47,6 +47,7 @@ import {
 
 import { scrollToSection } from "@/utils/scroll";
 import { Footer } from "./footer";
+import { PlatformShowcase } from "./platform-showcase";
 
 export function HomePage() {
   return (
@@ -59,6 +60,7 @@ export function HomePage() {
       <Hero />
       <FeatureStrip />
       <About />
+      <PlatformShowcase />
       <InsideProwexa />
       <MissionVision />
       <Services />
@@ -108,17 +110,18 @@ function Hero() {
           loading="eager"
           decoding="async"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.28_0.14_298/0.85)] via-[oklch(0.32_0.15_300/0.45)] to-transparent" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 md:py-16">
         <div className="max-w-3xl animate-fade-up">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-black/40 px-4 py-1.5 text-xs text-white/80 backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs text-white/90 backdrop-blur">
             <Sparkles className="h-3.5 w-3.5 text-brand-glow" />
             Next-gen product engineering
           </div>
           <h1 className="mt-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl text-white">
             Transforming Ideas into<br />
-            <span className="text-brand">Scalable Digital Solutions</span>
+            <span className="text-[oklch(0.82_0.12_305)]">Scalable Digital Solutions</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base md:text-lg text-white/90 leading-relaxed">
             Custom Software Development, AI Solutions, Web Applications, Mobile Apps &amp; Technology Consulting.
@@ -131,7 +134,7 @@ function Hero() {
               { icon: TrendingUp, label: "Business → Success" },
             ].map((step, i) => (
               <div key={step.label} className="flex items-center gap-3">
-                <div className="flex items-center gap-2 rounded-full border border-border bg-black/40 px-4 py-2 backdrop-blur">
+                <div className="flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 backdrop-blur">
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-brand text-primary-foreground">
                     <step.icon className="h-3.5 w-3.5" />
                   </span>
@@ -212,10 +215,10 @@ function SectionHeading({ eyebrow, title, subtitle }: { eyebrow: string; title: 
 /* ─────────────────────── About ─────────────────────── */
 function About() {
   return (
-    <section id="about" className="py-24">
+    <section id="about" className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading eyebrow="About" title="About Prowexa" />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
             {
               icon: Building2,
@@ -260,14 +263,14 @@ function InsideProwexa() {
     { src: officeNight, label: "Always-on Culture", span: "" },
   ];
   return (
-    <section className="py-24 bg-surface/40">
+    <section className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
           eyebrow="Our space"
           title="Inside Prowexa"
           subtitle="A glimpse of where our ideas, code and culture come to life."
         />
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-4 md:auto-rows-[220px] gap-4">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-4 md:auto-rows-[220px] gap-4">
           {images.map((img) => (
             <div
               key={img.label}
@@ -294,7 +297,7 @@ function InsideProwexa() {
 /* ─────────────────────── Mission & Vision ─────────────────────── */
 function MissionVision() {
   return (
-    <section className="py-24">
+    <section className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-7xl px-6 grid gap-6 md:grid-cols-2">
         {[
           {
@@ -367,14 +370,14 @@ function Services() {
     },
   ];
   return (
-    <section id="services" className="py-24 bg-surface/40">
+    <section id="services" className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
           eyebrow="Services"
           title="What We Build"
           subtitle="A full-stack technology partner for software development, AI, cloud and consulting — all under one roof."
         />
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <div
               key={s.title}
@@ -407,7 +410,7 @@ function WhyUs() {
     { icon: Globe2, text: "Industry Expertise" },
   ];
   return (
-    <section className="py-24">
+    <section className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-7xl px-6 grid gap-12 lg:grid-cols-2 lg:items-center">
         <div>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Why choose us</span>
@@ -458,14 +461,14 @@ function Industries() {
     { icon: Rocket, name: "Startups", desc: "MVP development and growth engineering for startups." },
   ];
   return (
-    <section id="industries" className="py-24 bg-surface/40">
+    <section id="industries" className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
           eyebrow="Industries"
           title="Industries We Serve"
           subtitle="We build technology solutions across diverse sectors — from regulated industries to high-growth startups."
         />
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {industries.map((ind) => (
             <div
               key={ind.name}
@@ -506,14 +509,14 @@ function Locations() {
     },
   ];
   return (
-    <section id="locations" className="py-24">
+    <section id="locations" className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
           eyebrow="Locations"
           title="Where We Serve"
           subtitle="We deliver software development services to clients across India and around the globe."
         />
-        <div className="mt-14 grid gap-5 md:grid-cols-2">
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
           {regions.map((region) => (
             <div
               key={region.name}
@@ -560,7 +563,7 @@ function EdTech() {
     "Corporate Training",
   ];
   return (
-    <section id="academy" className="py-24">
+    <section id="academy" className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-hero p-10 md:p-14 shadow-card animate-fade-up">
           <div className="absolute -top-32 -left-20 h-80 w-80 rounded-full bg-gradient-brand opacity-20 blur-3xl" />
@@ -605,7 +608,7 @@ function EdTech() {
 /* ─────────────────────── Contact CTA ─────────────────────── */
 function ContactCTA() {
   return (
-    <section className="py-24 bg-surface/40">
+    <section className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-5xl px-6">
         <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-brand p-10 md:p-16 shadow-glow text-center animate-fade-up">
           <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
@@ -653,10 +656,10 @@ function CompanyDetails() {
     { icon: MapPin, label: "State", value: "Maharashtra" },
   ];
   return (
-    <section className="py-24">
+    <section className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading eyebrow="Company" title="Company Details" />
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {details.map((d) => (
             <div key={d.label} className="rounded-3xl border border-border bg-card p-6 shadow-card hover-lift hover:-translate-y-1 animate-fade-up">
               <div className="flex items-center gap-3 text-muted-foreground">
@@ -677,7 +680,7 @@ function CompanyDetails() {
 /* ─────────────────────── Contact ─────────────────────── */
 function Contact() {
   return (
-    <section id="contact" className="py-24 bg-surface/40">
+    <section id="contact" className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-5xl px-6">
         <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-hero p-10 md:p-16 shadow-glow text-center animate-fade-up">
           <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-gradient-brand opacity-30 blur-3xl" />

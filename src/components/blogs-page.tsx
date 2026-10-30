@@ -67,7 +67,7 @@ export function BlogsPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-24 overflow-hidden">
+        <section className="relative py-16 md:py-12 md:py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/10 px-4 py-1.5 text-xs text-purple-400 backdrop-blur-sm animate-fade-up">
@@ -94,7 +94,7 @@ export function BlogsPage() {
         </section>
 
         {/* Blogs Grid */}
-        <section className="py-24 bg-surface/30">
+        <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {blogs.map((b) => (
