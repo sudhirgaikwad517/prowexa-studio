@@ -45,7 +45,7 @@ export function CaseStudiesPage() {
               <Layers className="h-3.5 w-3.5" />
               Enterprise Case Studies
             </div>
-            <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
+            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl animate-fade-up">
               Real Impact. <span className="text-gradient-brand">Real Results.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
@@ -58,7 +58,7 @@ export function CaseStudiesPage() {
         <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
             {!loading && caseStudies.length === 0 && (
-              <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+              <div className="rounded-3xl border border-dashed border-border bg-card p-8 text-center text-muted-foreground">
                 Detailed case studies are being prepared. In the meantime, explore our{" "}
                 <a href="/portfolio" className="font-semibold text-brand hover:underline">
                   portfolio
@@ -70,11 +70,11 @@ export function CaseStudiesPage() {
                 about your project.
               </div>
             )}
-            <div className="space-y-16">
+            <div className="space-y-10">
               {caseStudies.map((cs) => (
                 <div
                   key={cs.id || cs.title}
-                  className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-8 md:p-12 shadow-glow animate-fade-up"
+                  className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 md:p-8 shadow-glow animate-fade-up"
                 >
                   <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
                     <div className="lg:col-span-7">

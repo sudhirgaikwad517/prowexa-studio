@@ -68,7 +68,7 @@ export function CareersPage() {
               <Sparkles className="h-3.5 w-3.5" />
               Join the Prowexa Team
             </div>
-            <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
+            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl animate-fade-up">
               Build the <span className="text-gradient-purple">Future</span> With Us
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
@@ -137,7 +137,7 @@ export function CareersPage() {
         {/* Job Listings */}
         <section id="openings" className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
               <div>
                 <h2 className="text-3xl font-bold md:text-4xl">Open Positions</h2>
                 <p className="mt-2 text-muted-foreground">Find your next challenge and join our mission.</p>
@@ -187,7 +187,7 @@ export function CareersPage() {
               ))}
             </div>
 
-            <div className="mt-12 text-center rounded-[2.5rem] bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-12 shadow-glow">
+            <div className="mt-12 text-center rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/10 p-8 shadow-glow">
               <h3 className="text-2xl font-bold">Don't see a perfect fit?</h3>
               <p className="mt-4 text-muted-foreground">
                 We're always looking for talented individuals. Submit an open application and tell us 

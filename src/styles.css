@@ -215,3 +215,21 @@
   .hex-stage .hex-piece,
   .hex-stage .hex-float { animation: none !important; }
 }
+
+/* Technology strip: endless horizontal scroll, pauses on hover */
+@keyframes tech-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.tech-marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.tech-marquee-track {
+  animation: tech-marquee 35s linear infinite;
+}
+.tech-marquee:hover .tech-marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee-track { animation: none; flex-wrap: wrap; width: auto; }
+}

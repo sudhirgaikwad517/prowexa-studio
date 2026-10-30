@@ -87,7 +87,7 @@ export function PortfolioPage() {
         <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-brand opacity-10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-6 text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our Work</span>
-          <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-6xl">Portfolio</h1>
+          <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">Portfolio</h1>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-muted-foreground">
             Products we have built for real businesses: SaaS platforms, CRMs and industry-specific ERP systems.
           </p>
@@ -96,7 +96,7 @@ export function PortfolioPage() {
 
       {/* Projects */}
       <section className="py-12 md:py-16">
-        <div className="mx-auto max-w-7xl px-6 space-y-20">
+        <div className="mx-auto max-w-7xl px-6 space-y-12">
           {projects.map((cat) => (
             <div key={cat.category}>
               {/* Category Header */}
@@ -158,7 +158,7 @@ export function PortfolioPage() {
       {/* CTA */}
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-brand p-12 shadow-glow">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-brand p-8 shadow-glow">
             <div className="absolute -top-20 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
             <div className="relative">
               <h2 className="text-3xl md:text-4xl font-bold text-white">Have a project in mind?</h2>

@@ -54,7 +54,7 @@ export function TestimonialsPage() {
               <Star className="h-3.5 w-3.5 fill-current" />
               Verified Testimonials & Reviews
             </div>
-            <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
+            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl animate-fade-up">
               Trusted by <span className="text-gradient-amber">Clients & Students</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
@@ -123,7 +123,7 @@ export function TestimonialsPage() {
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
             {!loading && filtered.length === 0 && (
-              <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+              <div className="rounded-3xl border border-dashed border-border bg-card p-8 text-center text-muted-foreground">
                 No reviews here yet. Worked with us or studied at Prowexa Academy? Be the first to share your experience.
               </div>
             )}
@@ -131,7 +131,7 @@ export function TestimonialsPage() {
               {filtered.map((t) => (
                 <div
                   key={t.id || t.name}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-amber-500/40 transition-all duration-300 animate-fade-up"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-card hover:border-amber-500/40 transition-all duration-300 animate-fade-up"
                 >
                   <div className="relative">
                     <Quote className="h-10 w-10 text-amber-500/20 mb-4" />

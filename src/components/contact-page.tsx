@@ -85,7 +85,7 @@ export function ContactPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-transparent to-transparent opacity-50" />
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Get In Touch</span>
-            <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-6xl">Let's Connect</h1>
+            <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">Let's Connect</h1>
             <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
               Have an idea, project, or training inquiry? Fill out the form or schedule a call, and we'll reply within 24 hours.
             </p>
@@ -163,7 +163,7 @@ export function ContactPage() {
 
               {/* Inquiry Form */}
               <div className="lg:col-span-7">
-                <div className="rounded-[2rem] border border-border bg-card p-8 md:p-10 shadow-card">
+                <div className="rounded-2xl border border-border bg-card p-8 md:p-8 shadow-card">
                   {submitted ? (
                     <div className="text-center py-12">
                       <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 mx-auto mb-6">
@@ -291,7 +291,7 @@ export function ContactPage() {
         {/* FAQs */}
         <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-4xl px-6">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Common Questions</span>
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">Frequently Asked Questions</h2>
             </div>

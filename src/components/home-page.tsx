@@ -53,6 +53,7 @@ export function HomePage() {
         structuredData={[defaultOrganizationSchema, defaultLocalBusinessSchema]}
       />
       <Hero />
+      <TechStrip />
       <About />
       <PlatformShowcase />
       <InsideProwexa />
@@ -91,7 +92,7 @@ function WhatsAppButton() {
 /* ─────────────────────── Hero ─────────────────────── */
 function Hero() {
   return (
-    <section className="relative overflow-hidden min-h-[calc(100vh-72px)] flex items-center">
+    <section className="relative overflow-hidden min-h-[560px] md:min-h-[calc(86vh-72px)] flex items-center">
       <div className="absolute inset-0">
         <img
           src={heroImage}
@@ -169,47 +170,140 @@ function SectionHeading({ eyebrow, title, subtitle }: { eyebrow: string; title: 
   return (
     <div className="mx-auto max-w-3xl text-center">
       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">{eyebrow}</span>
-      <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">{title}</h2>
-      {subtitle && <p className="mt-4 text-lg text-muted-foreground">{subtitle}</p>}
+      <h2 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
+      {subtitle && <p className="mt-3 text-base md:text-lg text-muted-foreground">{subtitle}</p>}
     </div>
   );
 }
 
 /* ─────────────────────── About ─────────────────────── */
 function About() {
+  const highlights = [
+    {
+      icon: HandshakeIcon,
+      title: "Client-First Partnership",
+      body: "An extension of your team, with transparent communication and clear ownership.",
+    },
+    {
+      icon: Layers,
+      title: "Product Engineering",
+      body: "SaaS platforms, CRMs, ERPs and digital products built to scale.",
+    },
+    {
+      icon: Target,
+      title: "Real Problem Solvers",
+      body: "Software designed around the business problem, not just the feature list.",
+    },
+    {
+      icon: LifeBuoy,
+      title: "Long-Term Support",
+      body: "We stay on after launch to maintain, improve and scale what we build.",
+    },
+  ];
   return (
     <section id="about" className="py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading eyebrow="About" title="About Prowexa" />
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {[
-            {
-              icon: HandshakeIcon,
-              title: "Client-First Partnership",
-              body: "We work as an extension of your team, with transparent communication and clear ownership at every step.",
-            },
-            {
-              icon: Layers,
-              title: "Product Engineering",
-              body: "We specialize in building high-performance software solutions, SaaS platforms, and digital products.",
-            },
-            {
-              icon: Target,
-              title: "Real Problem Solvers",
-              body: "We don't just develop software; we build products that solve real problems at scale.",
-            },
-          ].map((c) => (
-            <div
-              key={c.title}
-              className="group relative rounded-3xl border border-border bg-card p-8 shadow-card hover-lift hover:-translate-y-1 animate-fade-up"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
-                <c.icon className="h-5 w-5" />
+      <div className="mx-auto max-w-7xl px-6 grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">About Prowexa</span>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">
+            A product engineering partner for <span className="text-gradient-brand">growing businesses</span>
+          </h2>
+          <p className="mt-4 text-muted-foreground md:text-lg leading-relaxed">
+            Prowexa Technologies is a Pune-based software company that designs, builds and supports custom software,
+            web and mobile apps, AI solutions and industry ERP/CRM systems for clients in India and worldwide.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {highlights.map((h) => (
+              <div key={h.title} className="flex gap-3 rounded-2xl border border-border bg-card p-4 shadow-card">
+                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
+                  <h.icon className="h-4 w-4" />
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold">{h.title}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{h.body}</p>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold">{c.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{c.body}</p>
+            ))}
+          </div>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="#services"
+              onClick={(event) => {
+                event.preventDefault();
+                scrollToSection("services");
+              }}
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 transition"
+            >
+              Explore Our Services <ArrowRight className="h-4 w-4" />
+            </a>
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-card px-6 py-3 text-sm font-semibold text-brand hover:bg-brand-soft transition"
+            >
+              View Our Work
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative">
+          <img
+            src={officeTeam}
+            alt="The Prowexa team at the Pune office"
+            loading="lazy"
+            className="aspect-[4/3] w-full rounded-2xl object-cover shadow-card"
+          />
+          <div className="absolute -bottom-5 left-4 right-4 sm:left-6 sm:right-auto flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-card">
+            <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground">
+              <MapPin className="h-4 w-4" />
+            </span>
+            <div>
+              <div className="text-sm font-semibold">Headquartered in Pune, India</div>
+              <div className="text-xs text-muted-foreground">Serving clients across India and worldwide</div>
             </div>
-          ))}
+          </div>
+          <div className="absolute -top-4 right-4 hidden sm:flex items-center gap-2 rounded-full bg-gradient-brand px-4 py-2 text-xs font-semibold text-primary-foreground shadow-glow">
+            <Sparkles className="h-3.5 w-3.5" /> SaaS · ERP · CRM · AI
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────── Technology Strip ─────────────────────── */
+function TechStrip() {
+  const tech = [
+    "React",
+    "Next.js",
+    "Node.js",
+    "TypeScript",
+    "Flutter",
+    "React Native",
+    "Java Spring Boot",
+    "Python",
+    "PostgreSQL",
+    "AWS",
+    "Docker",
+    "WhatsApp Cloud API",
+  ];
+  return (
+    <section aria-label="Technologies we work with" className="border-b border-border bg-card py-5">
+      <div className="mx-auto max-w-7xl px-6 flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
+        <span className="flex-none text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Technologies we work with
+        </span>
+        <div className="tech-marquee relative flex-1 overflow-hidden">
+          <div className="tech-marquee-track flex w-max gap-3">
+            {[...tech, ...tech].map((t, i) => (
+              <span
+                key={`${t}-${i}`}
+                aria-hidden={i >= tech.length}
+                className="rounded-full border border-border bg-surface px-4 py-1.5 text-sm font-medium whitespace-nowrap"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -222,7 +316,7 @@ function InsideProwexa() {
     { src: officeReception, label: "Reception", span: "md:col-span-2 md:row-span-2" },
     { src: officeTeam, label: "Team Collaboration", span: "" },
     { src: officeWorkspace, label: "Workspace", span: "" },
-    { src: officeCoding, label: "Engineering", span: "md:col-span-2" },
+    { src: officeCoding, label: "Engineering", span: "" },
     { src: officeNight, label: "Always-on Culture", span: "" },
   ];
   return (
@@ -233,7 +327,7 @@ function InsideProwexa() {
           title="Inside Prowexa"
           subtitle="A glimpse of where our ideas, code and culture come to life."
         />
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-4 md:auto-rows-[220px] gap-4">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 md:auto-rows-[220px] gap-4">
           {images.map((img) => (
             <div
               key={img.label}
@@ -278,7 +372,7 @@ function MissionVision() {
         ].map((c) => (
           <div
             key={c.tag}
-            className="relative overflow-hidden rounded-3xl border border-border bg-gradient-hero p-10 shadow-card hover-lift hover:-translate-y-1 animate-fade-up"
+            className="relative overflow-hidden rounded-2xl border border-border bg-gradient-hero p-7 shadow-card hover-lift hover:-translate-y-1 animate-fade-up"
           >
             <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-gradient-brand opacity-20 blur-3xl" />
             <div className="relative">
@@ -288,7 +382,7 @@ function MissionVision() {
                 </span>
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">{c.tag}</span>
               </div>
-              <h3 className="mt-5 text-3xl font-bold tracking-tight">{c.title}</h3>
+              <h3 className="mt-4 text-2xl font-bold tracking-tight">{c.title}</h3>
               <p className="mt-3 text-muted-foreground leading-relaxed">{c.body}</p>
             </div>
           </div>
@@ -305,31 +399,37 @@ function Services() {
       icon: Code2,
       title: "Custom Software Development",
       body: "Tailor-made enterprise-grade software built for your unique business requirements and built to scale.",
+      points: ["Business workflow automation", "ERP, CRM & internal tools", "Legacy system modernisation"],
     },
     {
       icon: MonitorSmartphone,
       title: "Web Development",
       body: "High-performance, responsive web applications crafted with modern frameworks and best practices.",
+      points: ["Corporate websites & portals", "SaaS web applications", "Dashboards & admin panels"],
     },
     {
       icon: Smartphone,
       title: "Mobile App Development",
       body: "Native and cross-platform mobile apps for iOS and Android with delightful user experiences.",
+      points: ["Android & iOS apps", "Flutter & React Native", "App store launch & updates"],
     },
     {
       icon: Cpu,
       title: "AI Solutions",
       body: "AI-powered features, automation, and intelligent workflows that move the needle for your business.",
+      points: ["Chatbots & assistants", "Document & data automation", "AI features in existing apps"],
     },
     {
       icon: Cloud,
       title: "Cloud & DevOps",
       body: "Scalable cloud infrastructure, CI/CD pipelines, and DevOps practices for reliable, fast delivery.",
+      points: ["Cloud setup & migration", "CI/CD pipelines", "Monitoring & backups"],
     },
     {
       icon: BriefcaseBusiness,
       title: "IT Consulting",
       body: "Strategic technology consulting to help you make the right architectural and business decisions.",
+      points: ["Technology roadmap", "Architecture reviews", "Build vs buy decisions"],
     },
   ];
   return (
@@ -340,19 +440,33 @@ function Services() {
           title="What We Build"
           subtitle="A full-stack technology partner for software development, AI, cloud and consulting — all under one roof."
         />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
             <div
               key={s.title}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
+              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
             >
               <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-3xl group-hover:opacity-30 transition" />
               <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
                   <s.icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-5 text-lg font-semibold">{s.title}</h3>
+                <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.body}</p>
+                <ul className="mt-4 space-y-1.5 border-t border-border pt-4">
+                  {s.points.map((point) => (
+                    <li key={point} className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 flex-none text-brand-glow" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/contact"
+                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:gap-2.5 transition-all"
+                >
+                  Discuss your project <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           ))}
@@ -377,7 +491,7 @@ function WhyUs() {
       <div className="mx-auto max-w-7xl px-6 grid gap-12 lg:grid-cols-2 lg:items-center">
         <div>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Why choose us</span>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+          <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             A technology partner built for <span className="text-gradient-brand">growth &amp; scale</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-lg">
@@ -431,15 +545,15 @@ function Industries() {
           title="Industries We Serve"
           subtitle="We build technology solutions across diverse sectors — from regulated industries to high-growth startups."
         />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {industries.map((ind) => (
             <div
               key={ind.name}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
+              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
             >
               <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-3xl group-hover:opacity-30 transition" />
               <div className="relative flex items-start gap-4">
-                <span className="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
                   <ind.icon className="h-5 w-5" />
                 </span>
                 <div>
@@ -479,16 +593,16 @@ function Locations() {
           title="Where We Serve"
           subtitle="We deliver software development services to clients across India and around the globe."
         />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
           {regions.map((region) => (
             <div
               key={region.name}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
+              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card hover-lift hover:-translate-y-1 hover:border-brand animate-fade-up"
             >
               <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-brand opacity-0 blur-3xl group-hover:opacity-30 transition" />
               <div className="relative">
                 <div className="flex items-center gap-4">
-                  <span className="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
+                  <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
                     <region.icon className="h-5 w-5" />
                   </span>
                   <div>
@@ -536,7 +650,7 @@ function EdTech() {
                 <GraduationCap className="h-3.5 w-3.5 text-brand-glow" />
                 Prowexa Academy
               </span>
-              <h2 className="mt-5 text-4xl font-bold tracking-tight md:text-5xl">Education &amp; Training</h2>
+              <h2 className="mt-5 text-3xl font-bold tracking-tight md:text-4xl">Education &amp; Training</h2>
               <p className="mt-4 text-muted-foreground text-lg">
                 Practical, industry-focused programs designed to build real-world skills and accelerate careers.
               </p>
@@ -573,16 +687,16 @@ function Contact() {
   return (
     <section id="contact" className="py-12 md:py-16 bg-surface">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="relative overflow-hidden rounded-[2rem] border border-border bg-gradient-hero p-10 md:p-16 shadow-glow text-center animate-fade-up">
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-hero p-8 md:p-12 shadow-glow text-center animate-fade-up">
           <div className="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-gradient-brand opacity-30 blur-3xl" />
           <div className="relative">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Let's Build Your Next Digital Product
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
               Tell us about your vision. We'll help you turn it into a world-class digital product.
             </p>
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {[
                 { icon: Mail, label: "Email", value: "info@prowexa.com", href: "mailto:info@prowexa.com" },
                 { icon: Phone, label: "Phone", value: "+91 70303 47209", href: "tel:+917030347209" },

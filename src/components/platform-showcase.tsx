@@ -55,25 +55,33 @@ function Label({ x, y, lines, color, size = 15 }: { x: number; y: number; lines:
 
 function HexStack() {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [played, setPlayed] = useState(false);
   const [cycle, setCycle] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.3 });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting) setPlayed(true);
+      },
+      { threshold: 0.1, rootMargin: "0px 0px 120px 0px" },
+    );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!visible) return;
+    // Replay the assembly only while the graphic is on screen; once played it stays visible.
+    if (!inView) return;
     const timer = window.setInterval(() => setCycle((c) => c + 1), CYCLE_MS);
     return () => window.clearInterval(timer);
-  }, [visible]);
+  }, [inView]);
 
   return (
-    <div ref={ref} className={`hex-stage relative mx-auto w-full max-w-[520px] ${visible ? "is-visible" : ""}`}>
+    <div ref={ref} className={`hex-stage relative mx-auto w-full max-w-[520px] ${played ? "is-visible" : ""}`}>
       <div className="absolute inset-8 rounded-full bg-gradient-brand opacity-20 blur-3xl" />
       <svg
         key={cycle}
@@ -92,19 +100,19 @@ function HexStack() {
           </filter>
         </defs>
 
-        <HexTile cx={250} cy={262} r={240} top="url(#hexRing)" side="#4c1d95" delay={1.9} variant="grow">
+        <HexTile cx={250} cy={262} r={240} top="url(#hexRing)" side="#4c1d95" delay={1.5} variant="grow">
           <Label x={250} y={452} lines={["Cloud · DevOps · Security"]} color="#ffffff" size={13} />
         </HexTile>
-        <HexTile cx={163} cy={318} r={100} top="#ede9fe" side="#c4b5fd" delay={1.3}>
+        <HexTile cx={163} cy={318} r={100} top="#ede9fe" side="#c4b5fd" delay={1.0}>
           <Label x={136} y={328} lines={["Web & Mobile", "Experiences"]} color="#3b0764" />
         </HexTile>
-        <HexTile cx={337} cy={318} r={100} top="#7c3aed" side="#5b21b6" delay={0.7}>
+        <HexTile cx={337} cy={318} r={100} top="#7c3aed" side="#5b21b6" delay={0.5}>
           <Label x={364} y={328} lines={["AI & Data", "Solutions"]} color="#ffffff" />
         </HexTile>
-        <HexTile cx={250} cy={165} r={100} top="#2a1258" side="#160935" delay={0.1}>
+        <HexTile cx={250} cy={165} r={100} top="#2a1258" side="#160935" delay={0}>
           <Label x={250} y={128} lines={["Custom Software", "Engineering"]} color="#ffffff" />
         </HexTile>
-        <HexTile cx={250} cy={268} r={52} top="#ffffff" side="#ddd6fe" delay={2.6} variant="pop">
+        <HexTile cx={250} cy={268} r={52} top="#ffffff" side="#ddd6fe" delay={2.1} variant="pop">
           <text x={250} y={268} textAnchor="middle" fill="#5b21b6" fontSize={19} fontWeight={800}>
             Prowexa
           </text>
@@ -129,10 +137,10 @@ export function PlatformShowcase() {
       <div className="mx-auto max-w-7xl px-6 grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our approach</span>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">
             One partner for <span className="text-gradient-brand">every layer</span> of your product
           </h2>
-          <p className="mt-4 text-muted-foreground text-lg">
+          <p className="mt-4 text-muted-foreground md:text-lg">
             From the first line of code to cloud scale, Prowexa brings engineering, design, AI and operations together so
             your product ships faster and runs reliably.
           </p>

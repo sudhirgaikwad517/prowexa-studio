@@ -147,7 +147,7 @@ export function AcademyPage() {
               <GraduationCap className="h-3.5 w-3.5" />
               Prowexa Academy
             </div>
-            <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
+            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl animate-fade-up">
               Upskill for the <span className="text-gradient-purple">Future</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
@@ -174,7 +174,7 @@ export function AcademyPage() {
         {/* Programs Section */}
         <section id="programs" className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our Courses</span>
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">Industry-Ready Curriculums</h2>
               <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
@@ -186,7 +186,7 @@ export function AcademyPage() {
               {programs.map((program) => (
                 <div
                   key={program.title}
-                  className="group relative overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-purple-500/50 transition-all duration-300 animate-fade-up flex flex-col justify-between"
+                  className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-card hover:border-purple-500/50 transition-all duration-300 animate-fade-up flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex justify-between items-start gap-4 flex-wrap">
@@ -247,7 +247,7 @@ export function AcademyPage() {
         {/* College Partnerships Section */}
         <section id="partnerships" className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Academic Network</span>
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">College & Campus Partnerships</h2>
               <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
@@ -281,7 +281,7 @@ export function AcademyPage() {
         {/* Training Roadmap */}
         <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Execution</span>
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">The 5-Step Learning Roadmap</h2>
             </div>
@@ -301,7 +301,7 @@ export function AcademyPage() {
         {/* CTA Section */}
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-5xl px-6 text-center">
-            <div className="rounded-[2.5rem] border border-border bg-gradient-hero p-10 md:p-16 shadow-glow">
+            <div className="rounded-2xl border border-border bg-gradient-hero p-8 md:p-12 shadow-glow">
               <h2 className="text-3xl md:text-4xl font-bold">Ready to Start Your Software Career?</h2>
               <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
                 Join Prowexa Academy's upcoming batch and get guaranteed hands-on development experience.

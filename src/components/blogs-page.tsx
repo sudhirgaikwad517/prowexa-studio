@@ -74,7 +74,7 @@ export function BlogsPage() {
               <FileText className="h-3.5 w-3.5" />
               Technical Blog & Community Articles
             </div>
-            <h1 className="mt-8 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl animate-fade-up">
+            <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl animate-fade-up">
               Engineering <span className="text-gradient-purple">Blogs & Insights</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed animate-fade-up">
@@ -100,7 +100,7 @@ export function BlogsPage() {
               {blogs.map((b) => (
                 <div
                   key={b.id || b.slug}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card hover:border-purple-500/40 transition-all duration-300 animate-fade-up text-left"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-card hover:border-purple-500/40 transition-all duration-300 animate-fade-up text-left"
                 >
                   <Link to="/blogs/$slug" params={{ slug: b.slug }} className="block flex-1">
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
