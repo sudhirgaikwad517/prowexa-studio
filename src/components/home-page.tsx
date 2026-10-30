@@ -97,7 +97,7 @@ function Hero() {
         <img
           src={heroImage}
           alt="Prowexa engineers collaborating at the Pune office"
-          className="h-full w-full object-cover object-right"
+          className="h-full w-full object-cover object-[80%_center] md:object-right"
           width={1280}
           height={698}
           loading="eager"

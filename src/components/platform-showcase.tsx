@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { scrollToSection } from "@/utils/scroll";
 
 /* ─────────────────────── Platform Showcase (animated hexagon stack) ─────────────────────── */
 
 const CYCLE_MS = 11000;
+const ASSEMBLE_MS = 3200; // last tile lands ~3s after start
 const DEPTH = 14;
 
 function hexPoints(cx: number, cy: number, r: number) {
@@ -58,6 +59,15 @@ function HexStack() {
   const [inView, setInView] = useState(false);
   const [played, setPlayed] = useState(false);
   const [cycle, setCycle] = useState(0);
+  const startedAt = useRef(0);
+
+  // Remounting the SVG (new key) restarts every CSS animation from the first tile.
+  const replay = useCallback((force = false) => {
+    if (!force && Date.now() - startedAt.current < ASSEMBLE_MS) return; // don't cut a running assembly short
+    startedAt.current = Date.now();
+    setPlayed(true);
+    setCycle((c) => c + 1);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -65,23 +75,29 @@ function HexStack() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
-        if (entry.isIntersecting) setPlayed(true);
+        // Every time the section scrolls back into view, assemble from the start.
+        if (entry.isIntersecting) replay(true);
       },
-      { threshold: 0.1, rootMargin: "0px 0px 120px 0px" },
+      { threshold: 0.35 },
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [replay]);
 
   useEffect(() => {
-    // Replay the assembly only while the graphic is on screen; once played it stays visible.
+    // While on screen, replay after each full cycle (counted from the last start).
     if (!inView) return;
-    const timer = window.setInterval(() => setCycle((c) => c + 1), CYCLE_MS);
-    return () => window.clearInterval(timer);
-  }, [inView]);
+    const timer = window.setTimeout(() => replay(true), CYCLE_MS);
+    return () => window.clearTimeout(timer);
+  }, [inView, cycle, replay]);
 
   return (
-    <div ref={ref} className={`hex-stage relative mx-auto w-full max-w-[520px] ${played ? "is-visible" : ""}`}>
+    <div
+      ref={ref}
+      onPointerEnter={(e) => e.pointerType === "mouse" && replay()}
+      onClick={() => replay()}
+      className={`hex-stage relative mx-auto w-full max-w-[520px] cursor-pointer ${played ? "is-visible" : ""}`}
+    >
       <div className="absolute inset-8 rounded-full bg-gradient-brand opacity-20 blur-3xl" />
       <svg
         key={cycle}
