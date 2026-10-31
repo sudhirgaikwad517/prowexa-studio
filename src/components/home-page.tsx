@@ -636,7 +636,7 @@ function EdTech() {
     "Java Full Stack",
     "Python + AI",
     "Data Analytics",
-    "Interview Preparation",
+    "Live Project Internship",
     "Corporate Training",
   ];
   return (
@@ -652,7 +652,7 @@ function EdTech() {
               </span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight md:text-4xl">Education &amp; Training</h2>
               <p className="mt-4 text-muted-foreground text-lg">
-                Practical, industry-focused programs designed to build real-world skills and accelerate careers.
+                Practical programs where students learn on real Prowexa projects and grow into our engineering team.
               </p>
               <a
                 href="#contact"

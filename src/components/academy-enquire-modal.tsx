@@ -161,7 +161,7 @@ export function AcademyEnquireModal({ isOpen, onClose, defaultCourse = "Java Ful
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Ask about batch timings, fee structure, placement assistance..."
+                  placeholder="Ask about batch timings, fee structure, internship details..."
                   value={formState.message}
                   onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                   className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-brand transition resize-none"

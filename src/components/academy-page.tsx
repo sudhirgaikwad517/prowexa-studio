@@ -15,8 +15,6 @@ import {
   Calendar,
   Clock,
   CheckCircle2,
-  Building,
-  MapPin,
   ChevronRight,
   Code,
   FileText,
@@ -67,24 +65,6 @@ export function AcademyPage() {
     }
   ];
 
-  const partners = [
-    {
-      college: "Modern College of Engineering",
-      location: "Pune",
-      type: "Syllabus Integration & Labs"
-    },
-    {
-      college: "DY Patil Institute of Technology",
-      location: "Pune",
-      type: "Campus Placement Partner"
-    },
-    {
-      college: "Sinhgad Institutes",
-      location: "Pune",
-      type: "Faculty Development Programs"
-    }
-  ];
-
   const roadmapSteps = [
     {
       step: "01",
@@ -103,28 +83,13 @@ export function AcademyPage() {
     },
     {
       step: "04",
-      title: "Guaranteed Internship",
-      desc: "Join Prowexa's internal development team or our partner firms to work on live projects."
+      title: "Internship at Prowexa",
+      desc: "Work on live Prowexa projects alongside our engineering team, following real delivery standards."
     },
     {
       step: "05",
-      title: "Placements & Success",
-      desc: "Mock interviews, resume building, profile optimization, and direct placement drives."
-    }
-  ];
-
-  const testimonials = [
-    {
-      quote: "The Java Full Stack program completely changed my career path. The live internship at Prowexa gave me the hands-on project experience that standard courses lack.",
-      name: "Amit Deshmukh",
-      role: "Software Engineer at Cognizant",
-      course: "Java Full Stack (Batch of 2025)"
-    },
-    {
-      quote: "Learning AI & Python directly from Prowexa's engineering team helped me build real LLM projects. The career placement support was incredible.",
-      name: "Sneha Patil",
-      role: "Data Analyst at TechCorp",
-      course: "Python + AI Masterclass"
+      title: "Join the Prowexa Team",
+      desc: "Students who complete the program are considered for roles in Prowexa's own engineering team."
     }
   ];
 
@@ -178,7 +143,7 @@ export function AcademyPage() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Our Courses</span>
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">Industry-Ready Curriculums</h2>
               <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-                No fluff. Just the exact technologies and practical skills that companies look for in technical interviews.
+                No fluff. Just the technologies and practical skills our engineers use every day on real Prowexa projects.
               </p>
             </div>
 
@@ -225,7 +190,7 @@ export function AcademyPage() {
                     </div>
 
                     <div className="mt-6 pt-6 border-t border-border flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Career Outcome:</span>
+                      <span className="text-muted-foreground">Prepares you for:</span>
                       <span className="font-semibold text-brand">{program.outcome}</span>
                     </div>
                   </div>
@@ -244,42 +209,8 @@ export function AcademyPage() {
           </div>
         </section>
 
-        {/* College Partnerships Section */}
-        <section id="partnerships" className="py-12 md:py-16">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-10">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Academic Network</span>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">College & Campus Partnerships</h2>
-              <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-                We partner with engineering institutes across Pune to offer industry-aligned workshops and placement support.
-              </p>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-3">
-              {partners.map((partner) => (
-                <div key={partner.college} className="rounded-2xl border border-border bg-card p-6 shadow-card hover-lift transition">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-brand">
-                      <Building className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-base">{partner.college}</h3>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                        <MapPin className="h-3 w-3" /> {partner.location}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4 border-t border-border pt-4 text-xs font-medium text-brand">
-                    {partner.type}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Training Roadmap */}
-        <section className="py-12 md:py-16 bg-surface/30">
+        <section className="py-12 md:py-16">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-10">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-glow">Execution</span>
@@ -299,12 +230,12 @@ export function AcademyPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-12 md:py-16">
+        <section className="py-12 md:py-16 bg-surface/30">
           <div className="mx-auto max-w-5xl px-6 text-center">
             <div className="rounded-2xl border border-border bg-gradient-hero p-8 md:p-12 shadow-glow">
-              <h2 className="text-3xl md:text-4xl font-bold">Ready to Start Your Software Career?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">Ready to Build Your Career at Prowexa?</h2>
               <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
-                Join Prowexa Academy's upcoming batch and get guaranteed hands-on development experience.
+                Join Prowexa Academy's upcoming batch and learn on live projects with our engineering team.
               </p>
               <div className="mt-8">
                 <button
